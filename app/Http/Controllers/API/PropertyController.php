@@ -17,13 +17,7 @@ class PropertyController extends Controller
 
     public function getAll()
     {
-        $user = Auth::user();
-
-        if ($user->type == "Agent") {
-            $records = Model::where('user_id', $user->id)->get();
-        } else if ($user->type == "Admin") {
-            $records = Model::with(['user'])->get();
-        }
+        $records = Model::with(['user'])->get();
 
         $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
 
