@@ -7,7 +7,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
-use App\Http\Controllers\PropertySubmissionController;
+use App\Http\Controllers\API\PropertySubmissionController;
 
 use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\ScheduleController;
