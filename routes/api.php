@@ -7,10 +7,9 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
-use App\Http\Controllers\API\PropertySubmissionController;
-
 use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\ScheduleController;
+use App\Http\Controllers\API\SubmissionController;
 use App\Http\Controllers\API\TestimonialController;
 
 /*
@@ -56,14 +55,6 @@ Route::prefix('amenities')->group(function () {
     Route::delete('{id}', [AmenityController::class, 'delete']);
 });
 
-Route::prefix('property-submissions')->group(function () {
-    Route::get('', [PropertySubmissionController::class, 'getAll']);
-    Route::get('{id}', [PropertySubmissionController::class, 'get']);
-    Route::post('', [PropertySubmissionController::class, 'store']);
-    Route::put('{id}', [PropertySubmissionController::class, 'update']);
-    Route::delete('{id}', [PropertySubmissionController::class, 'delete']);
-});
-
 Route::prefix('certificates')->group(function () {
     Route::get('', [CertificateController::class, 'getAll']);
     Route::get('{id}', [CertificateController::class, 'get']);
@@ -90,6 +81,16 @@ Route::prefix('testimonials')->group(function () {
     Route::delete('{id}', [TestimonialController::class, 'delete']);
 
     Route::post('/change-status', [TestimonialController::class, 'changeStatus']);
+});
+
+Route::prefix('submissions')->group(function () {
+    Route::get('', [SubmissionController::class, 'getAll']);
+    Route::get('{id}', [SubmissionController::class, 'get']);
+    Route::post('', [SubmissionController::class, 'create']);
+    Route::put('', [SubmissionController::class, 'update']);
+    Route::delete('{id}', [SubmissionController::class, 'delete']);
+
+    Route::post('/change-status', [SubmissionController::class, 'changeStatus']);
 });
 
 Route::prefix('users')->group(function () {

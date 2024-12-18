@@ -9,16 +9,16 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('property_submissions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignUlid('user_id')->constrained()->onDelete('cascade');
-            $table->string('full_name');
-            $table->string('phone_number');
-            $table->string('email');
+        Schema::create('submissions', function (Blueprint $table) {
+            $table->ulid('id')->primary();
+            $table->foreignUlid('user_id');
             $table->string('name');
-            $table->string('unit_type');
+            $table->string('phone');
+            $table->string('email');
+            $table->string('property');
+            $table->string('type');
             $table->string('location');
             $table->decimal('min_price', 10, 2);
             $table->decimal('max_price', 10, 2);
@@ -28,12 +28,11 @@ return new class extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('property_submission');
+        Schema::dropIfExists('submissions');
     }
 };
