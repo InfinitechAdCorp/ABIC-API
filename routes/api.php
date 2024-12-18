@@ -7,6 +7,8 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
+use App\Http\Controllers\PropertySubmissionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +49,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [AmenityController::class, 'create']);
         Route::put('', [AmenityController::class, 'update']);
         Route::delete('{id}', [AmenityController::class, 'delete']);
+    });
+
+    Route::prefix('property-submissions')->group(function () {
+        Route::get('', [PropertySubmissionController::class, 'getAll']);
+        Route::get('{id}', [PropertySubmissionController::class, 'get']);
+        Route::post('', [PropertySubmissionController::class, 'store']);
+        Route::put('{id}', [PropertySubmissionController::class, 'update']);
+        Route::delete('{id}', [PropertySubmissionController::class, 'delete']);
     });
 });
 
