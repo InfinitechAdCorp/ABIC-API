@@ -23,6 +23,7 @@ use App\Http\Controllers\API\ScheduleController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function () {
+        Route::get('', [UserController::class, 'getAll']);
         Route::get('/get', [UserController::class, 'get']);
         Route::post('/logout', [UserController::class, 'logout']);
     });
