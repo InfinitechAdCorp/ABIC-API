@@ -9,6 +9,8 @@ use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
 use App\Http\Controllers\PropertySubmissionController;
 
+use App\Http\Controllers\API\CertificateController;
+use App\Http\Controllers\API\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,6 +25,7 @@ use App\Http\Controllers\PropertySubmissionController;
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function () {
+        Route::get('', [UserController::class, 'getAll']);
         Route::get('/get', [UserController::class, 'get']);
         Route::post('/logout', [UserController::class, 'logout']);
     });
@@ -57,6 +60,24 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [PropertySubmissionController::class, 'store']);
         Route::put('{id}', [PropertySubmissionController::class, 'update']);
         Route::delete('{id}', [PropertySubmissionController::class, 'delete']);
+    });
+
+    Route::prefix('certificates')->group(function () {
+        Route::get('', [CertificateController::class, 'getAll']);
+        Route::get('{id}', [CertificateController::class, 'get']);
+        Route::post('', [CertificateController::class, 'create']);
+        Route::put('', [CertificateController::class, 'update']);
+        Route::delete('{id}', [CertificateController::class, 'delete']);
+    });
+
+    Route::prefix('schedules')->group(function () {
+        Route::get('', [ScheduleController::class, 'getAll']);
+        Route::get('{id}', [ScheduleController::class, 'get']);
+        Route::post('', [ScheduleController::class, 'create']);
+        Route::put('', [ScheduleController::class, 'update']);
+        Route::delete('{id}', [ScheduleController::class, 'delete']);
+
+        Route::post('/change-status', [ScheduleController::class, 'changeStatus']);
     });
 });
 

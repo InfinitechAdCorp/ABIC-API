@@ -11,6 +11,13 @@ use App\Models\User as Model;
 
 class UserController extends Controller
 {
+    public function getAll()
+    {
+        $records = Model::all();
+        $response = ['code' => 200, 'message' => "Fetched Users", 'records' => $records];
+        return response()->json($response);
+    }
+
     public function get()
     {
         if (Auth::check()) {
