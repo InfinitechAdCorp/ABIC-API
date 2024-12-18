@@ -67,7 +67,7 @@ class UserController extends Controller
 
         if ($record && Hash::check($request->password, $record->password)) {
             $record->tokens()->delete();
-            $token = $record->createToken('auth_token')->plainTextToken;
+            $token = $record->createToken($record->name.'-AuthToken')->plainTextToken;
             $response = [
                 'code' => 200,
                 'message' => 'Login Successful',
