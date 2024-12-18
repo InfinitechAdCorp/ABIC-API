@@ -40,17 +40,11 @@ class PropertyController extends Controller
     public function getAgentProperties($id)
     {
         $records = Model::where('user_id', $id)->get();
-
-        if ($records->isNotEmpty()) {
-            $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
-        } else {
-            $response = ['code' => 404, 'message' => "No Properties Found"];;
-        }
-
+        $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
         return response()->json($response);
     }
 
-    public function add(Request $request)
+    public function create(Request $request)
     {
         try {
             $validated = $request->validate([
@@ -121,38 +115,30 @@ class PropertyController extends Controller
     {
         $record = Model::find($id);
 
-        if ($record) {
-            try {
-                if ($record->logo) {
-                    $file = public_path("uploads/properties/logos/$record->logo");
+        try {
+            if ($record->logo) {
+                $file = public_path("uploads/properties/logos/$record->logo");
+                if (file_exists($file)) unlink($file);
+            }
+
+            if ($record->images) {
+                $images = json_decode($record->images, true);
+                foreach ($images as $image) {
+                    $file = public_path("uploads/properties/images/$image");
                     if (file_exists($file)) unlink($file);
                 }
-
-                if ($record->images) {
-                    $images = json_decode($record->images, true);
-                    foreach ($images as $image) {
-                        $file = public_path("uploads/properties/images/$image");
-                        if (file_exists($file)) unlink($file);
-                    }
-                }
-
-                $record->delete();
-
-                
-                $response = [
-                    'code' => 200,
-                    'message' => "Deleted $this->model"
-                ];
-            } catch (\Exception $e) {
-                $response = [
-                    'code' => 500,
-                    'message' => $e->getMessage(),
-                ];
             }
-        } else {
+
+            $record->delete();
+
             $response = [
-                'code' => 404,
-                'message' => "No Property Found",
+                'code' => 200,
+                'message' => "Deleted $this->model"
+            ];
+        } catch (\Exception $e) {
+            $response = [
+                'code' => 500,
+                'message' => $e->getMessage(),
             ];
         }
 

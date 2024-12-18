@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\QuestionController;
+use App\Http\Controllers\API\PropertyController;
+use App\Http\Controllers\API\AmenityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,6 +31,22 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [QuestionController::class, 'create']);
         Route::put('', [QuestionController::class, 'update']);
         Route::delete('{id}', [QuestionController::class, 'delete']);
+    });
+
+    Route::prefix('properties')->group(function () {
+        Route::get('', [PropertyController::class, 'getAll']);
+        Route::get('{id}', [PropertyController::class, 'get']);
+        Route::post('', [PropertyController::class, 'create']);
+        Route::put('', [PropertyController::class, 'update']);
+        Route::delete('{id}', [PropertyController::class, 'delete']);
+    });
+
+    Route::prefix('amenities')->group(function () {
+        Route::get('', [AmenityController::class, 'getAll']);
+        Route::get('{id}', [AmenityController::class, 'get']);
+        Route::post('', [AmenityController::class, 'create']);
+        Route::put('', [AmenityController::class, 'update']);
+        Route::delete('{id}', [AmenityController::class, 'delete']);
     });
 });
 
