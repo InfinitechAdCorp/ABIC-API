@@ -65,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [ScheduleController::class, 'create']);
         Route::put('', [ScheduleController::class, 'update']);
         Route::delete('{id}', [ScheduleController::class, 'delete']);
+
+        Route::post('/change-status', [ScheduleController::class, 'changeStatus'])
     });
 });
 

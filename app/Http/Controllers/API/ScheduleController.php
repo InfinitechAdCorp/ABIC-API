@@ -78,4 +78,17 @@ class ScheduleController extends Controller
         $record->delete();
         return response(['code' => 200, 'message' => "Deleted $this->model"]);
     }
+
+    public function changeStatus(Request $request) {
+        $validated = $request->validate([
+            'id' => 'required|exists:schedules,id',
+            'status' => 'required',
+        ]);
+
+        $record = Model::find($validated['id']);
+        $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated Status"];
+
+        return response($response);
+    }
 }
