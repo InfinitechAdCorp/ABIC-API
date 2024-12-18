@@ -9,6 +9,7 @@ use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
 use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\ScheduleController;
+use App\Http\Controllers\API\TestimonialController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,6 +69,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('{id}', [ScheduleController::class, 'delete']);
 
         Route::post('/change-status', [ScheduleController::class, 'changeStatus']);
+    });
+
+    Route::prefix('testimonials')->group(function () {
+        Route::get('', [TestimonialController::class, 'getAll']);
+        Route::get('{id}', [TestimonialController::class, 'get']);
+        Route::post('', [TestimonialController::class, 'create']);
+        Route::put('', [TestimonialController::class, 'update']);
+        Route::delete('{id}', [TestimonialController::class, 'delete']);
+
+        Route::post('/change-status', [TestimonialController::class, 'changeStatus']);
     });
 });
 
