@@ -7,6 +7,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
+use App\Http\Controllers\API\CertificateController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,6 +48,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [AmenityController::class, 'create']);
         Route::put('', [AmenityController::class, 'update']);
         Route::delete('{id}', [AmenityController::class, 'delete']);
+    });
+
+    Route::prefix('certificates')->group(function () {
+        Route::get('', [CertificateController::class, 'getAll']);
+        Route::get('{id}', [CertificateController::class, 'get']);
+        Route::post('', [CertificateController::class, 'create']);
+        Route::put('', [CertificateController::class, 'update']);
+        Route::delete('{id}', [CertificateController::class, 'delete']);
     });
 });
 
