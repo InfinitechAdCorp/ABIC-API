@@ -11,7 +11,7 @@ use App\Models\User as Model;
 
 class UserController extends Controller
 {
-    public function getAll()
+    public function get()
     {
         if (Auth::check()) {
             $id = Auth::id();
@@ -28,18 +28,7 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function get(Request $request)
-    {
-        if (Auth::check()) {
-            $id = Auth::id();
-            $record = Model::find($id);
-            $response = ['code' => 200, 'record' => $record];
-
-            return response()->json($response);
-        }
-    }
-
-    public function add(Request $request)
+    public function create(Request $request)
     {
         $validated = $request->validate([
             'name' => 'required',
@@ -67,48 +56,48 @@ class UserController extends Controller
         return response()->json($response);
     }
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required|min:8',
-        ]);
+    // public function login(Request $request)
+    // {
+    //     $request->validate([
+    //         'email' => 'required|email',
+    //         'password' => 'required|min:8',
+    //     ]);
 
-        $record = Model::where('email', $request->email)->first();
+    //     $record = Model::where('email', $request->email)->first();
 
-        if ($record && Hash::check($request->password, $record->password)) {
-            $record->tokens()->delete();
-            $token = $record->createToken('auth_token')->plainTextToken;
-            $response = [
-                'code' => 200,
-                'message' => 'Login Successful',
-                'token' => $token,
-            ];
-        } else {
-            $response = [
-                'code' => 401,
-                'message' => 'Invalid Credentials',
-            ];
-        }
+    //     if ($record && Hash::check($request->password, $record->password)) {
+    //         $record->tokens()->delete();
+    //         $token = $record->createToken('auth_token')->plainTextToken;
+    //         $response = [
+    //             'code' => 200,
+    //             'message' => 'Login Successful',
+    //             'token' => $token,
+    //         ];
+    //     } else {
+    //         $response = [
+    //             'code' => 401,
+    //             'message' => 'Invalid Credentials',
+    //         ];
+    //     }
 
-        return response()->json($response);
-    }
+    //     return response()->json($response);
+    // }
 
-    public function logout(Request $request)
-    {
-        if (Auth::check()) {
-            $request->user()->currentAccessToken()->delete();
-            $response = [
-                'code' => 200,
-                'message' => 'Logged Out Successfully',
-            ];
-        } else {
-            $response = [
-                'code' => 401,
-                'message' => 'Not Authenticated',
-            ];
-        }
+    // public function logout(Request $request)
+    // {
+    //     if (Auth::check()) {
+    //         $request->user()->currentAccessToken()->delete();
+    //         $response = [
+    //             'code' => 200,
+    //             'message' => 'Logged Out Successfully',
+    //         ];
+    //     } else {
+    //         $response = [
+    //             'code' => 401,
+    //             'message' => 'Not Authenticated',
+    //         ];
+    //     }
 
-        return response()->json($response);
-    }
+    //     return response()->json($response);
+    // }
 }
