@@ -8,6 +8,7 @@ use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
 use App\Http\Controllers\API\CertificateController;
+use App\Http\Controllers\API\ScheduleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,6 +57,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('', [CertificateController::class, 'create']);
         Route::put('', [CertificateController::class, 'update']);
         Route::delete('{id}', [CertificateController::class, 'delete']);
+    });
+
+    Route::prefix('schedules')->group(function () {
+        Route::get('', [ScheduleController::class, 'getAll']);
+        Route::get('{id}', [ScheduleController::class, 'get']);
+        Route::post('', [ScheduleController::class, 'create']);
+        Route::put('', [ScheduleController::class, 'update']);
+        Route::delete('{id}', [ScheduleController::class, 'delete']);
     });
 });
 
