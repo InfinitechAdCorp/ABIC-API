@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\API;
 
 use App\Models\PropertySubmission;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-use App\Models\PropertySubmission as Model;
 
 class PropertySubmissionController extends Controller
+
 {
     public $model = "PropertySubmission";
 
