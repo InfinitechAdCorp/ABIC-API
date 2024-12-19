@@ -31,6 +31,7 @@ class Submission extends Model
         'sale',
         'badge',
         'status',
+        'submit_status',
         'unit_number',
         'unit_type',
         'unit_furnish',
@@ -41,7 +42,7 @@ class Submission extends Model
         'title',
         'turnover',
         'lease',
-        'acknowledgement',
+        'acknowledgment',
         'images',
     ];
 

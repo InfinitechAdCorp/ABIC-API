@@ -66,8 +66,8 @@ class ScheduleController extends Controller
         ]);
 
         $record = Model::find($validated['id']);
-        $record = $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
+        $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model"];
 
         return response($response);
     }

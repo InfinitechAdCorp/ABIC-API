@@ -68,8 +68,8 @@ class CertificateController extends Controller
             $validated[$key] = $name;
         }
 
-        $record = $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
+        $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model"];
 
         return response($response);
     }

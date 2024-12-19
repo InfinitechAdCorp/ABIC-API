@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use App\Models\Submission as Model;
+use App\Models\Property;
 
 class SubmissionController extends Controller
 {
@@ -47,6 +48,7 @@ class SubmissionController extends Controller
                 'sale' => 'required',
                 'badge' => 'required',
                 'status' => 'required',
+                'submit_status' => 'required',
                 'unit_number' => 'required',
                 'unit_type' => 'required',
                 'unit_furnish' => 'required',
@@ -57,7 +59,7 @@ class SubmissionController extends Controller
                 'title' => 'required',
                 'turnover' => 'required',
                 'lease' => 'required',
-                'acknowledgement' => 'required',
+                'acknowledgment' => 'required',
                 'images' => 'required|file',
             ]);
 
@@ -109,6 +111,7 @@ class SubmissionController extends Controller
             'sale' => 'required',
             'badge' => 'required',
             'status' => 'required',
+            'submit_status' => 'required',
             'unit_number' => 'required',
             'unit_type' => 'required',
             'unit_furnish' => 'required',
@@ -119,13 +122,13 @@ class SubmissionController extends Controller
             'title' => 'required',
             'turnover' => 'required',
             'lease' => 'required',
-            'acknowledgement' => 'required',
+            'acknowledgment' => 'required',
             'images' => 'nullable|file',
         ]);
 
         $record = Model::find($validated['id']);
-        $record = $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
+        $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model"];
 
         return response($response);
     }
@@ -155,12 +158,21 @@ class SubmissionController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:submissions,id',
-            'status' => 'required',
+            'submit_status' => 'required',
         ]);
 
         $record = Model::find($validated['id']);
         $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated Status"];
+
+        if ($validated['submit_status'] == "Accepted") {
+            $property = [
+                $record
+            ];
+
+            $property = Property::create($property);
+        }
+
+        $response = ['code' => 200, 'message' => "Updated Status", 'property' => $property];
 
         return response($response);
     }

@@ -29,6 +29,7 @@ return new class extends Migration
             $table->string('sale');
             $table->string('badge');
             $table->string('status');
+            $table->string('submit_status');
             $table->string('unit_number');
             $table->string('unit_type');
             $table->string('unit_furnish');
