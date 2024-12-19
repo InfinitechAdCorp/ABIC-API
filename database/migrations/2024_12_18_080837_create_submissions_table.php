@@ -20,10 +20,25 @@ return new class extends Migration
             $table->string('property');
             $table->string('type');
             $table->string('location');
-            $table->decimal('min_price', 10, 2);
-            $table->decimal('max_price', 10, 2);
+            $table->decimal('price', 50, 2);
+            $table->integer('area');
+            $table->boolean('parking');
+            $table->boolean('vacant');
+            $table->text('nearby');
+            $table->text('description');
+            $table->string('sale');
             $table->string('status');
-            $table->json('images');
+            $table->string('unit_type');
+            $table->string('unit_furnish');
+            $table->string('unit_floor')->nullable();
+            $table->string('submitted_by');
+            $table->boolean('commission');
+            $table->string('terms');
+            $table->string('title');
+            $table->date('turnover');
+            $table->string('lease');
+            $table->boolean('acknowledgment');
+            $table->json('images');      
             $table->timestamps();
         });
     }

@@ -90,8 +90,8 @@ class SubmissionController extends Controller
         ]);
 
         $record = Model::find($validated['id']);
-        $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model"];
+        $record = $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
 
         return response($response);
     }

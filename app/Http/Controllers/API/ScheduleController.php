@@ -43,8 +43,8 @@ class ScheduleController extends Controller
             'status' => 'required',
         ]);
 
-        Model::create($validated);
-        $response = ['code' => 200, 'message' => "Created $this->model"];
+        $record = Model::create($validated);
+        $response = ['code' => 200, 'message' => "Created $this->model", 'record' => $record];
 
         return response($response);
     }
@@ -66,8 +66,8 @@ class ScheduleController extends Controller
         ]);
 
         $record = Model::find($validated['id']);
-        $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model"];
+        $record = $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
 
         return response($response);
     }

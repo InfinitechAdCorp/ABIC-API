@@ -43,8 +43,8 @@ class CertificateController extends Controller
             $validated[$key] = $name;
         }
 
-        Model::create($validated);
-        $response = ['code' => 200, 'message' => "Created $this->model"];
+        $record = Model::create($validated);
+        $response = ['code' => 200, 'message' => "Created $this->model", 'record' => $record];
 
         return response($response);
     }
@@ -68,8 +68,8 @@ class CertificateController extends Controller
             $validated[$key] = $name;
         }
 
-        $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model"];
+        $record = $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
 
         return response($response);
     }

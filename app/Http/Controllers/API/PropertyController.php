@@ -40,25 +40,25 @@ class PropertyController extends Controller
     {
         try {
             $validated = $request->validate([
-                'user_id' => 'required',
+                'user_id' => 'required|exists:users,id',
                 'name' => 'required',
-                'logo' => 'required|image',
-                'slogan' => 'required',
-                'description' => 'required',
+                'type' => 'required',
                 'location' => 'required',
-                'min_price' => 'required|numeric|min:0',
-                'max_price' => 'required|numeric|gte:min_price',
+                'price' => 'required|decimal:2',
+                'area' => 'required|numeric',
+                'parking' => 'required|boolean',
+                'vacant' => 'required|boolean',
+                'nearby' => 'required',
+                'description' => 'required',
+                'sale' => 'required',
+                'badge' => 'required',
                 'status' => 'required',
-                'percent' => 'required|numeric|between:0,100',
-                'images.*' => 'required|file',
+                'unit_number' => 'required',
+                'unit_type' => 'required',
+                'unit_furnish' => 'required',
+                'unit_floor' => 'nullable',
+                'images' => 'required|file',
             ]);
-
-            $key = 'logo';
-            if ($request->hasFile('logo')) {
-                $name = Str::ulid() . "." . $request->file($key)->clientExtension();
-                Storage::disk('s3')->put("properties/logos/$name", $request->file($key)->getContent(), 'public');
-                $validated[$key] = $name;
-            }
 
             $key = 'images';
             if ($request[$key]) {
@@ -92,19 +92,29 @@ class PropertyController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:properties,id',
+            'user_id' => 'required|exists:users,id',
             'name' => 'required',
-            'slogan' => 'required',
-            'description' => 'required',
+            'type' => 'required',
             'location' => 'required',
-            'min_price' => 'required',
-            'max_price' => 'required',
+            'price' => 'required|decimal:2',
+            'area' => 'required|numeric',
+            'parking' => 'required|boolean',
+            'vacant' => 'required|boolean',
+            'nearby' => 'required',
+            'description' => 'required',
+            'sale' => 'required',
+            'badge' => 'required',
             'status' => 'required',
-            'percent' => 'required',
+            'unit_number' => 'required',
+            'unit_type' => 'required',
+            'unit_furnish' => 'required',
+            'unit_floor' => 'nullable',
+            'images' => 'nullable|file',
         ]);
 
         $record = Model::find($validated['id']);
-        $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model"];
+        $record = $record->update($validated);
+        $response = ['code' => 200, 'message' => "Updated $this->model", 'record' => $record];
 
         return response($response);
     }
