@@ -4,12 +4,10 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use App\Models\Property as Model;
-use App\Traits\Uploadable;
 
 class PropertyController extends Controller
 {
@@ -63,7 +61,7 @@ class PropertyController extends Controller
             }
 
             $key = 'images';
-            if ($request->hasFile($key)) {
+            if ($request[$key]) {
                 $images = [];
                 foreach ($request[$key] as $image) {
                     $name = Str::ulid() . "." . $image->clientExtension();

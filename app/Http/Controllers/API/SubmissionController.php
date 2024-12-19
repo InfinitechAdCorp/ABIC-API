@@ -4,14 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Submission as Model;
-use App\Traits\Uploadable;
 
 class SubmissionController extends Controller
 {
-    use Uploadable;
-
     public $model = "Submission";
 
     public function getAll()
@@ -45,10 +44,13 @@ class SubmissionController extends Controller
                 'images.*' => 'required|file',
             ]);
 
-            if ($request->hasFile('images')) {
+            $key = 'images';
+            if ($request[$key]) {
                 $images = [];
-                foreach ($request->file('images') as $image) {
-                    array_push($images, $this->upload($image, 'uploads/submissions/images'));
+                foreach ($request[$key] as $image) {
+                    $name = Str::ulid() . "." . $image->clientExtension();
+                    Storage::disk('s3')->put("submissions/images/$name", $image->getContent(), 'public');
+                    array_push($images, $name);
                 }
                 $validated['images'] = json_encode($images);
             }
@@ -99,14 +101,6 @@ class SubmissionController extends Controller
         $record = Model::find($id);
 
         try {
-            if ($record->images) {
-                $images = json_decode($record->images, true);
-                foreach ($images as $image) {
-                    $file = public_path("uploads/submissions/images/$image");
-                    if (file_exists($file)) unlink($file);
-                }
-            }
-
             $record->delete();
 
             $response = [
