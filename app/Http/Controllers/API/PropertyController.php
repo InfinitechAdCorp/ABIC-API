@@ -16,9 +16,7 @@ class PropertyController extends Controller
     public function getAll()
     {
         $records = Model::with(['user'])->get();
-
         $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
-
         return response()->json($response);
     }
 

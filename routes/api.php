@@ -10,6 +10,7 @@ use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\SubmissionController;
 use App\Http\Controllers\API\TestimonialController;
+use App\Http\Controllers\API\PartnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -82,6 +83,14 @@ Route::prefix('submissions')->group(function () {
     Route::delete('{id}', [SubmissionController::class, 'delete']);
 
     Route::post('/change-status', [SubmissionController::class, 'changeStatus']);
+});
+
+Route::prefix('partners')->group(function () {
+    Route::get('', [PartnerController::class, 'getAll']);
+    Route::get('{id}', [PartnerController::class, 'get']);
+    Route::post('', [PartnerController::class, 'create']);
+    Route::put('', [PartnerController::class, 'update']);
+    Route::delete('{id}', [PartnerController::class, 'delete']);
 });
 
 Route::prefix('users')->group(function () {
