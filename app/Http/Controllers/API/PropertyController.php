@@ -57,7 +57,7 @@ class PropertyController extends Controller
                 'unit_type' => 'required',
                 'unit_furnish' => 'required',
                 'unit_floor' => 'nullable',
-                'images' => 'required|file',
+                'images' => 'required',
             ]);
 
             $key = 'images';
@@ -109,7 +109,7 @@ class PropertyController extends Controller
             'unit_type' => 'required',
             'unit_furnish' => 'required',
             'unit_floor' => 'nullable',
-            'images' => 'nullable|file',
+            'images' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);

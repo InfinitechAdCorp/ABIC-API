@@ -60,7 +60,7 @@ class SubmissionController extends Controller
                 'turnover' => 'required',
                 'lease' => 'required',
                 'acknowledgment' => 'required',
-                'images' => 'required|file',
+                'images' => 'required',
             ]);
 
             $key = 'images';
@@ -123,7 +123,7 @@ class SubmissionController extends Controller
             'turnover' => 'required',
             'lease' => 'required',
             'acknowledgment' => 'required',
-            'images' => 'nullable|file',
+            'images' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);
