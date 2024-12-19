@@ -77,8 +77,6 @@ class CertificateController extends Controller
     public function delete($id)
     {
         $record = Model::find($id);
-        $file = public_path("uploads/certificates/$record->image");
-        if (file_exists($file)) unlink($file);
         $record->delete();
         return response(['code' => 200, 'message' => "Deleted $this->model"]);
     }
