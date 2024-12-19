@@ -4,7 +4,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\UserController;
-use App\Http\Controllers\API\QuestionController;
 use App\Http\Controllers\API\PropertyController;
 use App\Http\Controllers\API\AmenityController;
 use App\Http\Controllers\API\CertificateController;
@@ -29,14 +28,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/get', [UserController::class, 'get']);
         Route::post('/logout', [UserController::class, 'logout']);
     });
-});
-
-Route::prefix('questions')->group(function () {
-    Route::get('', [QuestionController::class, 'getAll']);
-    Route::get('{id}', [QuestionController::class, 'get']);
-    Route::post('', [QuestionController::class, 'create']);
-    Route::put('', [QuestionController::class, 'update']);
-    Route::delete('{id}', [QuestionController::class, 'delete']);
 });
 
 Route::prefix('properties')->group(function () {
