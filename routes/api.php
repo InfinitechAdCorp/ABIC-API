@@ -11,6 +11,7 @@ use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\SubmissionController;
 use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\PartnerController;
+use App\Http\Controllers\API\ItemController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,14 @@ Route::prefix('partners')->group(function () {
     Route::post('', [PartnerController::class, 'create']);
     Route::put('', [PartnerController::class, 'update']);
     Route::delete('{id}', [PartnerController::class, 'delete']);
+});
+
+Route::prefix('items')->group(function () {
+    Route::get('', [ItemController::class, 'getAll']);
+    Route::get('{id}', [ItemController::class, 'get']);
+    Route::post('', [ItemController::class, 'create']);
+    Route::put('', [ItemController::class, 'update']);
+    Route::delete('{id}', [ItemController::class, 'delete']);
 });
 
 Route::prefix('users')->group(function () {
