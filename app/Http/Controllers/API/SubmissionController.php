@@ -166,7 +166,24 @@ class SubmissionController extends Controller
 
         if ($validated['submit_status'] == "Accepted") {
             $property = [
-                $record
+                'user_id' => $record->user_id,
+                'name' => $record->name,
+                'type' => $record->type,
+                'location' => $record->location,
+                'price' => $record->price,
+                'area' => $record->area,
+                'parking' => $record->parking,
+                'vacant' => $record->vacant,
+                'nearby' => $record->nearby,
+                'description' => $record->description,
+                'sale' => $record->sale,
+                'badge' => $record->badge,
+                'status' => $record->status,
+                'unit_number' => $record->unit_number,
+                'unit_type' => $record->unit_type,
+                'unit_furnish' => $record->unit_furnish,
+                'unit_floor' => $record->unit_floor,
+                'images' => $record->images,
             ];
 
             $property = Property::create($property);
