@@ -27,7 +27,9 @@ return new class extends Migration
             $table->text('nearby');
             $table->text('description');
             $table->string('sale');
+            $table->string('badge');
             $table->string('status');
+            $table->string('unit_number');
             $table->string('unit_type');
             $table->string('unit_furnish');
             $table->string('unit_floor')->nullable();
