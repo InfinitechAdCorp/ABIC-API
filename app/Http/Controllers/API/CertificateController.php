@@ -63,6 +63,7 @@ class CertificateController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
+            Storage::disk('s3')->delete("certificates/$record->image");
             $name = Str::ulid() . "." . $request->file($key)->clientExtension();
             Storage::disk('s3')->put("certificates/$name", $request->file($key)->getContent(), 'public');
             $validated[$key] = $name;
@@ -77,6 +78,7 @@ class CertificateController extends Controller
     public function delete($id)
     {
         $record = Model::find($id);
+        Storage::disk('s3')->delete("certificates/$record->image");
         $record->delete();
         return response(['code' => 200, 'message' => "Deleted $this->model"]);
     }

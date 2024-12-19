@@ -113,6 +113,20 @@ class PropertyController extends Controller
         ]);
 
         $record = Model::find($validated['id']);
+        $key = 'images';
+        $images = json_decode($record[$key]);
+        foreach ($images as $image) {
+            Storage::disk('s3')->delete("properties/images/$image");
+        }
+        if ($request[$key]) {
+            $images = [];
+            foreach ($request[$key] as $image) {
+                $name = Str::ulid() . "." . $image->clientExtension();
+                Storage::disk('s3')->put("properties/images/$name", $image->getContent(), 'public');
+                array_push($images, $name);
+            }
+            $validated['images'] = json_encode($images);
+        }
         $record->update($validated);
         $response = ['code' => 200, 'message' => "Updated $this->model"];
 
@@ -122,8 +136,11 @@ class PropertyController extends Controller
     public function delete($id)
     {
         $record = Model::find($id);
-
         try {
+            $images = json_decode($record->images);
+            foreach ($images as $image) {
+                Storage::disk('s3')->delete("properties/images/$image");
+            }
             $record->delete();
 
             $response = [
