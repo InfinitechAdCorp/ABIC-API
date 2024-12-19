@@ -55,7 +55,7 @@ class CertificateController extends Controller
             'user_id' => 'required|exists:users,id',
             'name' => 'required',
             'date' => 'required|date',
-            'image' => 'required|image',
+            'image' => 'nullable|image',
         ]);
 
         $record = Model::find($validated['id']);

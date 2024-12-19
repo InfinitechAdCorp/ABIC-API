@@ -5,7 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use App\Models\Property as Model;
+use App\Models\Submission as Model;
 use App\Traits\Uploadable;
 
 class SubmissionController extends Controller
@@ -13,7 +13,7 @@ class SubmissionController extends Controller
     use Uploadable;
 
     public $model = "Submission";
-    
+
     public function getAll()
     {
         $records = Model::all();
@@ -42,7 +42,6 @@ class SubmissionController extends Controller
                 'min_price' => 'required|numeric|min:0',
                 'max_price' => 'required|numeric|gte:min_price',
                 'status' => 'required',
-                'percent' => 'required|numeric|between:0,100',
                 'images.*' => 'required|file',
             ]);
 
@@ -85,7 +84,6 @@ class SubmissionController extends Controller
             'min_price' => 'required|numeric|min:0',
             'max_price' => 'required|numeric|gte:min_price',
             'status' => 'required',
-            'percent' => 'required|numeric|between:0,100',
             'images.*' => 'required|file',
         ]);
 
@@ -125,7 +123,8 @@ class SubmissionController extends Controller
         return response()->json($response);
     }
 
-    public function changeStatus(Request $request) {
+    public function changeStatus(Request $request)
+    {
         $validated = $request->validate([
             'id' => 'required|exists:submissions,id',
             'status' => 'required',
