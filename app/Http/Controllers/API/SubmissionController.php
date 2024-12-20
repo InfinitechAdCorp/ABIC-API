@@ -66,8 +66,8 @@ class SubmissionController extends Controller
                 'turnover' => 'required',
                 'lease' => 'required',
                 'acknowledgment' => 'required',
-                'images' => 'required',
                 'amenities' => 'required|array',
+                'images' => 'required',
             ]);
 
             $key = 'images';
@@ -78,7 +78,16 @@ class SubmissionController extends Controller
                     Storage::disk('s3')->put("submissions/images/$name", $image->getContent(), 'public');
                     array_push($images, $name);
                 }
-                $validated['images'] = json_encode($images);
+                $validated[$key] = json_encode($images);
+            }
+
+            $key = 'amenities';
+            if ($request[$key]) {
+                $amenities = [];
+                foreach ($request[$key] as $amenity) {
+                    array_push($amenities, $amenity);
+                }
+                $validated[$key] = json_encode($amenities);
             }
 
             $record = Model::create($validated);
@@ -130,8 +139,8 @@ class SubmissionController extends Controller
             'turnover' => 'required',
             'lease' => 'required',
             'acknowledgment' => 'required',
-            'images' => 'nullable',
             'amenities' => 'required|array',
+            'images' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);
@@ -150,7 +159,16 @@ class SubmissionController extends Controller
                 Storage::disk('s3')->put("submissions/images/$name", $image->getContent(), 'public');
                 array_push($images, $name);
             }
-            $validated['images'] = json_encode($images);
+            $validated[$key] = json_encode($images);
+        }
+
+        $key = 'amenities';
+        if ($request[$key]) {
+            $amenities = [];
+            foreach ($request[$key] as $amenity) {
+                array_push($amenities, $amenity);
+            }
+            $validated[$key] = json_encode($amenities);
         }
 
         $record->update($validated);

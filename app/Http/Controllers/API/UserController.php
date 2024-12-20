@@ -40,11 +40,12 @@ class UserController extends Controller
         try {
             $key = "password";
             $validated[$key] = Hash::make($validated[$key]);
-            Model::create($validated);
+            $record = Model::create($validated);
 
             $response = [
                 'code' => 200,
                 'message' => 'Created User',
+                'record' => $record,
             ];
         } catch (\Exception $e) {
             $response = [

@@ -61,8 +61,8 @@ class PropertyController extends Controller
                 'unit_type' => 'required',
                 'unit_furnish' => 'required',
                 'unit_floor' => 'nullable',
-                'images' => 'required',
                 'amenities' => 'required|array',
+                'images' => 'required',
             ]);
 
             $key = 'images';
@@ -73,20 +73,19 @@ class PropertyController extends Controller
                     Storage::disk('s3')->put("properties/images/$name", $image->getContent(), 'public');
                     array_push($images, $name);
                 }
-                $validated['images'] = json_encode($images);
+                $validated[$key] = json_encode($images);
             }
-
-            $record = Model::create($validated);
 
             $key = 'amenities';
             if ($request[$key]) {
-                foreach ($request[$key] as $name) {
-                    Amenity::create([
-                        'property_id' => $record->id,
-                        'name' => $name,
-                    ]);       
+                $amenities = [];
+                foreach ($request[$key] as $amenity) {
+                    array_push($amenities, $amenity);
                 }
+                $validated[$key] = json_encode($amenities);
             }
+
+            $record = Model::create($validated);
 
             $response = [
                 'code' => 200,
@@ -148,14 +147,12 @@ class PropertyController extends Controller
         }
 
         $key = 'amenities';
-        Amenity::where('user_id', $record->id)->delete();
         if ($request[$key]) {
-            foreach ($request[$key] as $name) {
-                Amenity::create([
-                    'property_id' => $record->id,
-                    'name' => $name,
-                ]);       
+            $amenities = [];
+            foreach ($request[$key] as $amenity) {
+                array_push($amenities, $amenity);
             }
+            $validated[$key] = json_encode($amenities);
         }
 
         $record->update($validated);
