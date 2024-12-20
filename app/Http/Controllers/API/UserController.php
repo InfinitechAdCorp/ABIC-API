@@ -87,6 +87,7 @@ class UserController extends Controller
                 'record' => $record,
                 'token' => $token,
             ];
+            
         } else {
             $code = 401;
             $response = [
