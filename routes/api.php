@@ -80,7 +80,7 @@ Route::prefix('partners')->group(function () {
     Route::get('', [PartnerController::class, 'getAll']);
     Route::get('/get/{id}', [PartnerController::class, 'get']);
     Route::post('', [PartnerController::class, 'create']);
-    Route::put('', [PartnerController::class, 'update']);
+    Route::patch('', [PartnerController::class, 'update']);
     Route::delete('{id}', [PartnerController::class, 'delete']);
 });
 
