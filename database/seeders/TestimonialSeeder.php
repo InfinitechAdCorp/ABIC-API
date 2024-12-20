@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
+use App\Models\User;
+
 class TestimonialSeeder extends Seeder
 {
     /**
@@ -13,6 +15,7 @@ class TestimonialSeeder extends Seeder
      */
     public function run(): void
     {
+              $user = User::first();
     DB::table('testimonials')->insert([
     ['id' => (string) Str::ulid(), 'user_id' => (string) Str::ulid(), 'name' => 'John Doe', 'message' => 'The team helped me find my dream home in no time! The process was smooth, and they made everything so easy.', 'created_at' => now(), 'updated_at' => now()],
     ['id' => (string) Str::ulid(), 'user_id' => (string) Str::ulid(), 'name' => 'Jane Smith', 'message' => 'I had a fantastic experience buying my first property with this agency. They guided me every step of the way and made the process stress-free.', 'created_at' => now(), 'updated_at' => now()],

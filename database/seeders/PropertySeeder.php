@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class PropertySeeder extends Seeder
 {
@@ -13,6 +14,8 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
+              $user = User::first();
+
         DB::table('properties')->insert([
             [
                 'id' => Str::ulid(),

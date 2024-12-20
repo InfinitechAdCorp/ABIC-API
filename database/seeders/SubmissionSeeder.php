@@ -6,6 +6,8 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str; 
+use App\Models\User;
+
 class SubmissionSeeder extends Seeder
 {
     /**
@@ -13,10 +15,11 @@ class SubmissionSeeder extends Seeder
      */
     public function run(): void
     {
+              $user = User::first();
           DB::table('submissions')->insert([
     [
         'id' => Str::ulid(), 
-        'user_id' => Str::ulid(), 
+     'user_id' => $user->id,  
         'name' => 'John Doe',
         'phone' => '+1234567890',
         'email' => 'john.doe@example.com',
@@ -52,7 +55,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Jane Smith',
         'phone' => '+9876543210',
         'email' => 'jane.smith@example.com',
@@ -87,7 +90,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Emily Brown',
         'phone' => '+1122334455',
         'email' => 'emily.brown@example.com',
@@ -123,7 +126,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Michael Johnson',
         'phone' => '+2233445566',
         'email' => 'michael.johnson@example.com',
@@ -159,7 +162,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Sarah Wilson',
         'phone' => '+3344556677',
         'email' => 'sarah.wilson@example.com',
@@ -195,7 +198,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'David Lee',
         'phone' => '+5566778899',
         'email' => 'david.lee@example.com',
@@ -230,7 +233,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Olivia Green',
         'phone' => '+6677889900',
         'email' => 'olivia.green@example.com',
@@ -266,7 +269,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Lucas White',
         'phone' => '+7788990011',
         'email' => 'lucas.white@example.com',
@@ -302,7 +305,7 @@ class SubmissionSeeder extends Seeder
     ],
     [
         'id' => Str::ulid(),
-        'user_id' => Str::ulid(),
+     'user_id' => $user->id, 
         'name' => 'Ava Parker',
         'phone' => '+8899001122',
         'email' => 'ava.parker@example.com',
