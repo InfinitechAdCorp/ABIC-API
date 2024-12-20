@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use App\Models\Property as Model;
+use App\Models\User;
 
 class PropertyController extends Controller
 {
@@ -15,7 +16,12 @@ class PropertyController extends Controller
 
     public function getAll($user_id)
     {
-        $records = Model::with(['user'])->get();
+        $user = User::find($user_id);
+        if ($user->type == "Admin") {
+            $records = Model::with("amenities")->get();
+        } else if ($user->type == "Agent") {
+            $records = Model::with("amenities")->where('user_id', $user_id)->get();
+        }
         $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
         return response()->json($response);
     }
@@ -23,7 +29,7 @@ class PropertyController extends Controller
     public function get($id)
     {
         $record = Model::find($id);
-        $response = ['code' => 200, "Fetched $this->model", 'record' => $record];
+        $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
         return response()->json($response);
     }
 
