@@ -15,11 +15,15 @@ class UserController extends Controller
     {
         if ($id) {
             $record = Model::find($id);
-            if ($record->type == "Admin") {
-                $records = Model::all();
-                $response = ['code' => 200, 'message' => 'Fetched Users', 'records' => $records];
-            } else if ($record->type == "Agent") {
-                $response = ['code' => 200, 'message' => 'Fetched User', 'record' => $record];
+            if ($record) {
+                if ($record->type == "Admin") {
+                    $records = Model::all();
+                    $response = ['code' => 200, 'message' => 'Fetched Users', 'records' => $records];
+                } else if ($record->type == "Agent") {
+                    $response = ['code' => 200, 'message' => 'Fetched User', 'record' => $record];
+                }
+            } else {
+                $response = ['code' => 401, 'message' => 'User Not Authenticated'];
             }
         } else {
             $response = ['code' => 401, 'message' => 'User Not Authenticated'];
