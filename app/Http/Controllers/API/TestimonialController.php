@@ -18,12 +18,16 @@ class TestimonialController extends Controller
     public function getAll($user_id)
     {
         $user = User::find($user_id);
-        if ($user->type == "Admin") {
-            $records = Model::all();
-        } else if ($user->type == "Agent") {
-            $records = Model::where('user_id', $user_id)->get();
+        if ($user) {
+            if ($user->type == "Admin") {
+                $records = Model::all();
+            } else if ($user->type == "Agent") {
+                $records = Model::where('user_id', $user_id)->get();
+            }
+            $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
+        } else {
+            $response = ['code' => 401, 'message' => "User Not Authenticated"];
         }
-        $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response);
     }
 

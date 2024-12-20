@@ -19,12 +19,17 @@ class PropertyController extends Controller
     public function getAll($user_id)
     {
         $user = User::find($user_id);
-        if ($user->type == "Admin") {
-            $records = Model::with("amenities")->get();
-        } else if ($user->type == "Agent") {
-            $records = Model::with("amenities")->where('user_id', $user_id)->get();
+        if ($user) {
+            if ($user->type == "Admin") {
+                $records = Model::all();
+            } else if ($user->type == "Agent") {
+                $records = Model::where('user_id', $user_id)->get();
+            }
+            $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
         }
-        $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
+        else {
+            $response = ['code' => 401, 'message' => "User Not Authenticated"];
+        }
         return response()->json($response);
     }
 
