@@ -7,6 +7,7 @@ use App\Traits\Uploadable;
 use Illuminate\Http\Request;
 
 use App\Models\Testimonial as Model;
+use App\Models\User;
 
 class TestimonialController extends Controller
 {
@@ -14,11 +15,16 @@ class TestimonialController extends Controller
 
     public $model = "Testimonial";
 
-    public function getAll()
+    public function getAll($user_id)
     {
-        $records = Model::all();
+        $user = User::find($user_id);
+        if ($user->type == "Admin") {
+            $records = Model::all();
+        } else if ($user->type == "Agent") {
+            $records = Model::where('user_id', $user_id)->get();
+        }
         $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
-        return response($response);
+        return response()->json($response);
     }
 
     public function get($id)

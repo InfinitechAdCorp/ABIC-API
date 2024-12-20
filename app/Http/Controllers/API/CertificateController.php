@@ -8,16 +8,22 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 use App\Models\Certificate as Model;
+use App\Models\User;
 
 class CertificateController extends Controller
 {
     public $model = "Certificate";
 
-    public function getAll()
+    public function getAll($user_id)
     {
-        $records = Model::all();
+        $user = User::find($user_id);
+        if ($user->type == "Admin") {
+            $records = Model::all();
+        } else if ($user->type == "Agent") {
+            $records = Model::where('user_id', $user_id)->get();
+        }
         $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
-        return response($response);
+        return response()->json($response);
     }
 
     public function get($id)

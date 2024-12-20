@@ -48,7 +48,7 @@ Route::prefix('amenities')->group(function () {
 });
 
 Route::prefix('certificates')->group(function () {
-    Route::get('', [CertificateController::class, 'getAll']);
+    Route::get('{user_id}', [CertificateController::class, 'getAll']);
     Route::get('/get/{id}', [CertificateController::class, 'get']);
     Route::post('', [CertificateController::class, 'create']);
     Route::put('', [CertificateController::class, 'update']);
@@ -56,7 +56,7 @@ Route::prefix('certificates')->group(function () {
 });
 
 Route::prefix('schedules')->group(function () {
-    Route::get('', [ScheduleController::class, 'getAll']);
+    Route::get('{user_id}', [ScheduleController::class, 'getAll']);
     Route::get('/get/{id}', [ScheduleController::class, 'get']);
     Route::post('', [ScheduleController::class, 'create']);
     Route::put('', [ScheduleController::class, 'update']);
@@ -66,7 +66,7 @@ Route::prefix('schedules')->group(function () {
 });
 
 Route::prefix('testimonials')->group(function () {
-    Route::get('', [TestimonialController::class, 'getAll']);
+    Route::get('{user_id}', [TestimonialController::class, 'getAll']);
     Route::get('/get/{id}', [TestimonialController::class, 'get']);
     Route::post('', [TestimonialController::class, 'create']);
     Route::put('', [TestimonialController::class, 'update']);
@@ -76,7 +76,7 @@ Route::prefix('testimonials')->group(function () {
 });
 
 Route::prefix('submissions')->group(function () {
-    Route::get('', [SubmissionController::class, 'getAll']);
+    Route::get('{user_id}', [SubmissionController::class, 'getAll']);
     Route::get('/get/{id}', [SubmissionController::class, 'get']);
     Route::post('', [SubmissionController::class, 'create']);
     Route::put('', [SubmissionController::class, 'update']);

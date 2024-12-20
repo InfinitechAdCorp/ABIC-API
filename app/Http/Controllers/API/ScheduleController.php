@@ -7,6 +7,7 @@ use App\Traits\Uploadable;
 use Illuminate\Http\Request;
 
 use App\Models\Schedule as Model;
+use App\Models\User;
 
 class ScheduleController extends Controller
 {
@@ -14,11 +15,16 @@ class ScheduleController extends Controller
 
     public $model = "Schedule";
 
-    public function getAll()
+    public function getAll($user_id)
     {
-        $records = Model::all();
+        $user = User::find($user_id);
+        if ($user->type == "Admin") {
+            $records = Model::all();
+        } else if ($user->type == "Agent") {
+            $records = Model::where('user_id', $user_id)->get();
+        }
         $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
-        return response($response);
+        return response()->json($response);
     }
 
     public function get($id)
@@ -79,7 +85,8 @@ class ScheduleController extends Controller
         return response(['code' => 200, 'message' => "Deleted $this->model"]);
     }
 
-    public function changeStatus(Request $request) {
+    public function changeStatus(Request $request)
+    {
         $validated = $request->validate([
             'id' => 'required|exists:schedules,id',
             'status' => 'required',
