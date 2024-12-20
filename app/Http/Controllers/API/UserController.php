@@ -11,6 +11,8 @@ use App\Models\User as Model;
 
 class UserController extends Controller
 {
+    public $model = "User";
+
     public function getAll($id)
     {
         if ($id) {
@@ -18,15 +20,15 @@ class UserController extends Controller
             if ($record) {
                 if ($record->type == "Admin") {
                     $records = Model::all();
-                    $response = ['code' => 200, 'message' => 'Fetched Users', 'records' => $records];
+                    $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
                 } else if ($record->type == "Agent") {
-                    $response = ['code' => 200, 'message' => 'Fetched User', 'record' => $record];
+                    $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
                 }
             } else {
-                $response = ['code' => 401, 'message' => 'User Not Authenticated'];
+                $response = ['code' => 404, 'message' => "$this->model Not Found"];
             }
         } else {
-            $response = ['code' => 401, 'message' => 'User Not Authenticated'];
+            $response = ['code' => 401, 'message' => "$this->model Not Authenticated"];
         }
 
         return response()->json($response);
@@ -48,7 +50,7 @@ class UserController extends Controller
 
             $response = [
                 'code' => 200,
-                'message' => 'Created User',
+                'message' => "Created $this->model",
                 'record' => $record,
             ];
         } catch (\Exception $e) {
@@ -100,7 +102,7 @@ class UserController extends Controller
         } else {
             $response = [
                 'code' => 401,
-                'message' => 'Not Authenticated',
+                'message' => "$this->model Not Authenticated",
             ];
         }
 

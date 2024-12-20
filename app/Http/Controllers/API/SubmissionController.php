@@ -28,8 +28,7 @@ class SubmissionController extends Controller
                 $records = Model::where('user_id', $user_id)->get();
             }
             $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
-        }
-        else {
+        } else {
             $response = ['code' => 401, 'message' => "User Not Authenticated"];
         }
         return response()->json($response);
@@ -38,8 +37,12 @@ class SubmissionController extends Controller
     public function get($id)
     {
         $record = Model::find($id);
-        $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
-        return response($response);
+        if ($record) {
+            $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
+        } else {
+            $response = ['code' => 404, 'message' => "$this->model Not Found"];
+        }
+        return response()->json($response);
     }
 
     public function create(Request $request)
@@ -178,29 +181,32 @@ class SubmissionController extends Controller
         $record->update($validated);
         $response = ['code' => 200, 'message' => "Updated $this->model"];
 
-        return response($response);
+        return response()->json($response);
     }
 
     public function delete($id)
     {
         $record = Model::find($id);
+        if ($record) {
+            try {
+                $images = json_decode($record->images);
+                foreach ($images as $image) {
+                    Storage::disk('s3')->delete("submissions/images/$image");
+                }
+                $record->delete();
 
-        try {
-            $images = json_decode($record->images);
-            foreach ($images as $image) {
-                Storage::disk('s3')->delete("submissions/images/$image");
+                $response = [
+                    'code' => 200,
+                    'message' => "Deleted $this->model"
+                ];
+            } catch (\Exception $e) {
+                $response = [
+                    'code' => 500,
+                    'message' => $e->getMessage(),
+                ];
             }
-            $record->delete();
-
-            $response = [
-                'code' => 200,
-                'message' => "Deleted $this->model"
-            ];
-        } catch (\Exception $e) {
-            $response = [
-                'code' => 500,
-                'message' => $e->getMessage(),
-            ];
+        } else {
+            $response = ['code' => 404, 'message' => "$this->model Not Found"];
         }
 
         return response()->json($response);
@@ -242,7 +248,6 @@ class SubmissionController extends Controller
         }
 
         $response = ['code' => 200, 'message' => "Updated Status", 'property' => $property];
-
-        return response($response);
+        return response()->json($response);
     }
 }

@@ -26,8 +26,7 @@ class PropertyController extends Controller
                 $records = Model::where('user_id', $user_id)->get();
             }
             $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
-        }
-        else {
+        } else {
             $response = ['code' => 401, 'message' => "User Not Authenticated"];
         }
         return response()->json($response);
@@ -36,7 +35,11 @@ class PropertyController extends Controller
     public function get($id)
     {
         $record = Model::find($id);
-        $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
+        if ($record) {
+            $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
+        } else {
+            $response = ['code' => 404, 'message' => "$this->model Not Found"];
+        }
         return response()->json($response);
     }
 
@@ -133,7 +136,7 @@ class PropertyController extends Controller
         ]);
 
         $record = Model::find($validated['id']);
-        
+
         $key = 'images';
 
         $images = json_decode($record[$key]);
@@ -161,28 +164,32 @@ class PropertyController extends Controller
         $record->update($validated);
         $response = ['code' => 200, 'message' => "Updated $this->model"];
 
-        return response($response);
+        return response()->json($response);
     }
 
     public function delete($id)
     {
         $record = Model::find($id);
-        try {
-            $images = json_decode($record->images);
-            foreach ($images as $image) {
-                Storage::disk('s3')->delete("properties/images/$image");
-            }
-            $record->delete();
+        if ($record) {
+            try {
+                $images = json_decode($record->images);
+                foreach ($images as $image) {
+                    Storage::disk('s3')->delete("properties/images/$image");
+                }
+                $record->delete();
 
-            $response = [
-                'code' => 200,
-                'message' => "Deleted $this->model"
-            ];
-        } catch (\Exception $e) {
-            $response = [
-                'code' => 500,
-                'message' => $e->getMessage(),
-            ];
+                $response = [
+                    'code' => 200,
+                    'message' => "Deleted $this->model"
+                ];
+            } catch (\Exception $e) {
+                $response = [
+                    'code' => 500,
+                    'message' => $e->getMessage(),
+                ];
+            }
+        } else {
+            $response = ['code' => 404, 'message' => "$this->model Not Found"];
         }
 
         return response()->json($response);
