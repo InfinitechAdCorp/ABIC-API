@@ -11,25 +11,18 @@ use App\Models\User as Model;
 
 class UserController extends Controller
 {
-    public function getAll()
+    public function getAll($id)
     {
-        $records = Model::all();
-        $response = ['code' => 200, 'message' => "Fetched Users", 'records' => $records];
-        return response()->json($response);
-    }
-
-    public function get()
-    {
-        if (Auth::check()) {
-            $id = Auth::id();
-            if ($id) {
-                $record = Model::find($id);
+        if ($id) {
+            $record = Model::find($id);
+            if ($record->type == "Admin") {
+                $records = Model::all();
+                $response = ['code' => 200, 'message' => 'Fetched Users', 'records' => $records];
+            } else if ($record->type == "Agent") {
                 $response = ['code' => 200, 'message' => 'Fetched User', 'record' => $record];
-            } else {
-                $response = ['code' => 401, 'message' => 'User Not Authenticated'];
             }
         } else {
-            $response = ['code' => 401, 'message' => 'User Not Authenticated.'];
+            $response = ['code' => 401, 'message' => 'User Not Authenticated'];
         }
 
         return response()->json($response);
@@ -74,7 +67,7 @@ class UserController extends Controller
 
         if ($record && Hash::check($request->password, $record->password)) {
             $record->tokens()->delete();
-            $token = $record->createToken($record->name.'-AuthToken')->plainTextToken;
+            $token = $record->createToken($record->name . '-AuthToken')->plainTextToken;
             $response = [
                 'code' => 200,
                 'message' => 'Login Successful',

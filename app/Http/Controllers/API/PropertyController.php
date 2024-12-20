@@ -13,7 +13,7 @@ class PropertyController extends Controller
 {
     public $model = "Property";
 
-    public function getAll()
+    public function getAll($user_id)
     {
         $records = Model::with(['user'])->get();
         $response = ['code' => 200, 'message' => "Fetched Properties", 'records' => $records];
