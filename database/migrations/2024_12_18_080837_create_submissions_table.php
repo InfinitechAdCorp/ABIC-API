@@ -41,6 +41,7 @@ return new class extends Migration
             $table->date('turnover');
             $table->string('lease');
             $table->boolean('acknowledgment');
+            $table->json('amenities');
             $table->json('images');      
             $table->timestamps();
         });

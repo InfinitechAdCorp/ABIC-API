@@ -30,6 +30,7 @@ return new class extends Migration
             $table->string('unit_type');
             $table->string('unit_furnish');
             $table->string('unit_floor')->nullable();
+            $table->json('amenities');
             $table->json('images');
             $table->timestamps();
         });

@@ -43,6 +43,7 @@ class Submission extends Model
         'turnover',
         'lease',
         'acknowledgment',
+        'amenities',
         'images',
     ];
 

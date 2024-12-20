@@ -62,6 +62,7 @@ class PropertyController extends Controller
                 'unit_furnish' => 'required',
                 'unit_floor' => 'nullable',
                 'images' => 'required',
+                'amenities' => 'required|array',
             ]);
 
             $key = 'images';
@@ -76,6 +77,16 @@ class PropertyController extends Controller
             }
 
             $record = Model::create($validated);
+
+            $key = 'amenities';
+            if ($request[$key]) {
+                foreach ($request[$key] as $name) {
+                    Amenity::create([
+                        'property_id' => $record->id,
+                        'name' => $name,
+                    ]);       
+                }
+            }
 
             $response = [
                 'code' => 200,
@@ -114,14 +125,18 @@ class PropertyController extends Controller
             'unit_furnish' => 'required',
             'unit_floor' => 'nullable',
             'images' => 'nullable',
+            'amenities' => 'required|array',
         ]);
 
         $record = Model::find($validated['id']);
+        
         $key = 'images';
+
         $images = json_decode($record[$key]);
         foreach ($images as $image) {
             Storage::disk('s3')->delete("properties/images/$image");
         }
+
         if ($request[$key]) {
             $images = [];
             foreach ($request[$key] as $image) {
@@ -131,6 +146,18 @@ class PropertyController extends Controller
             }
             $validated['images'] = json_encode($images);
         }
+
+        $key = 'amenities';
+        Amenity::where('user_id', $record->id)->delete();
+        if ($request[$key]) {
+            foreach ($request[$key] as $name) {
+                Amenity::create([
+                    'property_id' => $record->id,
+                    'name' => $name,
+                ]);       
+            }
+        }
+
         $record->update($validated);
         $response = ['code' => 200, 'message' => "Updated $this->model"];
 

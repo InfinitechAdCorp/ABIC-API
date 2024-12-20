@@ -67,6 +67,7 @@ class SubmissionController extends Controller
                 'lease' => 'required',
                 'acknowledgment' => 'required',
                 'images' => 'required',
+                'amenities' => 'required|array',
             ]);
 
             $key = 'images';
@@ -130,14 +131,18 @@ class SubmissionController extends Controller
             'lease' => 'required',
             'acknowledgment' => 'required',
             'images' => 'nullable',
+            'amenities' => 'required|array',
         ]);
 
         $record = Model::find($validated['id']);
+
         $key = 'images';
+
         $images = json_decode($record[$key]);
         foreach ($images as $image) {
             Storage::disk('s3')->delete("submissions/images/$image");
         }
+
         if ($request[$key]) {
             $images = [];
             foreach ($request[$key] as $image) {
@@ -147,6 +152,7 @@ class SubmissionController extends Controller
             }
             $validated['images'] = json_encode($images);
         }
+
         $record->update($validated);
         $response = ['code' => 200, 'message' => "Updated $this->model"];
 

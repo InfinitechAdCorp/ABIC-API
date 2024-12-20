@@ -33,6 +33,7 @@ class Property extends Model
         'unit_type',
         'unit_furnish',
         'unit_floor',
+        'amenities',
         'images',
     ];
 
@@ -46,10 +47,5 @@ class Property extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function amenities(): HasMany
-    {
-        return $this->hasMany(Amenity::class);
     }
 }

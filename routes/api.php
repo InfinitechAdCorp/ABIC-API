@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\PropertyController;
-use App\Http\Controllers\API\AmenityController;
 use App\Http\Controllers\API\CertificateController;
 use App\Http\Controllers\API\ScheduleController;
 use App\Http\Controllers\API\SubmissionController;
@@ -37,14 +36,6 @@ Route::prefix('properties')->group(function () {
     Route::post('', [PropertyController::class, 'create']);
     Route::put('', [PropertyController::class, 'update']);
     Route::delete('{id}', [PropertyController::class, 'delete']);
-});
-
-Route::prefix('amenities')->group(function () {
-    Route::get('', [AmenityController::class, 'getAll']);
-    Route::get('/get/{id}', [AmenityController::class, 'get']);
-    Route::post('', [AmenityController::class, 'create']);
-    Route::put('', [AmenityController::class, 'update']);
-    Route::delete('{id}', [AmenityController::class, 'delete']);
 });
 
 Route::prefix('certificates')->group(function () {
