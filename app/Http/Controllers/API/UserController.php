@@ -20,18 +20,23 @@ class UserController extends Controller
             if ($record) {
                 if ($record->type == "Admin") {
                     $records = Model::all();
-                    $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
+
+                    $code = 200;
+                    $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
                 } else if ($record->type == "Agent") {
-                    $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
+                    $code = 200;
+                    $response = ['message' => "Fetched $this->model", 'record' => $record];
                 }
             } else {
-                $response = ['code' => 404, 'message' => "$this->model Not Found"];
+                $code = 404;
+                $response = ['message' => "$this->model Not Found"];
             }
         } else {
-            $response = ['code' => 401, 'message' => "$this->model Not Authenticated"];
+            $code = 401;
+            $response = ['message' => "$this->model Not Authenticated"];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function create(Request $request)
@@ -48,19 +53,19 @@ class UserController extends Controller
             $validated[$key] = Hash::make($validated[$key]);
             $record = Model::create($validated);
 
+            $code = 201;
             $response = [
-                'code' => 200,
                 'message' => "Created $this->model",
                 'record' => $record,
             ];
         } catch (\Exception $e) {
+            $code = 500;
             $response = [
-                'code' => 500,
                 'message' => $e->getMessage(),
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function login(Request $request)
@@ -75,37 +80,39 @@ class UserController extends Controller
         if ($record && Hash::check($request->password, $record->password)) {
             $record->tokens()->delete();
             $token = $record->createToken($record->name . '-AuthToken')->plainTextToken;
+
+            $code = 200;
             $response = [
-                'code' => 200,
                 'message' => 'Login Successful',
                 'record' => $record,
                 'token' => $token,
             ];
         } else {
+            $code = 401;
             $response = [
-                'code' => 401,
                 'message' => 'Invalid Credentials',
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function logout(Request $request)
     {
         if (Auth::check()) {
             $request->user()->currentAccessToken()->delete();
+
+            $code = 200;
             $response = [
-                'code' => 200,
                 'message' => 'Logged Out Successfully',
             ];
         } else {
+            $code = 401;
             $response = [
-                'code' => 401,
                 'message' => "$this->model Not Authenticated",
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 }

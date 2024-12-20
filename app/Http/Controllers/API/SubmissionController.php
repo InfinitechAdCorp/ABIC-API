@@ -27,22 +27,27 @@ class SubmissionController extends Controller
             } else if ($user->type == "Agent") {
                 $records = Model::where('user_id', $user_id)->get();
             }
-            $response = ['code' => 200, 'message' => "Fetched $this->model" . "s", 'records' => $records];
+
+            $code = 200;
+            $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         } else {
-            $response = ['code' => 401, 'message' => "User Not Authenticated"];
+            $code = 401;
+            $response = ['message' => "User Not Authenticated"];
         }
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function get($id)
     {
         $record = Model::find($id);
         if ($record) {
-            $response = ['code' => 200, 'message' => "Fetched $this->model", 'record' => $record];
+            $code = 200;
+            $response = ['message' => "Fetched $this->model", 'record' => $record];
         } else {
-            $response = ['code' => 404, 'message' => "$this->model Not Found"];
+            $code = 404;
+            $response = ['message' => "$this->model Not Found"];
         }
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function create(Request $request)
@@ -101,19 +106,19 @@ class SubmissionController extends Controller
 
             $record = Model::create($validated);
 
+            $code = 201;
             $response = [
-                'code' => 200,
                 'message' => "Created $this->model",
                 'record' => $record,
             ];
         } catch (\Exception $e) {
+            $code = 500;
             $response = [
-                'code' => 500,
                 'message' => $e->getMessage(),
             ];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function update(Request $request)
@@ -179,9 +184,11 @@ class SubmissionController extends Controller
         }
 
         $record->update($validated);
-        $response = ['code' => 200, 'message' => "Updated $this->model"];
 
-        return response()->json($response);
+        $code = 200;
+        $response = ['message' => "Updated $this->model"];
+
+        return response()->json($response, $code);
     }
 
     public function delete($id)
@@ -195,21 +202,22 @@ class SubmissionController extends Controller
                 }
                 $record->delete();
 
+                $code = 200;
                 $response = [
-                    'code' => 200,
                     'message' => "Deleted $this->model"
                 ];
             } catch (\Exception $e) {
+                $code = 500;
                 $response = [
-                    'code' => 500,
                     'message' => $e->getMessage(),
                 ];
             }
         } else {
-            $response = ['code' => 404, 'message' => "$this->model Not Found"];
+            $code = 404;
+            $response = ['message' => "$this->model Not Found"];
         }
 
-        return response()->json($response);
+        return response()->json($response, $code);
     }
 
     public function changeStatus(Request $request)
@@ -247,7 +255,8 @@ class SubmissionController extends Controller
             $property = Property::create($property);
         }
 
-        $response = ['code' => 200, 'message' => "Updated Status", 'property' => $property];
-        return response()->json($response);
+        $code = 200;
+        $response = ['message' => "Updated Status", 'property' => $property];
+        return response()->json($response, $code);
     }
 }
