@@ -40,7 +40,7 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
-            'image' => 'required|image',
+            'image' => 'required',
         ]);
 
         $key = 'image';
@@ -61,7 +61,7 @@ class PartnerController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:partners,id',
             'name' => 'required',
-            'image' => 'nullable|image',
+            'image' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);
