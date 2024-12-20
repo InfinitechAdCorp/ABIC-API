@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use App\Traits\Uploadable;
 
 use App\Models\Submission as Model;
 use App\Models\Property;
@@ -13,6 +14,8 @@ use App\Models\User;
 
 class SubmissionController extends Controller
 {
+    use Uploadable;
+
     public $model = "Submission";
 
     public function getAll($user_id)
@@ -74,9 +77,7 @@ class SubmissionController extends Controller
             if ($request[$key]) {
                 $images = [];
                 foreach ($request[$key] as $image) {
-                    $name = Str::ulid() . "." . $image->clientExtension();
-                    Storage::disk('s3')->put("submissions/images/$name", $image->getContent(), 'public');
-                    array_push($images, $name);
+                    array_push($images, $this->upload($image, "submissions/images"));
                 }
                 $validated[$key] = json_encode($images);
             }
@@ -155,9 +156,7 @@ class SubmissionController extends Controller
         if ($request[$key]) {
             $images = [];
             foreach ($request[$key] as $image) {
-                $name = Str::ulid() . "." . $image->clientExtension();
-                Storage::disk('s3')->put("submissions/images/$name", $image->getContent(), 'public');
-                array_push($images, $name);
+                array_push($images, $this->upload($image, "submissions/images"));
             }
             $validated[$key] = json_encode($images);
         }

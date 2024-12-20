@@ -5,13 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Traits\Uploadable;
 
 use App\Models\Certificate as Model;
 use App\Models\User;
 
 class CertificateController extends Controller
 {
+    use Uploadable;
+
     public $model = "Certificate";
 
     public function getAll($user_id)
@@ -44,9 +46,7 @@ class CertificateController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $name = Str::ulid() . "." . $request->file($key)->clientExtension();
-            Storage::disk('s3')->put("certificates/$name", $request->file($key)->getContent(), 'public');
-            $validated[$key] = $name;
+            $validated[$key] = $this->upload($request->file($key), "certificates");
         }
 
         $record = Model::create($validated);
@@ -70,9 +70,7 @@ class CertificateController extends Controller
         $key = 'image';
         if ($request->hasFile($key)) {
             Storage::disk('s3')->delete("certificates/$record->image");
-            $name = Str::ulid() . "." . $request->file($key)->clientExtension();
-            Storage::disk('s3')->put("certificates/$name", $request->file($key)->getContent(), 'public');
-            $validated[$key] = $name;
+            $validated[$key] = $this->upload($request->file($key), "certificates");
         }
 
         $record->update($validated);

@@ -5,13 +5,15 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Traits\Uploadable;
 
 use App\Models\Property as Model;
 use App\Models\User;
 
 class PropertyController extends Controller
 {
+    use Uploadable;
+
     public $model = "Property";
 
     public function getAll($user_id)
@@ -69,9 +71,7 @@ class PropertyController extends Controller
             if ($request[$key]) {
                 $images = [];
                 foreach ($request[$key] as $image) {
-                    $name = Str::ulid() . "." . $image->clientExtension();
-                    Storage::disk('s3')->put("properties/images/$name", $image->getContent(), 'public');
-                    array_push($images, $name);
+                    array_push($images, $this->upload($image, "properties/images"));
                 }
                 $validated[$key] = json_encode($images);
             }
@@ -139,9 +139,7 @@ class PropertyController extends Controller
         if ($request[$key]) {
             $images = [];
             foreach ($request[$key] as $image) {
-                $name = Str::ulid() . "." . $image->clientExtension();
-                Storage::disk('s3')->put("properties/images/$name", $image->getContent(), 'public');
-                array_push($images, $name);
+                array_push($images, $this->upload($image, "properties/images"));
             }
             $validated['images'] = json_encode($images);
         }

@@ -5,12 +5,14 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
+use App\Traits\Uploadable;
 
 use App\Models\Item as Model;
 
 class ItemController extends Controller
 {
+    use Uploadable;
+    
     public $model = "Item";
 
     public function getAll()
@@ -39,9 +41,7 @@ class ItemController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $name = Str::ulid() . "." . $request->file($key)->clientExtension();
-            Storage::disk('s3')->put("items/$name", $request->file($key)->getContent(), 'public');
-            $validated[$key] = $name;
+            $validated[$key] = $this->upload($request->file($key), "items");
         }
 
         $record = Model::create($validated);
@@ -66,9 +66,7 @@ class ItemController extends Controller
         $key = 'image';
         if ($request->hasFile($key)) {
             Storage::disk('s3')->delete("items/$record->image");
-            $name = Str::ulid() . "." . $request->file($key)->clientExtension();
-            Storage::disk('s3')->put("items/$name", $request->file($key)->getContent(), 'public');
-            $validated[$key] = $name;
+            $validated[$key] = $this->upload($request->file($key), "items");
         }
 
         $record->update($validated);
