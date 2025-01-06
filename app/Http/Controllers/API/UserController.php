@@ -40,6 +40,19 @@ class UserController extends Controller
         return response()->json($response, $code);
     }
 
+    public function get($id)
+    {
+        $record = Model::find($id);
+        if ($record) {
+            $code = 200;
+            $response = ['message' => "Fetched $this->model", 'record' => $record];
+        } else {
+            $code = 404;
+            $response = ['message' => "$this->model Not Found"];
+        }
+        return response()->json($response, $code);
+    }
+
     public function create(Request $request)
     {
         $validated = $request->validate([

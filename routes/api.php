@@ -26,13 +26,14 @@ use App\Http\Controllers\API\ItemController;
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('', [UserController::class, 'getAll']);
+        Route::get('{id}', [UserController::class, 'get']);
         Route::post('/logout', [UserController::class, 'logout']);
     });
 });
 
 Route::prefix('properties')->group(function () {
     Route::get('', [PropertyController::class, 'getAll']);
-    Route::get('/get/{id}', [PropertyController::class, 'get']);
+    Route::get('{id}', [PropertyController::class, 'get']);
     Route::post('', [PropertyController::class, 'create']);
     Route::put('', [PropertyController::class, 'update']);
     Route::delete('{id}', [PropertyController::class, 'delete']);
@@ -40,7 +41,7 @@ Route::prefix('properties')->group(function () {
 
 Route::prefix('certificates')->group(function () {
     Route::get('', [CertificateController::class, 'getAll']);
-    Route::get('/get/{id}', [CertificateController::class, 'get']);
+    Route::get('{id}', [CertificateController::class, 'get']);
     Route::post('', [CertificateController::class, 'create']);
     Route::put('', [CertificateController::class, 'update']);
     Route::delete('{id}', [CertificateController::class, 'delete']);
@@ -48,7 +49,7 @@ Route::prefix('certificates')->group(function () {
 
 Route::prefix('schedules')->group(function () {
     Route::get('', [ScheduleController::class, 'getAll']);
-    Route::get('/get/{id}', [ScheduleController::class, 'get']);
+    Route::get('{id}', [ScheduleController::class, 'get']);
     Route::post('', [ScheduleController::class, 'create']);
     Route::put('', [ScheduleController::class, 'update']);
     Route::delete('{id}', [ScheduleController::class, 'delete']);
@@ -58,7 +59,7 @@ Route::prefix('schedules')->group(function () {
 
 Route::prefix('testimonials')->group(function () {
     Route::get('', [TestimonialController::class, 'getAll']);
-    Route::get('/get/{id}', [TestimonialController::class, 'get']);
+    Route::get('{id}', [TestimonialController::class, 'get']);
     Route::post('', [TestimonialController::class, 'create']);
     Route::put('', [TestimonialController::class, 'update']);
     Route::delete('{id}', [TestimonialController::class, 'delete']);
@@ -68,7 +69,7 @@ Route::prefix('testimonials')->group(function () {
 
 Route::prefix('submissions')->group(function () {
     Route::get('', [SubmissionController::class, 'getAll']);
-    Route::get('/get/{id}', [SubmissionController::class, 'get']);
+    Route::get('{id}', [SubmissionController::class, 'get']);
     Route::post('', [SubmissionController::class, 'create']);
     Route::put('', [SubmissionController::class, 'update']);
     Route::delete('{id}', [SubmissionController::class, 'delete']);
@@ -78,7 +79,7 @@ Route::prefix('submissions')->group(function () {
 
 Route::prefix('partners')->group(function () {
     Route::get('', [PartnerController::class, 'getAll']);
-    Route::get('/get/{id}', [PartnerController::class, 'get']);
+    Route::get('{id}', [PartnerController::class, 'get']);
     Route::post('', [PartnerController::class, 'create']);
     Route::put('', [PartnerController::class, 'update']);
     Route::delete('{id}', [PartnerController::class, 'delete']);
@@ -86,7 +87,7 @@ Route::prefix('partners')->group(function () {
 
 Route::prefix('items')->group(function () {
     Route::get('', [ItemController::class, 'getAll']);
-    Route::get('/get/{id}', [ItemController::class, 'get']);
+    Route::get('{id}', [ItemController::class, 'get']);
     Route::post('', [ItemController::class, 'create']);
     Route::put('', [ItemController::class, 'update']);
     Route::delete('{id}', [ItemController::class, 'delete']);
