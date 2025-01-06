@@ -11,6 +11,7 @@ use App\Http\Controllers\API\SubmissionController;
 use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\PartnerController;
 use App\Http\Controllers\API\ItemController;
+use App\Http\Controllers\API\SeminarController;
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,14 @@ Route::prefix('items')->group(function () {
     Route::post('', [ItemController::class, 'create']);
     Route::put('', [ItemController::class, 'update']);
     Route::delete('{id}', [ItemController::class, 'delete']);
+});
+
+Route::prefix('seminars')->group(function () {
+    Route::get('', [SeminarController::class, 'getAll']);
+    Route::get('{id}', [SeminarController::class, 'get']);
+    Route::post('', [SeminarController::class, 'create']);
+    Route::put('', [SeminarController::class, 'update']);
+    Route::delete('{id}', [SeminarController::class, 'delete']);
 });
 
 Route::prefix('users')->group(function () {
