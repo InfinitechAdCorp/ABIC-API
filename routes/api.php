@@ -12,6 +12,7 @@ use App\Http\Controllers\API\TestimonialController;
 use App\Http\Controllers\API\PartnerController;
 use App\Http\Controllers\API\ItemController;
 use App\Http\Controllers\API\SeminarController;
+use App\Http\Controllers\API\MeetingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +101,14 @@ Route::prefix('seminars')->group(function () {
     Route::post('', [SeminarController::class, 'create']);
     Route::put('', [SeminarController::class, 'update']);
     Route::delete('{id}', [SeminarController::class, 'delete']);
+});
+
+Route::prefix('meetings')->group(function () {
+    Route::get('', [MeetingController::class, 'getAll']);
+    Route::get('{id}', [MeetingController::class, 'get']);
+    Route::post('', [MeetingController::class, 'create']);
+    Route::put('', [MeetingController::class, 'update']);
+    Route::delete('{id}', [MeetingController::class, 'delete']);
 });
 
 Route::prefix('users')->group(function () {
