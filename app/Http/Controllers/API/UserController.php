@@ -62,22 +62,15 @@ class UserController extends Controller
             'type' => 'required'
         ]);
 
-        try {
-            $key = "password";
-            $validated[$key] = Hash::make($validated[$key]);
-            $record = Model::create($validated);
+        $key = "password";
+        $validated[$key] = Hash::make($validated[$key]);
+        $record = Model::create($validated);
 
-            $code = 201;
-            $response = [
-                'message' => "Created $this->model",
-                'record' => $record,
-            ];
-        } catch (\Exception $e) {
-            $code = 500;
-            $response = [
-                'message' => $e->getMessage(),
-            ];
-        }
+        $code = 201;
+        $response = [
+            'message' => "Created $this->model",
+            'record' => $record,
+        ];
 
         return response()->json($response, $code);
     }
@@ -113,20 +106,9 @@ class UserController extends Controller
 
     public function logout(Request $request)
     {
-        if (Auth::check()) {
-            $request->user()->currentAccessToken()->delete();
-
-            $code = 200;
-            $response = [
-                'message' => 'Logged Out Successfully',
-            ];
-        } else {
-            $code = 401;
-            $response = [
-                'message' => "$this->model Not Authenticated",
-            ];
-        }
-
+        $request->user()->currentAccessToken()->delete();
+        $code = 200;
+        $response = ['message' => 'Logged Out Successfully'];
         return response()->json($response, $code);
     }
 }
