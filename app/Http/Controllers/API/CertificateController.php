@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
+use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\Certificate as Model;
-use App\Models\User;
 
 class CertificateController extends Controller
 {
@@ -16,20 +16,25 @@ class CertificateController extends Controller
 
     public $model = "Certificate";
 
-    public function getAll($user_id)
+    public function getAll(Request $request)
     {
-        $user = User::find($user_id);
-        if ($user) {
-            if ($user->type == "Admin") {
-                $records = Model::all();
-            } else if ($user->type == "Agent") {
-                $records = Model::where('user_id', $user_id)->get();
+        if ($token = $request->bearerToken()) {
+            $user =  PersonalAccessToken::findToken($token)->tokenable;
+
+            if ($user) {
+                if ($user->type == "Admin") {
+                    $records = Model::all();
+                } else if ($user->type == "Agent") {
+                    $records = Model::where('user_id', $user->id)->get();
+                }
+
+                $code = 200;
+                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+            } else {
+                $code = 404;
+                $response = ['message' => "User Not Found"];
             }
-            
-            $code = 200;
-            $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
-        }
-        else {
+        } else {
             $code = 401;
             $response = ['message' => "User Not Authenticated"];
         }
@@ -42,8 +47,7 @@ class CertificateController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -107,8 +111,7 @@ class CertificateController extends Controller
 
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Traits\Uploadable;
 use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\Schedule as Model;
-use App\Models\User;
 
 class ScheduleController extends Controller
 {
@@ -15,18 +15,24 @@ class ScheduleController extends Controller
 
     public $model = "Schedule";
 
-    public function getAll($user_id)
+    public function getAll(Request $request)
     {
-        $user = User::find($user_id);
-        if ($user) {
-            if ($user->type == "Admin") {
-                $records = Model::all();
-            } else if ($user->type == "Agent") {
-                $records = Model::where('user_id', $user_id)->get();
-            }
+        if ($token = $request->bearerToken()) {
+            $user =  PersonalAccessToken::findToken($token)->tokenable;
 
-            $code = 200;
-            $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+            if ($user) {
+                if ($user->type == "Admin") {
+                    $records = Model::all();
+                } else if ($user->type == "Agent") {
+                    $records = Model::where('user_id', $user->id)->get();
+                }
+
+                $code = 200;
+                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+            } else {
+                $code = 404;
+                $response = ['message' => "User Not Found"];
+            }
         } else {
             $code = 401;
             $response = ['message' => "User Not Authenticated"];

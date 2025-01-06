@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\User as Model;
 
@@ -13,10 +14,10 @@ class UserController extends Controller
 {
     public $model = "User";
 
-    public function getAll($id)
+    public function getAll(Request $request)
     {
-        if ($id) {
-            $record = Model::find($id);
+        if ($token = $request->bearerToken()) {
+            $record =  PersonalAccessToken::findToken($token)->tokenable;
             if ($record) {
                 if ($record->type == "Admin") {
                     $records = Model::all();

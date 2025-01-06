@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
+use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\Property as Model;
-use App\Models\User;
 
 class PropertyController extends Controller
 {
@@ -16,18 +16,24 @@ class PropertyController extends Controller
 
     public $model = "Property";
 
-    public function getAll($user_id)
+    public function getAll(Request $request)
     {
-        $user = User::find($user_id);
-        if ($user) {
-            if ($user->type == "Admin") {
-                $records = Model::all();
-            } else if ($user->type == "Agent") {
-                $records = Model::where('user_id', $user_id)->get();
-            }
+        if ($token = $request->bearerToken()) {
+            $user =  PersonalAccessToken::findToken($token)->tokenable;
 
-            $code = 200;
-            $response = ['message' => "Fetched Properties", 'records' => $records];
+            if ($user) {
+                if ($user->type == "Admin") {
+                    $records = Model::all();
+                } else if ($user->type == "Agent") {
+                    $records = Model::where('user_id', $user->id)->get();
+                }
+
+                $code = 200;
+                $response = ['message' => "Fetched Properties", 'records' => $records];
+            } else {
+                $code = 404;
+                $response = ['message' => "User Not Found"];
+            }
         } else {
             $code = 401;
             $response = ['message' => "User Not Authenticated"];
@@ -160,7 +166,7 @@ class PropertyController extends Controller
         }
 
         $record->update($validated);
-        
+
         $code = 200;
         $response = ['message' => "Updated $this->model"];
 
