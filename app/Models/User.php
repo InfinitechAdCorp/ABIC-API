@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasFactory;
+    use HasApiTokens, HasFactory, Notifiable;
 
     protected $keyType = 'string';
     public $incrementing = false;
