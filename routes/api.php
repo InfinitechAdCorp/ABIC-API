@@ -15,6 +15,7 @@ use App\Http\Controllers\API\SeminarController;
 use App\Http\Controllers\API\MeetingController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\ClosedDealController;
+use App\Http\Controllers\API\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -127,6 +128,14 @@ Route::prefix('closed-deals')->group(function () {
     Route::post('', [ClosedDealController::class, 'create']);
     Route::put('', [ClosedDealController::class, 'update']);
     Route::delete('{id}', [ClosedDealController::class, 'delete']);
+});
+
+Route::prefix('news')->group(function () {
+    Route::get('', [NewsController::class, 'getAll']);
+    Route::get('{id}', [NewsController::class, 'get']);
+    Route::post('', [NewsController::class, 'create']);
+    Route::put('', [NewsController::class, 'update']);
+    Route::delete('{id}', [NewsController::class, 'delete']);
 });
 
 Route::prefix('users')->group(function () {
