@@ -36,6 +36,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 });
 
+Route::prefix('users')->group(function () {
+    Route::post('', [UserController::class, 'create']);
+    Route::post('/login', [UserController::class, 'login']);
+});
+
 Route::prefix('properties')->group(function () {
     Route::get('', [PropertyController::class, 'getAll']);
     Route::get('{id}', [PropertyController::class, 'get']);
@@ -136,9 +141,4 @@ Route::prefix('news')->group(function () {
     Route::post('', [NewsController::class, 'create']);
     Route::put('', [NewsController::class, 'update']);
     Route::delete('{id}', [NewsController::class, 'delete']);
-});
-
-Route::prefix('users')->group(function () {
-    Route::post('', [UserController::class, 'create']);
-    Route::post('/login', [UserController::class, 'login']);
 });
