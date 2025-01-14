@@ -16,6 +16,7 @@ use App\Http\Controllers\API\MeetingController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\ClosedDealController;
 use App\Http\Controllers\API\NewsController;
+use App\Http\Controllers\API\GlobalController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,3 +143,7 @@ Route::prefix('news')->group(function () {
     Route::put('', [NewsController::class, 'update']);
     Route::delete('{id}', [NewsController::class, 'delete']);
 });
+
+Route::prefix('global')->group(function () {
+    Route::get('properties', [GlobalController::class, 'propertiesGetAll']);
+} );
