@@ -9,7 +9,7 @@ use App\Models\Property;
 
 class GlobalController extends Controller
 {
-    public function getAll(Request $request)
+    public function propertiesGetAll()
     {
         $records = Property::all();
         $code = 200;
