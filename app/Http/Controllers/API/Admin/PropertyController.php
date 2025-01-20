@@ -68,20 +68,20 @@ class PropertyController extends Controller
 
         $key = 'amenities';
         if ($request[$key]) {
-            $validated[$key] = [];
-            foreach ($request[$key] as $amenity) {
-                array_push($validated[$key], $amenity);
+            $amenities = [];
+            foreach ($amenities as $amenity) {
+                array_push($amenities, $amenity);
             }
-            $validated[$key] = json_encode($validated[$key]);
+            $validated[$key] = json_encode($amenities);
         }
 
         $key = 'images';
         if ($request[$key]) {
-            $validated[$key] = [];
-            foreach ($request[$key] as $image) {
-                array_push($validated[$key], $this->upload($image, "properties/images"));
+            $images = [];
+            foreach ($images as $image) {
+                array_push($images, $this->upload($image, "properties/images"));
             }
-            $validated[$key] = json_encode($validated[$key]);
+            $validated[$key] = json_encode($images);
         }
 
         $record = Model::create($validated);
@@ -130,13 +130,13 @@ class PropertyController extends Controller
         }
 
         $key = 'images';
-
-        $images = json_decode($record[$key]);
-        foreach ($images as $image) {
-            Storage::disk('s3')->delete("properties/images/$image");
-        }
         
         if ($request[$key]) {
+            $images = json_decode($record[$key]);
+            foreach ($images as $image) {
+                Storage::disk('s3')->delete("properties/images/$image");
+            }
+
             $images = [];
             foreach ($request[$key] as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
@@ -145,10 +145,8 @@ class PropertyController extends Controller
         }
 
         $record->update($validated);
-
         $code = 200;
         $response = ['message' => "Updated $this->model"];
-
         return response()->json($response, $code);
     }
 

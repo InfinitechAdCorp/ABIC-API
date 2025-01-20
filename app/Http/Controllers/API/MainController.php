@@ -129,7 +129,7 @@ class MainController extends Controller
         if ($request[$key]) {
             $images = [];
             foreach ($images as $image) {
-                array_push($images, $this->upload($image, "submissions"));
+                array_push($images, $this->upload($image, "submissions/images"));
             }
             $validated[$key] = json_encode($images);
         }
