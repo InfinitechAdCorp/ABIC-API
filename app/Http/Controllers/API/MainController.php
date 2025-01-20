@@ -95,7 +95,7 @@ class MainController extends Controller
         $validated = $request->validate([
             'user_last' => 'nullable',
             'user_first' => 'nullable',
-            'user_email' => 'nullable|required',
+            'user_email' => 'nullable|email',
             'user_phone' => 'nullable',
             'sender_type' => 'nullable',
             'property_name' => 'nullable',
