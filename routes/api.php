@@ -18,6 +18,8 @@ use App\Http\Controllers\API\Admin\NewsController;
 
 use App\Http\Controllers\API\AgentController;
 
+use App\Http\Controllers\API\MainController;
+
 use App\Http\Controllers\API\Admin\GlobalController;
 
 /*
@@ -149,6 +151,10 @@ Route::middleware('auth.admin')->group(function () {
 
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
     Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
+});
+
+Route::prefix('main')->group(function () {
+    Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
 });
 
 Route::prefix('global')->group(function () {
