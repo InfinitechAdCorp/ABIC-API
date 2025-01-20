@@ -32,7 +32,8 @@ class MainController extends Controller
     public function submitProperty(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'phone' => 'required',
             'email' => 'required|email',
             'property' => 'required',

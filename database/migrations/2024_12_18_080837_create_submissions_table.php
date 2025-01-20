@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('submissions', function (Blueprint $table) {
             $table->ulid('id')->primary();
             $table->foreignUlid('user_id')->nullable();
-            $table->string('name');
+            $table->string('first_name');
+            $table->string('last_name');
             $table->string('phone');
             $table->string('email');
             $table->string('property');
