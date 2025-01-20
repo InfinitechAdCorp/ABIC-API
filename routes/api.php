@@ -146,6 +146,7 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [NewsController::class, 'create']);
         Route::put('', [NewsController::class, 'update']);
         Route::delete('{id}', [NewsController::class, 'delete']);
+        
     });
 });
 
