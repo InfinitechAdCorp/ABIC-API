@@ -61,7 +61,7 @@ class MeetingController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:meetings,id',
             'title' => 'required',
-            'description' => 'required',
+            'agenda' => 'required',
             'image' => 'nullable',
         ]);
 
