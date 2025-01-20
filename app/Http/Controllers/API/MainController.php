@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Inquiry;
 use App\Models\Submission;
+use App\Models\PropertySubmission;
 
 class MainController extends Controller
 {
@@ -29,7 +30,7 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function submitProperty(Request $request)
+    public function oldSubmitProperty(Request $request)
     {
         $validated = $request->validate([
             'first_name' => 'required',
@@ -81,6 +82,59 @@ class MainController extends Controller
         }
 
         $record = Submission::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Property",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitProperty(Request $request)
+    {
+        $validated = $request->validate([
+            'user_last' => 'nullable',
+            'user_first' => 'nullable',
+            'user_email' => 'nullable|required',
+            'user_phone' => 'nullable',
+            'sender_type' => 'nullable',
+            'property_name' => 'nullable',
+            'property_type' => 'nullable',
+            'property_unit_status' => 'nullable',
+            'property_price' => 'nullable|decimal:0,2',
+            'property_area' => 'nullable|decimal:0,2',
+            'property_number' => 'nullable',
+            'property_parking' => 'nullable',
+            'property_status' => 'nullable',
+            'property_rent_terms' => 'nullable',
+            'property_sale_type' => 'nullable',
+            'property_sale_payment' => 'nullable',
+            'property_sale_title' => 'nullable',
+            'property_sale_turnover' => 'nullable',
+            'property_description' => 'nullable',
+            'property_amenities' => 'nullable|array',
+            'images' => 'nullable',
+        ]);
+
+        $key = 'property_amenities';
+        if ($request[$key]) {
+            $amenities = [];
+            foreach ($amenities as $amenity) {
+                array_push($amenities, $amenity);
+            }
+            $validated[$key] = json_encode($amenities);
+        }
+
+        $key = 'images';
+        if ($request[$key]) {
+            $images = [];
+            foreach ($images as $image) {
+                array_push($images, $this->upload($image, "submissions"));
+            }
+            $validated[$key] = json_encode($images);
+        }
+
+        $record = PropertySubmission::create($validated);
         $code = 201;
         $response = [
             'message' => "Submitted Property",
