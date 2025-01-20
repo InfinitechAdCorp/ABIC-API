@@ -127,7 +127,6 @@ class SubmissionController extends Controller
         }
 
         $key = 'images';
-        
         if ($request[$key]) {
             $images = json_decode($record[$key]);
             foreach ($images as $image) {
