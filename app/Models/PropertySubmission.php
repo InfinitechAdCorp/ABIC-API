@@ -37,7 +37,7 @@ class PropertySubmission extends Model
 
     public static function booted()
     {
-        static::creating(function (Submission $record) {
+        static::creating(function (PropertySubmission $record) {
             $record->id = Str::ulid();
         });
     }
