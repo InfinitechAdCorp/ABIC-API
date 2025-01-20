@@ -155,6 +155,7 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
 
 Route::prefix('main')->group(function () {
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
+    Route::post('submit-property', [MainController::class, 'submitProperty']);
 });
 
 Route::prefix('global')->group(function () {

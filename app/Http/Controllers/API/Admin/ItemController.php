@@ -17,7 +17,7 @@ class ItemController extends Controller
 
     public function getAll()
     {
-        $records = Model::all();
+        $records = Model::orderBy('updated_at', 'desc')->get();
         $code = 200;
         $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
@@ -41,9 +41,9 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
-            'image' => 'required',
             'width' => 'required|decimal:0,2',
             'height' => 'required|decimal:0,2',
+            'image' => 'required',
             'category' => 'required',
         ]);
 
@@ -53,10 +53,8 @@ class ItemController extends Controller
         }
 
         $record = Model::create($validated);
-        
         $code = 201;
         $response = ['message' => "Created $this->model", 'record' => $record];
-
         return response()->json($response, $code);
     }
 
@@ -65,9 +63,9 @@ class ItemController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:items,id',
             'name' => 'required',
-            'image' => 'nullable',
             'width' => 'required|decimal:0,2',
             'height' => 'required|decimal:0,2',
+            'image' => 'nullable',
             'category' => 'required',
         ]);
 
@@ -75,15 +73,13 @@ class ItemController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("items/$record->image");
+            Storage::disk('s3')->delete("items/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "items");
         }
 
         $record->update($validated);
-
         $code = 200;
-        $response = ['message' => "Updated $this->model"];
-
+        $response = ['message' => "Updated $this->model", 'record' => $record];
         return response()->json($response, $code);
     }
 
@@ -93,7 +89,6 @@ class ItemController extends Controller
         if ($record) {
             Storage::disk('s3')->delete("items/$record->image");
             $record->delete();
-
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
         }
@@ -101,7 +96,6 @@ class ItemController extends Controller
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-
         return response($response, $code);
     }
 }
