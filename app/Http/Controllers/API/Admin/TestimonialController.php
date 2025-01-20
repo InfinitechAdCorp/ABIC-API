@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Traits\Uploadable;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -11,38 +10,24 @@ use App\Models\Testimonial as Model;
 
 class TestimonialController extends Controller
 {
-    use Uploadable;
-
     public $model = "Testimonial";
 
     public function getAll(Request $request)
     {
-        if ($token = $request->bearerToken()) {
-            $user =  PersonalAccessToken::findToken($token)->tokenable;
-
-            if ($user) {
-                if ($user->type == "Admin") {
-                    $records = Model::all();
-                } else if ($user->type == "Agent") {
-                    $records = Model::where('user_id', $user->id)->get();
-                }
-
-                $code = 200;
-                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
-            } else {
-                $code = 404;
-                $response = ['message' => "User Not Found"];
-            }
-        } else {
-            $code = 401;
-            $response = ['message' => "User Not Authenticated"];
+        $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
+        if ($user->type == "Admin") {
+            $records = Model::with('user')->orderBy('updated_at', 'desc')->get();
+        } else if ($user->type == "Agent") {
+            $records = Model::with('user')->where('user_id', $user->id)->orderBy('updated_at', 'desc')->get();
         }
+        $code = 200;
+        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
     }
 
     public function get($id)
     {
-        $record = Model::find($id);
+        $record = Model::with('user')->where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
@@ -62,10 +47,11 @@ class TestimonialController extends Controller
         ]);
 
         $record = Model::create($validated);
-
         $code = 201;
-        $response = ['message' => "Created $this->model", 'record' => $record];
-
+        $response = [
+            'message' => "Created $this->model",
+            'record' => $record,
+        ];
         return response()->json($response, $code);
     }
 
@@ -80,10 +66,8 @@ class TestimonialController extends Controller
 
         $record = Model::find($validated['id']);
         $record->update($validated);
-
         $code = 200;
-        $response = ['message' => "Updated $this->model"];
-
+        $response = ['message' => "Updated $this->model", 'record' => $record];
         return response()->json($response, $code);
     }
 
@@ -92,14 +76,14 @@ class TestimonialController extends Controller
         $record = Model::find($id);
         if ($record) {
             $record->delete();
-
             $code = 200;
-            $response = ['message' => "Deleted $this->model"];
+            $response = [
+                'message' => "Deleted $this->model"
+            ];
         } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-
         return response()->json($response, $code);
     }
 }

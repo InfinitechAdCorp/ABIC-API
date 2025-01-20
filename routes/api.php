@@ -78,8 +78,6 @@ Route::prefix('users')->group(function () {
         Route::post('', [TestimonialController::class, 'create']);
         Route::put('', [TestimonialController::class, 'update']);
         Route::delete('{id}', [TestimonialController::class, 'delete']);
-
-        Route::post('/change-status', [TestimonialController::class, 'changeStatus']);
     });
 
     Route::prefix('submissions')->group(function () {
@@ -156,6 +154,8 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
 Route::prefix('main')->group(function () {
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-property', [MainController::class, 'submitProperty']);
+
+    Route::post('old/submit-property', [MainController::class, 'oldSubmitProperty']);
 });
 
 Route::prefix('global')->group(function () {
