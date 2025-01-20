@@ -56,7 +56,7 @@ class MainController extends Controller
             'terms' => 'nullable',
             'title' => 'nullable',
             'turnover' => 'nullable',
-            'lease' => 'required',
+            'lease' => 'nullable',
             'amenities' => 'required|array',
             'images' => 'required',
         ]);

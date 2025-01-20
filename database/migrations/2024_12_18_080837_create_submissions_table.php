@@ -38,7 +38,7 @@ return new class extends Migration
             $table->string('terms')->nullable();
             $table->string('title')->nullable();
             $table->date('turnover')->nullable();
-            $table->string('lease');
+            $table->string('lease')->nullable();
             $table->json('amenities');
             $table->json('images');      
             $table->timestamps();
