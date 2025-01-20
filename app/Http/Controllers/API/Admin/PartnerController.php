@@ -1,42 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Traits\Uploadable;
 use Illuminate\Http\Request;
-use Laravel\Sanctum\PersonalAccessToken;
+use Illuminate\Support\Facades\Storage;
+use App\Traits\Uploadable;
 
-use App\Models\Testimonial as Model;
+use App\Models\Partner as Model;
 
-class TestimonialController extends Controller
+class PartnerController extends Controller
 {
     use Uploadable;
 
-    public $model = "Testimonial";
+    public $model = "Partner";
 
-    public function getAll(Request $request)
+    public function getAll()
     {
-        if ($token = $request->bearerToken()) {
-            $user =  PersonalAccessToken::findToken($token)->tokenable;
-
-            if ($user) {
-                if ($user->type == "Admin") {
-                    $records = Model::all();
-                } else if ($user->type == "Agent") {
-                    $records = Model::where('user_id', $user->id)->get();
-                }
-
-                $code = 200;
-                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
-            } else {
-                $code = 404;
-                $response = ['message' => "User Not Found"];
-            }
-        } else {
-            $code = 401;
-            $response = ['message' => "User Not Authenticated"];
-        }
+        $records = Model::all();
+        $code = 200;
+        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
     }
 
@@ -56,10 +39,14 @@ class TestimonialController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
             'name' => 'required',
-            'message' => 'required',
+            'image' => 'required',
         ]);
+
+        $key = 'image';
+        if ($request->hasFile($key)) {
+            $validated[$key] = $this->upload($request->file($key), "partners");
+        }
 
         $record = Model::create($validated);
 
@@ -72,13 +59,19 @@ class TestimonialController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:testimonials,id',
-            'user_id' => 'required|exists:users,id',
+            'id' => 'required|exists:partners,id',
             'name' => 'required',
-            'message' => 'required',
+            'image' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);
+
+        $key = 'image';
+        if ($request->hasFile($key)) {
+            Storage::disk('s3')->delete("partners/$record->image");
+            $validated[$key] = $this->upload($request->file($key), "partners");
+        }
+
         $record->update($validated);
 
         $code = 200;
@@ -91,6 +84,7 @@ class TestimonialController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
+            Storage::disk('s3')->delete("partners/$record->image");
             $record->delete();
 
             $code = 200;

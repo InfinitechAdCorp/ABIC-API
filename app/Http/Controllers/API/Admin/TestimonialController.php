@@ -1,25 +1,42 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
+use Illuminate\Http\Request;
+use Laravel\Sanctum\PersonalAccessToken;
 
-use App\Models\News as Model;
+use App\Models\Testimonial as Model;
 
-class NewsController extends Controller
+class TestimonialController extends Controller
 {
     use Uploadable;
 
-    public $model = "News";
+    public $model = "Testimonial";
 
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $records = Model::all();
-        $code = 200;
-        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+        if ($token = $request->bearerToken()) {
+            $user =  PersonalAccessToken::findToken($token)->tokenable;
+
+            if ($user) {
+                if ($user->type == "Admin") {
+                    $records = Model::all();
+                } else if ($user->type == "Agent") {
+                    $records = Model::where('user_id', $user->id)->get();
+                }
+
+                $code = 200;
+                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+            } else {
+                $code = 404;
+                $response = ['message' => "User Not Found"];
+            }
+        } else {
+            $code = 401;
+            $response = ['message' => "User Not Authenticated"];
+        }
         return response()->json($response, $code);
     }
 
@@ -39,16 +56,10 @@ class NewsController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'date' => 'required|date',
-            'image' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required',
+            'message' => 'required',
         ]);
-
-        $key = 'image';
-        if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "news");
-        }
 
         $record = Model::create($validated);
 
@@ -61,21 +72,13 @@ class NewsController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:news,id',
-            'title' => 'required',
-            'description' => 'required',
-            'date' => 'required|date',
-            'image' => 'nullable',
+            'id' => 'required|exists:testimonials,id',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required',
+            'message' => 'required',
         ]);
 
         $record = Model::find($validated['id']);
-
-        $key = 'image';
-        if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("news/$record->image");
-            $validated[$key] = $this->upload($request->file($key), "news");
-        }
-
         $record->update($validated);
 
         $code = 200;
@@ -88,7 +91,6 @@ class NewsController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("news/$record->image");
             $record->delete();
 
             $code = 200;

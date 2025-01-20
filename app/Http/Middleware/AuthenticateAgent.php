@@ -16,8 +16,8 @@ class AuthenticateAgent
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $userId = $request->header('user-id');
-        $user = User::find($userId);
+        $user_id = $request->header('user-id');
+        $user = User::find($user_id);
         if ($user) {
             return $next($request);
         } else {

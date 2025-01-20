@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
 
-use App\Models\Meeting as Model;
+use App\Models\ClosedDeal as Model;
 
-class MeetingController extends Controller
+class ClosedDealController extends Controller
 {
     use Uploadable;
 
-    public $model = "Meeting";
+    public $model = "Closed Deal";
 
     public function getAll()
     {
@@ -40,13 +40,13 @@ class MeetingController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required',
-            'agenda' => 'required',
+            'description' => 'required',
             'image' => 'required',
         ]);
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "meetings");
+            $validated[$key] = $this->upload($request->file($key), "closedDeals");
         }
 
         $record = Model::create($validated);
@@ -60,9 +60,9 @@ class MeetingController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:meetings,id',
+            'id' => 'required|exists:closed_deals,id',
             'title' => 'required',
-            'agenda' => 'required',
+            'description' => 'required',
             'image' => 'nullable',
         ]);
 
@@ -70,8 +70,8 @@ class MeetingController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("meetings/$record->image");
-            $validated[$key] = $this->upload($request->file($key), "meetings");
+            Storage::disk('s3')->delete("closedDeals/$record->image");
+            $validated[$key] = $this->upload($request->file($key), "closedDeals");
         }
 
         $record->update($validated);
@@ -86,7 +86,7 @@ class MeetingController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("meetings/$record->image");
+            Storage::disk('s3')->delete("closedDeals/$record->image");
             $record->delete();
 
             $code = 200;

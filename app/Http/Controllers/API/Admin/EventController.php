@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
 
-use App\Models\Partner as Model;
+use App\Models\Event as Model;
 
-class PartnerController extends Controller
+class EventController extends Controller
 {
     use Uploadable;
 
-    public $model = "Partner";
+    public $model = "Event";
 
     public function getAll()
     {
@@ -39,13 +39,14 @@ class PartnerController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'title' => 'required',
+            'description' => 'required',
             'image' => 'required',
         ]);
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "partners");
+            $validated[$key] = $this->upload($request->file($key), "events");
         }
 
         $record = Model::create($validated);
@@ -59,8 +60,9 @@ class PartnerController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:partners,id',
-            'name' => 'required',
+            'id' => 'required|exists:events,id',
+            'title' => 'required',
+            'description' => 'required',
             'image' => 'nullable',
         ]);
 
@@ -68,8 +70,8 @@ class PartnerController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("partners/$record->image");
-            $validated[$key] = $this->upload($request->file($key), "partners");
+            Storage::disk('s3')->delete("events/$record->image");
+            $validated[$key] = $this->upload($request->file($key), "events");
         }
 
         $record->update($validated);
@@ -84,7 +86,7 @@ class PartnerController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("partners/$record->image");
+            Storage::disk('s3')->delete("events/$record->image");
             $record->delete();
 
             $code = 200;

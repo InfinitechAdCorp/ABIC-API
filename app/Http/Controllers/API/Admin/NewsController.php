@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
 
-use App\Models\ClosedDeal as Model;
+use App\Models\News as Model;
 
-class ClosedDealController extends Controller
+class NewsController extends Controller
 {
     use Uploadable;
 
-    public $model = "Closed Deal";
+    public $model = "News";
 
     public function getAll()
     {
@@ -41,12 +41,13 @@ class ClosedDealController extends Controller
         $validated = $request->validate([
             'title' => 'required',
             'description' => 'required',
+            'date' => 'required|date',
             'image' => 'required',
         ]);
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "closedDeals");
+            $validated[$key] = $this->upload($request->file($key), "news");
         }
 
         $record = Model::create($validated);
@@ -60,9 +61,10 @@ class ClosedDealController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:closed_deals,id',
+            'id' => 'required|exists:news,id',
             'title' => 'required',
             'description' => 'required',
+            'date' => 'required|date',
             'image' => 'nullable',
         ]);
 
@@ -70,8 +72,8 @@ class ClosedDealController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("closedDeals/$record->image");
-            $validated[$key] = $this->upload($request->file($key), "closedDeals");
+            Storage::disk('s3')->delete("news/$record->image");
+            $validated[$key] = $this->upload($request->file($key), "news");
         }
 
         $record->update($validated);
@@ -86,7 +88,7 @@ class ClosedDealController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("closedDeals/$record->image");
+            Storage::disk('s3')->delete("news/$record->image");
             $record->delete();
 
             $code = 200;

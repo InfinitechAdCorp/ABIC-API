@@ -1,25 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
+use Laravel\Sanctum\PersonalAccessToken;
 
-use App\Models\Seminar as Model;
+use App\Models\Certificate as Model;
 
-class SeminarController extends Controller
+class CertificateController extends Controller
 {
     use Uploadable;
 
-    public $model = "Seminar";
+    public $model = "Certificate";
 
-    public function getAll()
+    public function getAll(Request $request)
     {
-        $records = Model::all();
-        $code = 200;
-        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+        if ($token = $request->bearerToken()) {
+            $user =  PersonalAccessToken::findToken($token)->tokenable;
+
+            if ($user) {
+                if ($user->type == "Admin") {
+                    $records = Model::all();
+                } else if ($user->type == "Agent") {
+                    $records = Model::where('user_id', $user->id)->get();
+                }
+
+                $code = 200;
+                $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+            } else {
+                $code = 404;
+                $response = ['message' => "User Not Found"];
+            }
+        } else {
+            $code = 401;
+            $response = ['message' => "User Not Authenticated"];
+        }
         return response()->json($response, $code);
     }
 
@@ -39,14 +57,15 @@ class SeminarController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required',
+            'date' => 'required|date',
             'image' => 'required',
         ]);
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "seminars");
+            $validated[$key] = $this->upload($request->file($key), "certificates");
         }
 
         $record = Model::create($validated);
@@ -60,9 +79,10 @@ class SeminarController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:seminars,id',
-            'title' => 'required',
-            'description' => 'required',
+            'id' => 'required|exists:certificates,id',
+            'user_id' => 'required|exists:users,id',
+            'name' => 'required',
+            'date' => 'required|date',
             'image' => 'nullable',
         ]);
 
@@ -70,8 +90,8 @@ class SeminarController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("seminars/$record->image");
-            $validated[$key] = $this->upload($request->file($key), "seminars");
+            Storage::disk('s3')->delete("certificates/$record->image");
+            $validated[$key] = $this->upload($request->file($key), "certificates");
         }
 
         $record->update($validated);
@@ -86,7 +106,7 @@ class SeminarController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("seminars/$record->image");
+            Storage::disk('s3')->delete("certificates/$record->image");
             $record->delete();
 
             $code = 200;
