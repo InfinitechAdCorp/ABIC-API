@@ -66,7 +66,7 @@ class SubmissionController extends Controller
         $key = 'property_amenities';
         if ($request[$key]) {
             $amenities = [];
-            foreach ($amenities as $amenity) {
+            foreach ($request[$key] as $amenity) {
                 array_push($validated[$key], $amenity);
             }
             $validated[$key] = json_encode($amenities);
@@ -120,7 +120,7 @@ class SubmissionController extends Controller
         $key = 'property_amenities';
         if ($request[$key]) {
             $amenities = [];
-            foreach ($amenities as $amenity) {
+            foreach ($request[$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
             $validated[$key] = json_encode($amenities);

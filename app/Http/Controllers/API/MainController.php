@@ -66,7 +66,7 @@ class MainController extends Controller
         $key = 'amenities';
         if ($request[$key]) {
             $amenities = [];
-            foreach ($amenities as $amenity) {
+            foreach ($request[$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
             $validated[$key] = json_encode($amenities);
@@ -75,7 +75,7 @@ class MainController extends Controller
         $key = 'images';
         if ($request[$key]) {
             $images = [];
-            foreach ($images as $image) {
+            foreach ($request[$key] as $image) {
                 array_push($images, $this->upload($image, "submissions"));
             }
             $validated[$key] = json_encode($images);
@@ -119,7 +119,7 @@ class MainController extends Controller
         $key = 'property_amenities';
         if ($request[$key]) {
             $amenities = [];
-            foreach ($amenities as $amenity) {
+            foreach ($request[$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
             $validated[$key] = json_encode($amenities);
@@ -128,7 +128,7 @@ class MainController extends Controller
         $key = 'images';
         if ($request[$key]) {
             $images = [];
-            foreach ($images as $image) {
+            foreach ($request[$key] as $image) {
                 array_push($images, $this->upload($image, "submissions/images"));
             }
             $validated[$key] = json_encode($images);

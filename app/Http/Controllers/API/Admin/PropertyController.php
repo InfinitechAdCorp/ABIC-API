@@ -69,7 +69,7 @@ class PropertyController extends Controller
         $key = 'amenities';
         if ($request[$key]) {
             $amenities = [];
-            foreach ($amenities as $amenity) {
+            foreach ($request[$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
             $validated[$key] = json_encode($amenities);
@@ -78,7 +78,7 @@ class PropertyController extends Controller
         $key = 'images';
         if ($request[$key]) {
             $images = [];
-            foreach ($images as $image) {
+            foreach ($request[$key] as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
             }
             $validated[$key] = json_encode($images);
