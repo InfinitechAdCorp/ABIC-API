@@ -17,9 +17,9 @@ class NewsController extends Controller
 
     public function getAll()
     {
-        $records = Model::all();
+        $records = Model::orderBy('updated_at', 'desc')->get();
         $code = 200;
-        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+        $response = ['message' => "Fetched $this->model", 'records' => $records];
         return response()->json($response, $code);
     }
 
@@ -29,7 +29,8 @@ class NewsController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        } else {
+        }
+        else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -40,8 +41,8 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required',
-            'description' => 'required',
             'date' => 'required|date',
+            'description' => 'required',
             'image' => 'required',
         ]);
 
@@ -51,10 +52,8 @@ class NewsController extends Controller
         }
 
         $record = Model::create($validated);
-
         $code = 201;
         $response = ['message' => "Created $this->model", 'record' => $record];
-
         return response()->json($response, $code);
     }
 
@@ -63,8 +62,8 @@ class NewsController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:news,id',
             'title' => 'required',
-            'description' => 'required',
             'date' => 'required|date',
+            'description' => 'required',
             'image' => 'nullable',
         ]);
 
@@ -72,15 +71,13 @@ class NewsController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("news/$record->image");
+            Storage::disk('s3')->delete("news/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "news");
         }
 
         $record->update($validated);
-
         $code = 200;
-        $response = ['message' => "Updated $this->model"];
-
+        $response = ['message' => "Updated $this->model", 'record' => $record];
         return response()->json($response, $code);
     }
 
@@ -90,14 +87,13 @@ class NewsController extends Controller
         if ($record) {
             Storage::disk('s3')->delete("news/$record->image");
             $record->delete();
-
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        } else {
+        }
+        else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-
-        return response()->json($response, $code);
+        return response($response, $code);
     }
 }
