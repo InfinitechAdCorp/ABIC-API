@@ -69,7 +69,7 @@ Route::prefix('users')->group(function () {
         Route::put('', [ScheduleController::class, 'update']);
         Route::delete('{id}', [ScheduleController::class, 'delete']);
 
-        Route::post('/change-status', [ScheduleController::class, 'changeStatus']);
+        Route::post('/set-status', [ScheduleController::class, 'setStatus']);
     });
 
     Route::prefix('testimonials')->group(function () {

@@ -59,7 +59,7 @@ class MainController extends Controller
             'turnover' => 'nullable',
             'lease' => 'nullable',
             'amenities' => 'required|array',
-            'images' => 'required',
+            'images' => 'nullable',
         ]);
 
         $key = 'amenities';

@@ -41,7 +41,7 @@ return new class extends Migration
             $table->date('turnover')->nullable();
             $table->string('lease')->nullable();
             $table->json('amenities');
-            $table->json('images');      
+            $table->json('images')->nullable();      
             $table->timestamps();
         });
     }
