@@ -15,33 +15,22 @@ class UserController extends Controller
 
     public function getAll(Request $request)
     {
-        if ($token = $request->bearerToken()) {
-            $record =  PersonalAccessToken::findToken($token)->tokenable;
-            if ($record) {
-                if ($record->type == "Admin") {
-                    $records = Model::all();
-
-                    $code = 200;
-                    $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
-                } else if ($record->type == "Agent") {
-                    $code = 200;
-                    $response = ['message' => "Fetched $this->model", 'record' => $record];
-                }
-            } else {
-                $code = 404;
-                $response = ['message' => "$this->model Not Found"];
-            }
-        } else {
-            $code = 401;
-            $response = ['message' => "$this->model Not Authenticated"];
+        $record =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
+        if ($record->type == "Admin") {
+            $records = Model::orderBy('updated_at', 'desc')->get();
+            $code = 200;
+            $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+        } else if ($record->type == "Agent") {
+            $record = Model::where('id', $record->id)->first();
+            $code = 200;
+            $response = ['message' => "Fetched $this->model", 'record' => $record];
         }
-
         return response()->json($response, $code);
     }
 
     public function get($id)
     {
-        $record = Model::find($id);
+        $record = Model::where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
@@ -55,43 +44,59 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|unique:users,name',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:8',
             'type' => 'required'
         ]);
 
-        $key = "password";
-        $validated[$key] = Hash::make($validated[$key]);
-        $record = Model::create($validated);
+        $validated['password'] = Hash::make($validated['password']);
 
+        $record = Model::create($validated);
         $code = 201;
         $response = [
             'message' => "Created $this->model",
             'record' => $record,
         ];
+        return response()->json($response, $code);
+    }
 
+    public function update(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:users,id',
+            'name' => 'required',
+            'email' => 'required|email',
+        ]);
+
+        $record = Model::find($validated['id']);
+        $record->update($validated);
+        $code = 200;
+        $response = [
+            'message' => "Updated $this->model",
+            'record' => $record,
+        ];
         return response()->json($response, $code);
     }
 
     public function login(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8',
         ]);
 
-        $record = Model::where('email', $request->email)->first();
+        $record = Model::where('email', $validated['email'])->first();
+        $validPassword = Hash::check($validated['password'], $record->password);
 
-        if ($record && Hash::check($request->password, $record->password)) {
+        if ($record && $validPassword) {
             $record->tokens()->delete();
-            $token = $record->createToken($record->name . '-AuthToken')->plainTextToken;
-
+            $token = $record->createToken("$record->name-AuthToken")->plainTextToken;
             $code = 200;
             $response = [
-                'message' => 'Login Successful',
-                'record' => $record,
+                'message' => 'Logged In Successfully',
                 'token' => $token,
+                'record' => $record,
             ];
         } else {
             $code = 401;
@@ -99,13 +104,13 @@ class UserController extends Controller
                 'message' => 'Invalid Credentials',
             ];
         }
-
         return response()->json($response, $code);
     }
 
     public function logout(Request $request)
     {
-        $request->user()->currentAccessToken()->delete();
+        $record = PersonalAccessToken::findToken($request->bearerToken())->tokenable;
+        PersonalAccessToken::where('tokenable_id', $record->id)->delete();
         $code = 200;
         $response = ['message' => 'Logged Out Successfully'];
         return response()->json($response, $code);
