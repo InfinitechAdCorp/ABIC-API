@@ -62,22 +62,22 @@ class MainController extends Controller
             'images' => 'required',
         ]);
 
-        $key = 'images';
-        if ($request[$key]) {
-            $validated[$key] = [];
-            foreach ($request[$key] as $image) {
-                array_push($validated[$key], $this->upload($image, "submissions"));
-            }
-            $validated[$key] = json_encode($validated[$key]);
-        }
-
         $key = 'amenities';
         if ($request[$key]) {
-            $validated[$key] = [];
-            foreach ($request[$key] as $amenity) {
-                array_push($validated[$key], $amenity);
+            $amenities = [];
+            foreach ($amenities as $amenity) {
+                array_push($amenities, $amenity);
             }
-            $validated[$key] = json_encode($validated[$key]);
+            $validated[$key] = json_encode($amenities);
+        }
+
+        $key = 'images';
+        if ($request[$key]) {
+            $images = [];
+            foreach ($images as $image) {
+                array_push($images, $this->upload($image, "submissions"));
+            }
+            $validated[$key] = json_encode($images);
         }
 
         $record = Submission::create($validated);

@@ -18,32 +18,20 @@ class PropertyController extends Controller
 
     public function getAll(Request $request)
     {
-        if ($token = $request->bearerToken()) {
-            $user =  PersonalAccessToken::findToken($token)->tokenable;
-
-            if ($user) {
-                if ($user->type == "Admin") {
-                    $records = Model::all();
-                } else if ($user->type == "Agent") {
-                    $records = Model::where('user_id', $user->id)->get();
-                }
-
-                $code = 200;
-                $response = ['message' => "Fetched Properties", 'records' => $records];
-            } else {
-                $code = 404;
-                $response = ['message' => "User Not Found"];
-            }
-        } else {
-            $code = 401;
-            $response = ['message' => "User Not Authenticated"];
+        $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
+        if ($user->type == "Admin") {
+            $records = Model::with('user')->orderBy('updated_at', 'desc')->get();
+        } else if ($user->type == "Agent") {
+            $records = Model::with('user')->where('user_id', $user->id)->orderBy('updated_at', 'desc')->get();
         }
+        $code = 200;
+        $response = ['message' => "Fetched Properties", 'records' => $records];
         return response()->json($response, $code);
     }
 
     public function get($id)
     {
-        $record = Model::find($id);
+        $record = Model::with('user')->where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
@@ -56,61 +44,52 @@ class PropertyController extends Controller
 
     public function create(Request $request)
     {
-        try {
-            $validated = $request->validate([
-                'user_id' => 'required|exists:users,id',
-                'name' => 'nullable',
-                'type' => 'nullable',
-                'location' => 'nullable',
-                'price' => 'nullable|decimal:0,2',
-                'area' => 'nullable|numeric',
-                'parking' => 'nullable|boolean',
-                'vacant' => 'nullable|boolean',
-                'nearby' => 'nullable',
-                'description' => 'nullable',
-                'sale' => 'nullable',
-                'badge' => 'nullable',
-                'status' => 'nullable',
-                'unit_number' => 'nullable',
-                'unit_type' => 'nullable',
-                'unit_furnish' => 'nullable',
-                'unit_floor' => 'nullable',
-                'amenities' => 'nullable|array',
-                'images' => 'nullable',
-            ]);
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'name' => 'nullable',
+            'type' => 'nullable',
+            'location' => 'nullable',
+            'price' => 'nullable|decimal:0,2',
+            'area' => 'nullable|numeric',
+            'parking' => 'nullable|boolean',
+            'vacant' => 'nullable|boolean',
+            'nearby' => 'nullable',
+            'description' => 'nullable',
+            'sale' => 'nullable',
+            'badge' => 'nullable',
+            'status' => 'nullable',
+            'unit_number' => 'nullable',
+            'unit_type' => 'nullable',
+            'unit_furnish' => 'nullable',
+            'unit_floor' => 'nullable',
+            'amenities' => 'nullable|array',
+            'images' => 'nullable',
+        ]);
 
-            $key = 'images';
-            if ($request[$key]) {
-                $images = [];
-                foreach ($request[$key] as $image) {
-                    array_push($images, $this->upload($image, "properties/images"));
-                }
-                $validated[$key] = json_encode($images);
+        $key = 'amenities';
+        if ($request[$key]) {
+            $validated[$key] = [];
+            foreach ($request[$key] as $amenity) {
+                array_push($validated[$key], $amenity);
             }
-
-            $key = 'amenities';
-            if ($request[$key]) {
-                $amenities = [];
-                foreach ($request[$key] as $amenity) {
-                    array_push($amenities, $amenity);
-                }
-                $validated[$key] = json_encode($amenities);
-            }
-
-            $record = Model::create($validated);
-
-            $code = 201;
-            $response = [
-                'message' => "Created $this->model",
-                'record' => $record,
-            ];
-        } catch (\Exception $e) {
-            $code = 500;
-            $response = [
-                'message' => $e->getMessage(),
-            ];
+            $validated[$key] = json_encode($validated[$key]);
         }
 
+        $key = 'images';
+        if ($request[$key]) {
+            $validated[$key] = [];
+            foreach ($request[$key] as $image) {
+                array_push($validated[$key], $this->upload($image, "properties/images"));
+            }
+            $validated[$key] = json_encode($validated[$key]);
+        }
+
+        $record = Model::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Created $this->model",
+            'record' => $record,
+        ];
         return response()->json($response, $code);
     }
 
@@ -135,26 +114,11 @@ class PropertyController extends Controller
             'unit_type' => 'nullable',
             'unit_furnish' => 'nullable',
             'unit_floor' => 'nullable',
-            'images' => 'nullable',
             'amenities' => 'nullable|array',
+            'images' => 'nullable',
         ]);
 
         $record = Model::find($validated['id']);
-
-        $key = 'images';
-
-        $images = json_decode($record[$key]);
-        foreach ($images as $image) {
-            Storage::disk('s3')->delete("properties/images/$image");
-        }
-
-        if ($request[$key]) {
-            $images = [];
-            foreach ($request[$key] as $image) {
-                array_push($images, $this->upload($image, "properties/images"));
-            }
-            $validated['images'] = json_encode($images);
-        }
 
         $key = 'amenities';
         if ($request[$key]) {
@@ -163,6 +127,21 @@ class PropertyController extends Controller
                 array_push($amenities, $amenity);
             }
             $validated[$key] = json_encode($amenities);
+        }
+
+        $key = 'images';
+
+        $images = json_decode($record[$key]);
+        foreach ($images as $image) {
+            Storage::disk('s3')->delete("properties/images/$image");
+        }
+        
+        if ($request[$key]) {
+            $images = [];
+            foreach ($request[$key] as $image) {
+                array_push($images, $this->upload($image, "properties/images"));
+            }
+            $validated[$key] = json_encode($images);
         }
 
         $record->update($validated);
@@ -177,28 +156,20 @@ class PropertyController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            try {
-                $images = json_decode($record->images);
-                foreach ($images as $image) {
-                    Storage::disk('s3')->delete("properties/images/$image");
-                }
-                $record->delete();
-
-                $code = 200;
-                $response = [
-                    'message' => "Deleted $this->model"
-                ];
-            } catch (\Exception $e) {
-                $code = 500;
-                $response = [
-                    'message' => $e->getMessage(),
-                ];
+            $images = json_decode($record->images);
+            foreach ($images as $image) {
+                Storage::disk('s3')->delete("properties/images/$image");
             }
+
+            $record->delete();
+            $code = 200;
+            $response = [
+                'message' => "Deleted $this->model"
+            ];
         } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-
         return response()->json($response, $code);
     }
 }
