@@ -42,9 +42,10 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
-            'phone' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
+            'phone' => 'required',
             'date' => 'required|date',
             'time' => 'required',
             'type' => 'required',
@@ -67,9 +68,10 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:schedules,id',
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
-            'phone' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
+            'phone' => 'required',
             'date' => 'required|date',
             'time' => 'required',
             'type' => 'required',
