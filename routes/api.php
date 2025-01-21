@@ -19,7 +19,7 @@ use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
 use App\Http\Controllers\API\Admin\InquiryController;
-
+use App\Http\Controllers\API\Admin\ServiceController;
 use App\Http\Controllers\API\AgentController;
 
 use App\Http\Controllers\API\MainController;
@@ -138,6 +138,14 @@ Route::prefix('users')->group(function () {
         Route::post('', [InquiryController::class, 'create']);
         Route::put('', [InquiryController::class, 'update']);
         Route::delete('{id}', [InquiryController::class, 'delete']);
+    });
+
+    Route::prefix('services')->group(function () {
+        Route::get('', [ServiceController::class, 'getAll']);
+        Route::get('{id}', [ServiceController::class, 'get']);
+        Route::post('', [ServiceController::class, 'create']);
+        Route::put('', [ServiceController::class, 'update']);
+        Route::delete('{id}', [ServiceController::class, 'delete']);
     });
 
     Route::prefix('events')->group(function () {
