@@ -48,4 +48,9 @@ class Property extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function amenities(): HasMany
+    {
+        return $this->hasMany(Amenity::class);
+    }
 }
