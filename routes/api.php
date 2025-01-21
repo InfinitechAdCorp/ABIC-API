@@ -18,6 +18,7 @@ use App\Http\Controllers\API\Admin\NewsController;
 use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
+use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
 use App\Http\Controllers\API\Admin\TipController;
@@ -81,6 +82,14 @@ Route::prefix('users')->group(function () {
         Route::post('', [AmenityController::class, 'create']);
         Route::put('', [AmenityController::class, 'update']);
         Route::delete('{id}', [AmenityController::class, 'delete']);
+    });
+
+    Route::prefix('infrastructures')->group(function () {
+        Route::get('', [InfrastructureController::class, 'getAll']);
+        Route::get('{id}', [InfrastructureController::class, 'get']);
+        Route::post('', [InfrastructureController::class, 'create']);
+        Route::put('', [InfrastructureController::class, 'update']);
+        Route::delete('{id}', [InfrastructureController::class, 'delete']);
     });
 
     Route::prefix('testimonials')->group(function () {
