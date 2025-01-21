@@ -167,6 +167,4 @@ Route::prefix('main')->group(function () {
     Route::post('old/submit-property', [MainController::class, 'oldSubmitProperty']);
 });
 
-Route::prefix('global')->group(function () {
-    Route::get('properties', [GlobalController::class, 'propertiesGetAll']);
-});
+Route::get('global/properties', [GlobalController::class, 'getAllProperties']);
