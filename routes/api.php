@@ -20,6 +20,7 @@ use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
+use App\Http\Controllers\API\Admin\TipController;
 use App\Http\Controllers\API\AgentController;
 
 use App\Http\Controllers\API\MainController;
@@ -114,6 +115,14 @@ Route::prefix('users')->group(function () {
         Route::post('', [ItemController::class, 'create']);
         Route::put('', [ItemController::class, 'update']);
         Route::delete('{id}', [ItemController::class, 'delete']);
+    });
+
+    Route::prefix('tips')->group(function () {
+        Route::get('', [TipController::class, 'getAll']);
+        Route::get('{id}', [TipController::class, 'get']);
+        Route::post('', [TipController::class, 'create']);
+        Route::put('', [TipController::class, 'update']);
+        Route::delete('{id}', [TipController::class, 'delete']);
     });
 
     Route::prefix('seminars')->group(function () {
