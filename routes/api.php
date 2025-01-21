@@ -15,6 +15,7 @@ use App\Http\Controllers\API\Admin\MeetingController;
 use App\Http\Controllers\API\Admin\EventController;
 use App\Http\Controllers\API\Admin\ClosedDealController;
 use App\Http\Controllers\API\Admin\NewsController;
+use App\Http\Controllers\API\Admin\AmenityController;
 
 use App\Http\Controllers\API\AgentController;
 
@@ -70,6 +71,14 @@ Route::prefix('users')->group(function () {
         Route::delete('{id}', [ScheduleController::class, 'delete']);
 
         Route::post('/set-status', [ScheduleController::class, 'setStatus']);
+    });
+
+    Route::prefix('amenities')->group(function () {
+        Route::get('', [AmenityController::class, 'getAll']);
+        Route::get('{id}', [AmenityController::class, 'get']);
+        Route::post('', [AmenityController::class, 'create']);
+        Route::put('', [AmenityController::class, 'update']);
+        Route::delete('{id}', [AmenityController::class, 'delete']);
     });
 
     Route::prefix('testimonials')->group(function () {
