@@ -14,7 +14,7 @@ class Meeting extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'title',
+        'name',
         'agenda',
         'image',
     ];

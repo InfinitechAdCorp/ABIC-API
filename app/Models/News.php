@@ -14,7 +14,7 @@ class News extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'title',
+        'name',
         'date',
         'description',
         'image',

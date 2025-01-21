@@ -14,7 +14,7 @@ class Event extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'title',
+        'name',
         'description',
         'image',
     ];

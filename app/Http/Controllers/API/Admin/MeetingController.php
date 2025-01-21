@@ -40,7 +40,7 @@ class MeetingController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
+            'name' => 'required',
             'agenda' => 'required',
             'image' => 'required',
         ]);
@@ -60,7 +60,7 @@ class MeetingController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:meetings,id',
-            'title' => 'required',
+            'name' => 'required',
             'agenda' => 'required',
             'image' => 'nullable',
         ]);

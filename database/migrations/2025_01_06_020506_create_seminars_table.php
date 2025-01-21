@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('seminars', function (Blueprint $table) {
             $table->ulid('id')->primary();
-            $table->string('title');
+            $table->string('name');
             $table->text('description');
             $table->string('image');
             $table->timestamps();
