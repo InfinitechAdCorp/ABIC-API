@@ -78,7 +78,8 @@ class MainController extends Controller
     public function submitInquiry(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'email' => 'required|email',
             'phone' => 'required',
             'type' => 'required',

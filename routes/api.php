@@ -18,6 +18,7 @@ use App\Http\Controllers\API\Admin\NewsController;
 use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
+use App\Http\Controllers\API\Admin\InquiryController;
 
 use App\Http\Controllers\API\AgentController;
 
@@ -129,6 +130,14 @@ Route::prefix('users')->group(function () {
         Route::post('', [MeetingController::class, 'create']);
         Route::put('', [MeetingController::class, 'update']);
         Route::delete('{id}', [MeetingController::class, 'delete']);
+    });
+
+    Route::prefix('inquiries')->group(function () {
+        Route::get('', [InquiryController::class, 'getAll']);
+        Route::get('{id}', [InquiryController::class, 'get']);
+        Route::post('', [InquiryController::class, 'create']);
+        Route::put('', [InquiryController::class, 'update']);
+        Route::delete('{id}', [InquiryController::class, 'delete']);
     });
 
     Route::prefix('events')->group(function () {
