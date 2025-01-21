@@ -42,7 +42,8 @@ class TestimonialController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'message' => 'required',
         ]);
 
@@ -60,7 +61,8 @@ class TestimonialController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:testimonials,id',
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
+            'first_name' => 'required',
+            'last_name' => 'required',
             'message' => 'required',
         ]);
 
