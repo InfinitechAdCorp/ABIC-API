@@ -25,4 +25,9 @@ class Career extends Model
             $record->id = Str::ulid();
         });
     }
+
+    public function applications(): HasMany
+    {
+        return $this->hasMany(Application::class);
+    }
 }

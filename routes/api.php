@@ -17,6 +17,7 @@ use App\Http\Controllers\API\Admin\ClosedDealController;
 use App\Http\Controllers\API\Admin\NewsController;
 use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
+use App\Http\Controllers\API\Admin\ApplicationController;
 
 use App\Http\Controllers\API\AgentController;
 
@@ -161,6 +162,14 @@ Route::prefix('users')->group(function () {
         Route::put('', [CareerController::class, 'update']);
         Route::delete('{id}', [CareerController::class, 'delete']);
     });
+
+    Route::prefix('applications')->group(function () {
+        Route::get('', [ApplicationController::class, 'getAll']);
+        Route::get('{id}', [ApplicationController::class, 'get']);
+        Route::post('', [ApplicationController::class, 'create']);
+        Route::put('', [ApplicationController::class, 'update']);
+        Route::delete('{id}', [ApplicationController::class, 'delete']);
+    });
 // });
 
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
@@ -169,7 +178,9 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
 
 Route::prefix('main')->group(function () {
     Route::get('partners', [MainController::class, 'partnersGetAll']);
+    Route::get('careers', [MainController::class, 'careersGetAll']);
 
+    Route::post('submit-application', [MainController::class, 'submitApplication']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-property', [MainController::class, 'submitProperty']);
 

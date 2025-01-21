@@ -4,15 +4,20 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Traits\Uploadable;
 
 use App\Models\Property;
 use App\Models\Partner;
+use App\Models\Career;
+use App\Models\Application;
 use App\Models\Inquiry;
 use App\Models\Submission;
 use App\Models\PropertySubmission;
 
 class MainController extends Controller
 {
+    use Uploadable;
+
     public function propertiesGetAll()
     {
         $records = Property::orderBy('badge')->get();
@@ -25,6 +30,48 @@ class MainController extends Controller
         $records = Partner::all();
         $code = 200;
         $response = ['message' => "Fetched Partners", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function careersGetAll() {
+       $records = Career::with('applications')->orderBy('updated_at', 'desc')->get();
+        foreach ($records as $record) {
+            $record['available_slots'] = $record->slots - count($record->applications);
+        }
+        $code = 200;
+        $response = ['message' => "Fetched Careers", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function submitApplication(Request $request)
+    {
+        $validated = $request->validate([
+            'career_id' => 'required|exists:careers,id',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'address' => 'required',
+            'resume' => 'required',
+        ]);
+
+        $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
+        $availableSlots = $parent->slots - count($parent->applications);
+
+        if ($availableSlots <= 0) {
+            $code = 200;
+            $response = ['message' => "Out Of Slots"];
+        } else {
+            $key = 'resume';
+            if ($request->hasFile($key)) {
+                $validated[$key] = $this->upload($request->file($key), "careers/applications");
+            }
+
+            $record = Application::create($validated);
+            $code = 201;
+            $response = ['message' => "Submitted Application", 'record' => $record];
+        }
+
         return response()->json($response, $code);
     }
 
