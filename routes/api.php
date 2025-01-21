@@ -213,6 +213,7 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
 
 Route::prefix('main')->group(function () {
     Route::get('testimonials', [MainController::class, 'testimonialsGetAll']);
+    Route::get('seminars', [MainController::class, 'seminarsGetAll']);
     Route::get('partners', [MainController::class, 'partnersGetAll']);
     Route::get('careers', [MainController::class, 'careersGetAll']);
 

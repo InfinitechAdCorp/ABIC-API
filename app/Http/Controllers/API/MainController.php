@@ -9,6 +9,7 @@ use Sentiment\Analyzer;
 
 use App\Models\Property;
 use App\Models\Testimonial;
+use App\Models\Seminar;
 use App\Models\Partner;
 use App\Models\Career;
 use App\Models\Application;
@@ -43,6 +44,13 @@ class MainController extends Controller
 
         $code = 200;
         $response = ['message' => "Fetched Testimonials", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function seminarsGetAll() {
+        $records = Seminar::orderBy('updated_at', 'desc')->get();
+        $code = 200;
+        $response = ['message' => "Fetched Seminars", 'records' => $records];
         return response()->json($response, $code);
     }
 
