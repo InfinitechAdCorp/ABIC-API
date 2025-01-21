@@ -6,17 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Models\Property;
+use App\Models\Partner;
 use App\Models\Inquiry;
 use App\Models\Submission;
 use App\Models\PropertySubmission;
 
 class MainController extends Controller
 {
-    public function getAllProperties()
+    public function propertiesGetAll()
     {
         $records = Property::orderBy('badge')->get();
         $code = 200;
         $response = ['message' => "Fetched Properties", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function partnersGetAll() {
+        $records = Partner::all();
+        $code = 200;
+        $response = ['message' => "Fetched Partners", 'records' => $records];
         return response()->json($response, $code);
     }
 
