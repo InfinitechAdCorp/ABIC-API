@@ -16,6 +16,28 @@ class PropertyController extends Controller
 
     public $model = "Property";
 
+    public $rules = [
+        'user_id' => 'required|exists:users,id',
+        'name' => 'required|max:255',
+        'type' => 'required|max:255',
+        'location' => 'required|max:255',
+        'price' => 'required|decimal:0,2',
+        'area' => 'required|numeric|integer',
+        'parking' => 'required|boolean',
+        'vacant' => 'required|boolean',
+        'nearby' => 'required',
+        'description' => 'required',
+        'sale' => 'required|max:255',
+        'badge' => 'required|max:255',
+        'status' => 'required|max:255',
+        'unit_number' => 'required|max:255',
+        'unit_type' => 'required|max:255',
+        'unit_furnish' => 'required|max:255',
+        'unit_floor' => 'required|max:255',
+        'amenities' => 'required|array',
+        'images' => 'required',
+    ];
+
     public function getAll(Request $request)
     {
         $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
@@ -44,27 +66,7 @@ class PropertyController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|max:255',
-            'type' => 'required|max:255',
-            'location' => 'required|max:255',
-            'price' => 'required|decimal:0,2',
-            'area' => 'required|numeric|integer',
-            'parking' => 'required|boolean',
-            'vacant' => 'required|boolean',
-            'nearby' => 'required',
-            'description' => 'required',
-            'sale' => 'required|max:255',
-            'badge' => 'required|max:255',
-            'status' => 'required|max:255',
-            'unit_number' => 'required|max:255',
-            'unit_type' => 'required|max:255',
-            'unit_furnish' => 'required|max:255',
-            'unit_floor' => 'required|max:255',
-            'amenities' => 'required|array',
-            'images' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'amenities';
         if ($request[$key]) {
@@ -95,28 +97,10 @@ class PropertyController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:properties,id',
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|max:255',
-            'type' => 'required|max:255',
-            'location' => 'required|max:255',
-            'price' => 'required|decimal:0,2',
-            'area' => 'required|numeric|integer',
-            'parking' => 'required|boolean',
-            'vacant' => 'required|boolean',
-            'nearby' => 'required',
-            'description' => 'required',
-            'sale' => 'required|max:255',
-            'badge' => 'required|max:255',
-            'status' => 'required|max:255',
-            'unit_number' => 'required|max:255',
-            'unit_type' => 'required|max:255',
-            'unit_furnish' => 'required|max:255',
-            'unit_floor' => 'required|max:255',
-            'amenities' => 'nullable|array',
-            'images' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:properties,id';
+        $this->rules['amenities'] = 'nullable|array';
+        $this->rules['images'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 

@@ -15,6 +15,12 @@ class MeetingController extends Controller
 
     public $model = "Meeting";
 
+    public $rules = [
+        'name' => 'required|max:255',
+        'agenda' => 'required',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::orderBy('updated_at', 'desc')->get();
@@ -39,11 +45,7 @@ class MeetingController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'agenda' => 'required',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -58,12 +60,9 @@ class MeetingController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:meetings,id',
-            'name' => 'required|max:255',
-            'agenda' => 'required',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:meetings,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 

@@ -15,6 +15,15 @@ class ArticleController extends Controller
 
     public $model = "Article";
 
+    public $rules = [
+        'title' => 'required|max:255',
+        'subtitle' => 'nullable|max:255',
+        'date' => 'required|date',
+        'content' => 'required',
+        'type' => 'required|max:255',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::orderBy('type')->get();
@@ -29,8 +38,7 @@ class ArticleController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -39,14 +47,7 @@ class ArticleController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|max:255',
-            'subtitle' => 'nullable|max:255',
-            'date' => 'required|date',
-            'content' => 'required',
-            'type' => 'required|max:255',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -61,15 +62,9 @@ class ArticleController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:articles,id',
-            'title' => 'required|max:255',
-            'subtitle' => 'nullable|max:255',
-            'date' => 'required|date',
-            'content' => 'required',
-            'type' => 'required|max:255',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:articles,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 
@@ -93,8 +88,7 @@ class ArticleController extends Controller
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }

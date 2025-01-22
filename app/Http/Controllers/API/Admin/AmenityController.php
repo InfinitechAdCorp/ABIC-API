@@ -11,6 +11,11 @@ class AmenityController extends Controller
 {
     public $model = "Amenity";
 
+    public $rules = [
+        'property_id' => 'required|exists:properties,id',
+        'name' => 'required|max:255',
+    ];
+
     public function getAll()
     {
         $records = Model::with('property')->orderBy('updated_at', 'desc')->get();
@@ -35,10 +40,7 @@ class AmenityController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'property_id' => 'required|exists:properties,id',
-            'name' => 'required|max:255',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $record = Model::create($validated);
         $code = 201;
@@ -48,11 +50,8 @@ class AmenityController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:amenities,id',
-            'property_id' => 'required|exists:properties,id',
-            'name' => 'required|max:255',
-        ]);
+        $this->rules['id'] = 'required|exists:amenities,id';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
         $record->update($validated);

@@ -15,6 +15,12 @@ class CareerController extends Controller
     
     public $model = "Career";
 
+    public $rules = [
+        'position' => 'required|max:255',
+        'slots' => 'required|numeric|integer',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::with('applications')->orderBy('updated_at', 'desc')->get();
@@ -43,11 +49,7 @@ class CareerController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'position' => 'required|max:255',
-            'slots' => 'required|numeric|integer',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -62,12 +64,9 @@ class CareerController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:careers,id',
-            'position' => 'required|max:255',
-            'slots' => 'required|numeric|integer',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:careers,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 

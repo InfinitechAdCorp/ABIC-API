@@ -12,6 +12,17 @@ class InquiryController extends Controller
 {
     public $model = "Inquiry";
 
+    public $rules = [
+        'user_id' => 'required|exists:users,id',
+        'first_name' => 'required|max:255',
+        'last_name' => 'required|max:255',
+        'email' => 'required|max:255|email',
+        'phone' => 'required|max:255',
+        'type' => 'required|max:255',
+        'properties' => 'nullable|max:255',
+        'message' => 'required',
+    ];
+
     public function getAll(Request $request)
     {
         $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
@@ -40,16 +51,7 @@ class InquiryController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'type' => 'required|max:255',
-            'properties' => 'nullable|max:255',
-            'message' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $record = Model::create($validated);
         $code = 201;
@@ -62,17 +64,8 @@ class InquiryController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:inquiries,id',
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'type' => 'required|max:255',
-            'properties' => 'nullable|max:255',
-            'message' => 'required',
-        ]);
+        $this->rules['id'] = 'required|exists:inquiries,id';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
         $record->update($validated);

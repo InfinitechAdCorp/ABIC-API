@@ -16,6 +16,13 @@ class CertificateController extends Controller
 
     public $model = "Certificate";
 
+    public $rules = [
+        'user_id' => 'required|exists:users,id',
+        'name' => 'required|max:255',
+        'date' => 'required|date',
+        'image' => 'required',
+    ];
+
     public function getAll(Request $request)
     {
         $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
@@ -44,12 +51,7 @@ class CertificateController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|max:255',
-            'date' => 'required|date',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -67,13 +69,9 @@ class CertificateController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:certificates,id',
-            'user_id' => 'required|exists:users,id',
-            'name' => 'required|max:255',
-            'date' => 'required|date',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:certificates,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 

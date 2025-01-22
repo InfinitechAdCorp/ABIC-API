@@ -16,6 +16,30 @@ class SubmissionController extends Controller
 
     public $model = "Submission";
 
+    public $rules = [
+        'user_last' => 'nullable|max:255',
+        'user_first' => 'nullable|max:255',
+        'user_email' => 'nullable|max:255|email',
+        'user_phone' => 'nullable|max:255',
+        'sender_type' => 'nullable|max:255',
+        'property_name' => 'nullable|max:255',
+        'property_type' => 'nullable|max:255',
+        'property_unit_status' => 'nullable|max:255',
+        'property_price' => 'nullable|decimal:0,2',
+        'property_area' => 'nullable|decimal:0,2',
+        'property_number' => 'nullable|max:255',
+        'property_parking' => 'nullable|boolean',
+        'property_status' => 'nullable|max:255',
+        'property_rent_terms' => 'nullable|max:255',
+        'property_sale_type' => 'nullable|max:255',
+        'property_sale_payment' => 'nullable|max:255',
+        'property_sale_title' => 'nullable|max:255',
+        'property_sale_turnover' => 'nullable|max:255',
+        'property_description' => 'nullable',
+        'property_amenities' => 'nullable|array',
+        'images' => 'nullable',
+    ];
+
     public function getAll(Request $request)
     {
         $records = Model::orderBy('updated_at', 'desc')->get();
@@ -39,29 +63,7 @@ class SubmissionController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_last' => 'nullable|max:255',
-            'user_first' => 'nullable|max:255',
-            'user_email' => 'nullable|max:255|email',
-            'user_phone' => 'nullable|max:255',
-            'sender_type' => 'nullable|max:255',
-            'property_name' => 'nullable|max:255',
-            'property_type' => 'nullable|max:255',
-            'property_unit_status' => 'nullable|max:255',
-            'property_price' => 'nullable|decimal:0,2',
-            'property_area' => 'nullable|decimal:0,2',
-            'property_number' => 'nullable|max:255',
-            'property_parking' => 'nullable|boolean',
-            'property_status' => 'nullable|max:255',
-            'property_rent_terms' => 'nullable|max:255',
-            'property_sale_type' => 'nullable|max:255',
-            'property_sale_payment' => 'nullable|max:255',
-            'property_sale_title' => 'nullable|max:255',
-            'property_sale_turnover' => 'nullable|max:255',
-            'property_description' => 'nullable',
-            'property_amenities' => 'nullable|array',
-            'images' => 'nullable',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'property_amenities';
         if ($request[$key]) {
@@ -92,30 +94,8 @@ class SubmissionController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:property_submissions,id',
-            'user_last' => 'nullable|max:255',
-            'user_first' => 'nullable|max:255',
-            'user_email' => 'nullable|max:255|email',
-            'user_phone' => 'nullable|max:255',
-            'sender_type' => 'nullable|max:255',
-            'property_name' => 'nullable|max:255',
-            'property_type' => 'nullable|max:255',
-            'property_unit_status' => 'nullable|max:255',
-            'property_price' => 'nullable|decimal:0,2',
-            'property_area' => 'nullable|decimal:0,2',
-            'property_number' => 'nullable|max:255',
-            'property_parking' => 'nullable|boolean',
-            'property_status' => 'nullable|max:255',
-            'property_rent_terms' => 'nullable|max:255',
-            'property_sale_type' => 'nullable|max:255',
-            'property_sale_payment' => 'nullable|max:255',
-            'property_sale_title' => 'nullable|max:255',
-            'property_sale_turnover' => 'nullable|max:255',
-            'property_description' => 'nullable',
-            'property_amenities' => 'nullable|array',
-            'images' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:property_submissions,id';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 

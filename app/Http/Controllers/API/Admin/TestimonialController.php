@@ -12,6 +12,13 @@ class TestimonialController extends Controller
 {
     public $model = "Testimonial";
 
+    public $rules = [
+        'user_id' => 'required|exists:users,id',
+        'first_name' => 'required|max:255',
+        'last_name' => 'required|max:255',
+        'message' => 'required|max:255',
+    ];
+
     public function getAll(Request $request)
     {
         $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
@@ -40,12 +47,7 @@ class TestimonialController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'message' => 'required|max:255',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $record = Model::create($validated);
         $code = 201;
@@ -58,13 +60,8 @@ class TestimonialController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:testimonials,id',
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'message' => 'required|max:255',
-        ]);
+        $this->rules['id'] = 'required|exists:testimonials,id';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
         $record->update($validated);

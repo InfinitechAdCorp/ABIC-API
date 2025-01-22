@@ -15,6 +15,12 @@ class ClosedDealController extends Controller
 
     public $model = "Closed Deal";
 
+    public $rules = [
+        'name' => 'required|max:255',
+        'description' => 'required',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::orderBy('updated_at', 'desc')->get();
@@ -29,8 +35,7 @@ class ClosedDealController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -39,11 +44,7 @@ class ClosedDealController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -58,12 +59,9 @@ class ClosedDealController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:closed_deals,id',
-            'name' => 'required|max:255',
-            'description' => 'required',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:closed_deals,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 
@@ -87,8 +85,7 @@ class ClosedDealController extends Controller
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }

@@ -16,6 +16,16 @@ class ApplicationController extends Controller
 
     public $model = "Application";
 
+    public $rules = [
+        'career_id' => 'required|exists:careers,id',
+        'first_name' => 'required|max:255',
+        'last_name' => 'required|max:255',
+        'email' => 'required|max:255|email',
+        'phone' => 'required|max:255',
+        'address' => 'required|max:255',
+        'resume' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::with('career')->orderBy('updated_at', 'desc')->get();
@@ -39,15 +49,7 @@ class ApplicationController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'career_id' => 'required|exists:careers,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'address' => 'required|max:255',
-            'resume' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
         $availableSlots = $parent->slots - count($parent->applications);
@@ -71,16 +73,9 @@ class ApplicationController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:applications,id',
-            'career_id' => 'required|exists:careers,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'address' => 'required|max:255',
-            'resume' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:applications,id';
+        $this->rules['resume'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
         $availableSlots = $parent->slots - count($parent['applications']);

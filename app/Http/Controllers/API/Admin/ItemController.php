@@ -12,8 +12,16 @@ use App\Models\Item as Model;
 class ItemController extends Controller
 {
     use Uploadable;
-    
+
     public $model = "Item";
+
+    public $rules = [
+        'name' => 'required|max:255',
+        'width' => 'required|decimal:0,2',
+        'height' => 'required|decimal:0,2',
+        'type' => 'required|max:255',
+        'image' => 'required',
+    ];
 
     public function getAll()
     {
@@ -29,8 +37,7 @@ class ItemController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -39,13 +46,7 @@ class ItemController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'width' => 'required|decimal:0,2',
-            'height' => 'required|decimal:0,2',
-            'type' => 'required|max:255',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -60,14 +61,9 @@ class ItemController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:items,id',
-            'name' => 'required|max:255',
-            'width' => 'required|decimal:0,2',
-            'height' => 'required|decimal:0,2',
-            'type' => 'required|max:255',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:items,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 
@@ -91,8 +87,7 @@ class ItemController extends Controller
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }

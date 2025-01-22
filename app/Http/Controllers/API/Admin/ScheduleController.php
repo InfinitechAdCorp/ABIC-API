@@ -12,6 +12,20 @@ class ScheduleController extends Controller
 {
     public $model = "Schedule";
 
+    public $rules = [
+        'user_id' => 'required|exists:users,id',
+        'first_name' => 'required|max:255',
+        'last_name' => 'required|max:255',
+        'email' => 'required|max:255|email',
+        'phone' => 'required|max:255',
+        'date' => 'required|date',
+        'time' => 'required',
+        'type' => 'required|max:255',
+        'properties' => 'required|max:255',
+        'message' => 'required',
+        'status' => 'required|max:255',
+    ];
+
     public function getAll(Request $request)
     {
         $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
@@ -40,19 +54,7 @@ class ScheduleController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'date' => 'required|date',
-            'time' => 'required',
-            'type' => 'required|max:255',
-            'properties' => 'required|max:255',
-            'message' => 'required',
-            'status' => 'required|max:255',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $record = Model::create($validated);
         $code = 201;
@@ -65,20 +67,8 @@ class ScheduleController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:schedules,id',
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'date' => 'required|date',
-            'time' => 'required',
-            'type' => 'required|max:255',
-            'properties' => 'required|max:255',
-            'message' => 'required',
-            'status' => 'required|max:255',
-        ]);
+        $this->rules['id'] = 'required|exists:schedules,id';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
         $record->update($validated);

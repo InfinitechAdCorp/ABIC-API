@@ -15,6 +15,16 @@ class InfrastructureController extends Controller
 
     public $model = "Infrastructure";
 
+    public $rules = [
+        'name' => 'required|max:255',
+        'location' => 'required|max:255',
+        'budget' => 'required|decimal:0,2',
+        'start' => 'required|date',
+        'end' => 'required|date|after:start',
+        'description' => 'required',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::orderBy('updated_at', 'desc')->get();
@@ -29,8 +39,7 @@ class InfrastructureController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -39,15 +48,7 @@ class InfrastructureController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'location' => 'required|max:255',
-            'budget' => 'required|decimal:0,2',
-            'start' => 'required|date',
-            'end' => 'required|date|after:start',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -62,16 +63,9 @@ class InfrastructureController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:infrastructures,id',
-            'name' => 'required|max:255',
-            'location' => 'required|max:255',
-            'budget' => 'required|decimal:0,2',
-            'start' => 'required|date',
-            'end' => 'required|date|after:start',
-            'description' => 'required',
-            'image' => 'required',
-        ]);
+        $this->rules['id'] = 'required|exists:infrastructures,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 
@@ -95,8 +89,7 @@ class InfrastructureController extends Controller
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }

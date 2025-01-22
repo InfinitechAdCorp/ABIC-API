@@ -15,6 +15,11 @@ class PartnerController extends Controller
 
     public $model = "Partner";
 
+    public $rules = [
+        'name' => 'required|max:255',
+        'image' => 'required',
+    ];
+
     public function getAll()
     {
         $records = Model::orderBy('updated_at', 'desc')->get();
@@ -29,8 +34,7 @@ class PartnerController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
@@ -39,10 +43,7 @@ class PartnerController extends Controller
 
     public function create(Request $request)
     {
-        $validated = $request->validate([
-            'name' => 'required|max:255',
-            'image' => 'required',
-        ]);
+        $validated = $request->validate($this->rules);
 
         $key = 'image';
         if ($request->hasFile($key)) {
@@ -57,11 +58,9 @@ class PartnerController extends Controller
 
     public function update(Request $request)
     {
-        $validated = $request->validate([
-            'id' => 'required|exists:partners,id',
-            'name' => 'required|max:255',
-            'image' => 'nullable',
-        ]);
+        $this->rules['id'] = 'required|exists:partners,id';
+        $this->rules['image'] = 'nullable';
+        $validated = $request->validate($this->rules);
 
         $record = Model::find($validated['id']);
 
@@ -85,8 +84,7 @@ class PartnerController extends Controller
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
