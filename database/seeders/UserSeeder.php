@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User; // Import the User model
-use Illuminate\Support\Str;
+
+use App\Models\User; 
 
 class UserSeeder extends Seeder
 {
@@ -14,14 +14,11 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Create a dummy user
-        $user = User::create([
-            'id' => Str::ulid(),
+        User::create([
             'name' => 'John Doe',
             'email' => 'johndoe@example.com',
-            'password' => bcrypt('password123'),
-            'type' => 'admin',
-            'email_verified_at' => now(),
+            'password' => '12345678',
+            'type' => 'Admin',
         ]);
     }
 }

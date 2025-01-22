@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
+
+use App\Models\Property;
 use App\Models\User;
 
 class PropertySeeder extends Seeder
@@ -14,17 +15,21 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-              $user = User::first();
+        $user = User::firstOrCreate([
+            'name' => 'Name',
+            'email' => 'email@email.com',
+            'password' => '12345678',
+            'type' => 'Admin',
+        ]);
 
-        DB::table('properties')->insert([
+        $records = [
             [
-                'id' => Str::ulid(),
-                'user_id' => Str::ulid(),
+                'user_id' => $user->id,
                 'name' => 'Alea Residences',
                 'type' => 'Condominium',
                 'location' => 'Las Pinas',
                 'price' => 25000,
-                'area' =>73,
+                'area' => 73,
                 'parking' => true,
                 'vacant' => true,
                 'nearby' => 'N/A',
@@ -36,19 +41,16 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_furnish' => 'Fully Furnished',
                 'unit_floor' => 'N/A',
-                'images' => json_encode(['image1.jpg', 'image2.jpg']),
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'images' => json_encode(['image1.jpg', 'image2.jpg']),
             ],
-                [
-                'id' => Str::ulid(),
-                'user_id' => Str::ulid(),
+            [
+                'user_id' => $user->id,
                 'name' => 'Alea Residences',
                 'type' => 'Condominium',
                 'location' => 'Las Pinas',
                 'price' => 20000.00,
-                'area'=> 53,
+                'area' => 53,
                 'parking' => true,
                 'vacant' => true,
                 'nearby' => 'N/A',
@@ -60,14 +62,11 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_furnish' => 'Fully Furnished',
                 'unit_floor' => 'N/A',
-                'images' => json_encode(['image1.jpg', 'image2.jpg']),
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'images' => json_encode(['image1.jpg', 'image2.jpg']),
             ],
-                [
-                'id' => Str::ulid(),
-                'user_id' => Str::ulid(),
+            [
+                'user_id' => $user->id,
                 'name' => 'Alea Residences',
                 'type' => 'Condominium',
                 'location' => 'Las Pinas',
@@ -84,15 +83,12 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_furnish' => 'Fully Furnished',
                 'unit_floor' => 'N/A',
-                'images' => json_encode(['image1.jpg', 'image2.jpg']),
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
+                'images' => json_encode(['image1.jpg', 'image2.jpg']),
 
-                'created_at' => now(),
-                'updated_at' => now(),
             ],
-                [
-                'id' => Str::ulid(),
-                'user_id' => Str::ulid(),
+            [
+                'user_id' => $user->id,
                 'name' => 'Alea Residences',
                 'type' => 'Condominium',
                 'location' => 'Las Pinas',
@@ -109,13 +105,13 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_furnish' => 'Fully Furnished',
                 'unit_floor' => 'N/A',
-                'images' => json_encode(['image1.jpg', 'image2.jpg']),
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
-                'created_at' => now(),
-                'updated_at' => now(),
+                'images' => json_encode(['image1.jpg', 'image2.jpg']),
             ],
-              
-          
-        ]);
+        ];
+
+        foreach($records as $record){
+            Property::create($record);
+        }
     }
 }

@@ -18,32 +18,32 @@ class CareerSeeder extends Seeder
             [
                 'position' => 'Real Estate Agent',
                 'slots' => 50,
-                'image' => 'uploads/careers/images/agent1.jpg',
+                'image' => 'no-image.jpg',
             ],
             [
                 'position' => 'Property Manager',
                 'slots' => 30,
-                'image' => 'uploads/careers/images/manager1.jpg',
+                'image' => 'no-image.jpg',
             ],
             [
                 'position' => 'Marketing Specialist',
                 'slots' => 15,
-                'image' => 'uploads/careers/images/marketing1.jpg',
+                'image' => 'no-image.jpg',
             ],
             [
                 'position' => 'Sales Consultant',
                 'slots' => 10,
-                'image' => 'uploads/careers/images/sales1.jpg',
+                'image' => 'no-image.jpg',
             ],
             [
                 'position' => 'Leasing Officer',
                 'slots' => 25,
-                'image' => 'uploads/careers/images/leasing1.jpg',
+                'image' => 'no-image.jpg',
             ],
             [
                 'position' => 'Administrative Officer',
                 'slots' => 30,
-                'image' => 'uploads/careers/images/admin1.jpg',
+                'image' => 'no-image.jpg',
             ],
         ];
 
