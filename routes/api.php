@@ -41,6 +41,7 @@ use App\Http\Controllers\API\MainController;
 Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'create']);
     Route::post('/login', [UserController::class, 'login']);
+    Route::post('request-reset', [UserController::class, 'requestReset']);
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
 });
 

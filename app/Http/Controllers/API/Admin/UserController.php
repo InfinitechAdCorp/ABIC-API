@@ -117,6 +117,26 @@ class UserController extends Controller
         return response()->json($response, $code);
     }
 
+    public function requestReset(Request $request) {
+        $validated = $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $record = Model::where('email', $validated['email'])->first();
+
+        if ($record) {
+            $code = 200;
+            $response = ['message' => 'Request Sent Successfully', 'token' => $record->reset_token];
+        }
+        else {
+            $code = 401;
+            $response = [
+                'message' => 'Invalid Credentials',
+            ];
+        }
+        return response()->json($response, $code);
+    }
+
     public function resetPassword(Request $request)
     {
         $validated = $request->validate([
