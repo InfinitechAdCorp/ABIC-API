@@ -111,6 +111,7 @@ class MainController extends Controller
             'email' => 'required|email',
             'phone' => 'required',
             'type' => 'required',
+            'properties' => 'nullable',
             'message' => 'required',
         ]);
 

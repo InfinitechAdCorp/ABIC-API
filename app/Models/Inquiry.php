@@ -21,6 +21,7 @@ class Inquiry extends Model
         'email',
         'phone',
         'type',
+        'inquiries',
         'message',
     ];
 
