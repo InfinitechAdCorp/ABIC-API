@@ -125,11 +125,10 @@ class UserController extends Controller
             'reset_token' => 'required',
         ]);
 
-        $record = PersonalAccessToken::findToken($request->bearerToken())->tokenable;
-        $validEmail = $record->email == $validated['email'];
-        $validToken = $record->reset_token == $validated['reset_token'];
+        $where = [['email', $validated['email']], ['reset_token', $validated['reset_token']]];
+        $record = Model::where($where)->first();
 
-        if ($validEmail && $validToken) {
+        if ($record) {
             $validated['reset_token'] = Str::random();
             $record->update($validated);
             $code = 200;
