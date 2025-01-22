@@ -10,6 +10,7 @@ use Sentiment\Analyzer;
 use App\Models\Property;
 use App\Models\Testimonial;
 use App\Models\Inquiry;
+use App\Models\Schedule;
 
 class AgentController extends Controller
 {
@@ -61,6 +62,31 @@ class AgentController extends Controller
         $code = 201;
         $response = [
             'message' => "Submitted Inquiry",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitSchedule(Request $request) {
+        $validated = $request->validate([
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'date' => 'required|date',
+            'time' => 'required',
+            'type' => 'required',
+            'properties' => 'required',
+            'message' => 'required',
+            'status' => 'required',
+        ]);
+
+        $validated['user_id'] = $request->header('user-id');
+
+        $record = Schedule::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Schedule",
             'record' => $record,
         ];
         return response()->json($response, $code);
