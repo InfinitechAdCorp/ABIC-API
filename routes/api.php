@@ -234,6 +234,7 @@ Route::prefix('main')->group(function () {
     Route::post('submit-application', [MainController::class, 'submitApplication']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-property', [MainController::class, 'submitProperty']);
+    Route::post('submit-property', [MainController::class, 'submitSchedule']);
 
     Route::post('old/submit-property', [MainController::class, 'oldSubmitProperty']);
 });

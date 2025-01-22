@@ -16,6 +16,7 @@ use App\Models\Application;
 use App\Models\Inquiry;
 use App\Models\Submission;
 use App\Models\PropertySubmission;
+use App\Models\Schedule;
 
 class MainController extends Controller
 {
@@ -232,6 +233,30 @@ class MainController extends Controller
         $code = 201;
         $response = [
             'message' => "Submitted Property",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitSchedule(Request $request) {
+        $validated = $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'first_name' => 'required',
+            'last_name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'date' => 'required|date',
+            'time' => 'required',
+            'type' => 'required',
+            'properties' => 'required',
+            'message' => 'required',
+            'status' => 'required',
+        ]);
+
+        $record = Schedule::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Schedule",
             'record' => $record,
         ];
         return response()->json($response, $code);
