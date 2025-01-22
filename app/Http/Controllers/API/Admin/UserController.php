@@ -129,6 +129,7 @@ class UserController extends Controller
         $record = Model::where($where)->first();
 
         if ($record) {
+            $validated['password'] = Hash::make($validated['password']);
             $validated['reset_token'] = Str::random();
             $record->update($validated);
             $code = 200;
