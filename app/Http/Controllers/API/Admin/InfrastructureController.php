@@ -44,7 +44,7 @@ class InfrastructureController extends Controller
             'location' => 'required|max:255',
             'budget' => 'required|decimal:0,2',
             'start' => 'required|date',
-            'end' => 'required|date',
+            'end' => 'required|date|after:start',
             'description' => 'required',
             'image' => 'required',
         ]);
@@ -68,7 +68,7 @@ class InfrastructureController extends Controller
             'location' => 'required|max:255',
             'budget' => 'required|decimal:0,2',
             'start' => 'required|date',
-            'end' => 'required|date',
+            'end' => 'required|date|after:start',
             'description' => 'required',
             'image' => 'required',
         ]);
