@@ -40,6 +40,7 @@ use App\Http\Controllers\API\MainController;
 Route::prefix('users')->group(function () {
     Route::post('', [UserController::class, 'create']);
     Route::post('/login', [UserController::class, 'login']);
+    Route::post('/reset-password', [UserController::class, 'resetPassword']);
 });
 
 // Route::middleware('auth.admin')->group(function () {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\User as Model;
@@ -113,6 +114,32 @@ class UserController extends Controller
         PersonalAccessToken::where('tokenable_id', $record->id)->delete();
         $code = 200;
         $response = ['message' => 'Logged Out Successfully'];
+        return response()->json($response, $code);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validated = $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+            'reset_token' => 'required',
+        ]);
+
+        $record = PersonalAccessToken::findToken($request->bearerToken())->tokenable;
+        $validEmail = $record->email == $validated['email'];
+        $validToken = $record->reset_token == $validated['reset_token'];
+
+        if ($validEmail && $validToken) {
+            $validated['reset_token'] = Str::random();
+            $record->update($validated);
+            $code = 200;
+            $response = ['message' => 'Reset Password Successfully'];
+        } else {
+            $code = 401;
+            $response = [
+                'message' => 'Invalid Credentials',
+            ];
+        }
         return response()->json($response, $code);
     }
 }
