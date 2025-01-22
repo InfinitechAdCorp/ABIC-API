@@ -18,6 +18,7 @@ use App\Http\Controllers\API\Admin\NewsController;
 use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
+use App\Http\Controllers\API\Admin\ArticleController;
 use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
@@ -205,6 +206,14 @@ Route::prefix('users')->group(function () {
         Route::post('', [ApplicationController::class, 'create']);
         Route::put('', [ApplicationController::class, 'update']);
         Route::delete('{id}', [ApplicationController::class, 'delete']);
+    });
+
+    Route::prefix('articles')->group(function () {
+        Route::get('', [ArticleController::class, 'getAll']);
+        Route::get('{id}', [ArticleController::class, 'get']);
+        Route::post('', [ArticleController::class, 'create']);
+        Route::put('', [ArticleController::class, 'update']);
+        Route::delete('{id}', [ArticleController::class, 'delete']);
     });
 // });
 

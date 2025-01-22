@@ -7,17 +7,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
 
-use App\Models\Item as Model;
+use App\Models\Article as Model;
 
-class ItemController extends Controller
+class ArticleController extends Controller
 {
     use Uploadable;
-    
-    public $model = "Item";
+
+    public $model = "Article";
 
     public function getAll()
     {
-        $records = Model::orderBy('updated_at', 'desc')->get();
+        $records = Model::orderBy('type')->get();
         $code = 200;
         $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
@@ -40,16 +40,17 @@ class ItemController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'width' => 'required|decimal:0,2',
-            'height' => 'required|decimal:0,2',
+            'title' => 'required',
+            'subtitle' => 'nullable',
+            'date' => 'required|date',
+            'content' => 'required',
             'type' => 'required',
             'image' => 'required',
         ]);
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            $validated[$key] = $this->upload($request->file($key), "items");
+            $validated[$key] = $this->upload($request->file($key), "articles");
         }
 
         $record = Model::create($validated);
@@ -61,10 +62,11 @@ class ItemController extends Controller
     public function update(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:items,id',
-            'name' => 'required',
-            'width' => 'required|decimal:0,2',
-            'height' => 'required|decimal:0,2',
+            'id' => 'required|exists:articles,id',
+            'title' => 'required',
+            'subtitle' => 'nullable',
+            'date' => 'required|date',
+            'content' => 'required',
             'type' => 'required',
             'image' => 'nullable',
         ]);
@@ -73,8 +75,8 @@ class ItemController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("items/$record[$key]");
-            $validated[$key] = $this->upload($request->file($key), "items");
+            Storage::disk('s3')->delete("articles/$record[$key]");
+            $validated[$key] = $this->upload($request->file($key), "articles");
         }
 
         $record->update($validated);
@@ -87,7 +89,7 @@ class ItemController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("items/$record->image");
+            Storage::disk('s3')->delete("articles/$record->image");
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
