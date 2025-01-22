@@ -209,10 +209,14 @@ Route::prefix('users')->group(function () {
 // });
 
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
+    Route::get('properties', [AgentController::class, 'propertiesGetAll']);
+    Route::get('testimonials', [AgentController::class, 'testimonialsGetAll']);
+
     Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
 });
 
 Route::prefix('main')->group(function () {
+    Route::get('properties', [MainController::class, 'propertiesGetAll']);
     Route::get('testimonials', [MainController::class, 'testimonialsGetAll']);
     Route::get('seminars', [MainController::class, 'seminarsGetAll']);
     Route::get('partners', [MainController::class, 'partnersGetAll']);
@@ -224,5 +228,3 @@ Route::prefix('main')->group(function () {
 
     Route::post('old/submit-property', [MainController::class, 'oldSubmitProperty']);
 });
-
-Route::get('global/properties', [MainController::class, 'propertiesGetAll']);
