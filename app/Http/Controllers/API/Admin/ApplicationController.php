@@ -41,11 +41,11 @@ class ApplicationController extends Controller
     {
         $validated = $request->validate([
             'career_id' => 'required|exists:careers,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'address' => 'required|max:255',
             'resume' => 'required',
         ]);
 
@@ -74,11 +74,11 @@ class ApplicationController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:applications,id',
             'career_id' => 'required|exists:careers,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'address' => 'required|max:255',
             'resume' => 'nullable',
         ]);
 

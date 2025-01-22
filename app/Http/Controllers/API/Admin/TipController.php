@@ -40,7 +40,7 @@ class TipController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'required',
         ]);
@@ -60,7 +60,7 @@ class TipController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:tips,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'nullable',
         ]);

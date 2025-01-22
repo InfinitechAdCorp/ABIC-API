@@ -42,16 +42,16 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
             'date' => 'required|date',
             'time' => 'required',
-            'type' => 'required',
-            'properties' => 'required',
+            'type' => 'required|max:255',
+            'properties' => 'required|max:255',
             'message' => 'required',
-            'status' => 'required',
+            'status' => 'required|max:255',
         ]);
 
         $record = Model::create($validated);
@@ -68,16 +68,16 @@ class ScheduleController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:schedules,id',
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
             'date' => 'required|date',
             'time' => 'required',
-            'type' => 'required',
-            'properties' => 'required',
+            'type' => 'required|max:255',
+            'properties' => 'required|max:255',
             'message' => 'required',
-            'status' => 'required',
+            'status' => 'required|max:255',
         ]);
 
         $record = Model::find($validated['id']);

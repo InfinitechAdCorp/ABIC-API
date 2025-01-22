@@ -37,7 +37,7 @@ class AmenityController extends Controller
     {
         $validated = $request->validate([
             'property_id' => 'required|exists:properties,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
         ]);
 
         $record = Model::create($validated);
@@ -51,7 +51,7 @@ class AmenityController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:amenities,id',
             'property_id' => 'required|exists:properties,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
         ]);
 
         $record = Model::find($validated['id']);

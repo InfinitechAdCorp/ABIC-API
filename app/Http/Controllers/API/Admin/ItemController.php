@@ -40,10 +40,10 @@ class ItemController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'width' => 'required|decimal:0,2',
             'height' => 'required|decimal:0,2',
-            'type' => 'required',
+            'type' => 'required|max:255',
             'image' => 'required',
         ]);
 
@@ -62,10 +62,10 @@ class ItemController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:items,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'width' => 'required|decimal:0,2',
             'height' => 'required|decimal:0,2',
-            'type' => 'required',
+            'type' => 'required|max:255',
             'image' => 'nullable',
         ]);
 

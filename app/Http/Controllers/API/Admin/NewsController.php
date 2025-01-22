@@ -40,7 +40,7 @@ class NewsController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'date' => 'required|date',
             'description' => 'required',
             'image' => 'required',
@@ -61,7 +61,7 @@ class NewsController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:news,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'date' => 'required|date',
             'description' => 'required',
             'image' => 'nullable',

@@ -40,7 +40,7 @@ class PartnerController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'image' => 'required',
         ]);
 
@@ -59,7 +59,7 @@ class PartnerController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:partners,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'image' => 'nullable',
         ]);
 

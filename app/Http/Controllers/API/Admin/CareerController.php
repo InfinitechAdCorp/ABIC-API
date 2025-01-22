@@ -44,7 +44,7 @@ class CareerController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'position' => 'required',
+            'position' => 'required|max:255',
             'slots' => 'required|numeric|integer',
             'image' => 'required',
         ]);
@@ -64,7 +64,7 @@ class CareerController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:careers,id',
-            'position' => 'required',
+            'position' => 'required|max:255',
             'slots' => 'required|numeric|integer',
             'image' => 'nullable',
         ]);

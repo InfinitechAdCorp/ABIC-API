@@ -40,7 +40,7 @@ class SeminarController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'required',
         ]);
@@ -60,7 +60,7 @@ class SeminarController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:seminars,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'nullable',
         ]);

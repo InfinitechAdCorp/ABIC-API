@@ -31,7 +31,7 @@ return new class extends Migration
             $table->string('property_sale_payment')->nullable();
             $table->string('property_sale_title')->nullable();
             $table->string('property_sale_turnover')->nullable();
-            $table->string('property_description')->nullable();
+            $table->text('property_description')->nullable();
             $table->json('property_amenities')->nullable();
             $table->json('images')->nullable();
             $table->timestamps();

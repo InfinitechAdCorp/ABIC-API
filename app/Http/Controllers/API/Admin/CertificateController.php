@@ -46,7 +46,7 @@ class CertificateController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'date' => 'required|date',
             'image' => 'required',
         ]);
@@ -70,7 +70,7 @@ class CertificateController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:certificates,id',
             'user_id' => 'required|exists:users,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'date' => 'required|date',
             'image' => 'nullable',
         ]);

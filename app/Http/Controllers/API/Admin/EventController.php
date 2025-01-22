@@ -40,7 +40,7 @@ class EventController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'required',
         ]);
@@ -60,7 +60,7 @@ class EventController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:events,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'nullable',
         ]);

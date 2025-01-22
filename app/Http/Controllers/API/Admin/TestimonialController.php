@@ -42,9 +42,9 @@ class TestimonialController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'message' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'message' => 'required|max:255',
         ]);
 
         $record = Model::create($validated);
@@ -61,9 +61,9 @@ class TestimonialController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:testimonials,id',
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'message' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'message' => 'required|max:255',
         ]);
 
         $record = Model::find($validated['id']);

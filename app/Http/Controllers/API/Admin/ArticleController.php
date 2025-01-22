@@ -40,11 +40,11 @@ class ArticleController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required',
-            'subtitle' => 'nullable',
+            'title' => 'required|max:255',
+            'subtitle' => 'nullable|max:255',
             'date' => 'required|date',
             'content' => 'required',
-            'type' => 'required',
+            'type' => 'required|max:255',
             'image' => 'required',
         ]);
 
@@ -63,11 +63,11 @@ class ArticleController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:articles,id',
-            'title' => 'required',
-            'subtitle' => 'nullable',
+            'title' => 'required|max:255',
+            'subtitle' => 'nullable|max:255',
             'date' => 'required|date',
             'content' => 'required',
-            'type' => 'required',
+            'type' => 'required|max:255',
             'image' => 'nullable',
         ]);
 

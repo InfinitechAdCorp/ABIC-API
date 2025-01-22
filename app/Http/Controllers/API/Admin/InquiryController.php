@@ -42,12 +42,12 @@ class InquiryController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'type' => 'required',
-            'properties' => 'nullable',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
             'message' => 'required',
         ]);
 
@@ -65,12 +65,12 @@ class InquiryController extends Controller
         $validated = $request->validate([
             'id' => 'required|exists:inquiries,id',
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'type' => 'required',
-            'properties' => 'nullable',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
             'message' => 'required',
         ]);
 

@@ -40,8 +40,8 @@ class InfrastructureController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'location' => 'required',
+            'name' => 'required|max:255',
+            'location' => 'required|max:255',
             'budget' => 'required|decimal:0,2',
             'start' => 'required|date',
             'end' => 'required|date',
@@ -64,8 +64,8 @@ class InfrastructureController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:infrastructures,id',
-            'name' => 'required',
-            'location' => 'required',
+            'name' => 'required|max:255',
+            'location' => 'required|max:255',
             'budget' => 'required|decimal:0,2',
             'start' => 'required|date',
             'end' => 'required|date',

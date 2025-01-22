@@ -45,10 +45,10 @@ class UserController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|unique:users,name',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
-            'type' => 'required'
+            'name' => 'required|max:255|unique:users,name',
+            'email' => 'required|max:255|email|unique:users,email',
+            'password' => 'required|min:8|max:255',
+            'type' => 'required|max:255'
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -66,8 +66,8 @@ class UserController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:users,id',
-            'name' => 'required',
-            'email' => 'required|email',
+            'name' => 'required|max:255',
+            'email' => 'required|max:255|email',
         ]);
 
         $record = Model::find($validated['id']);
@@ -119,45 +119,28 @@ class UserController extends Controller
 
     public function requestReset(Request $request) {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|exists:users,email',
         ]);
 
         $record = Model::where('email', $validated['email'])->first();
-
-        if ($record) {
-            $code = 200;
-            $response = ['message' => 'Request Sent Successfully', 'reset_token' => $record->reset_token];
-        }
-        else {
-            $code = 401;
-            $response = [
-                'message' => 'Invalid Credentials',
-            ];
-        }
+        $code = 200;
+        $response = ['message' => 'Request Sent Successfully', 'reset_token' => $record->reset_token];
         return response()->json($response, $code);
     }
 
     public function resetPassword(Request $request)
     {
         $validated = $request->validate([
-            'password' => 'required|min:8',
-            'reset_token' => 'required',
+            'password' => 'required|min:8|max:255',
+            'reset_token' => 'required|exists:users,reset_token',
         ]);
 
         $record = Model::where('reset_token', $validated['reset_token'])->first();
-
-        if ($record) {
-            $validated['password'] = Hash::make($validated['password']);
-            $validated['reset_token'] = Str::random();
-            $record->update($validated);
-            $code = 200;
-            $response = ['message' => 'Reset Password Successfully'];
-        } else {
-            $code = 401;
-            $response = [
-                'message' => 'Invalid Credentials',
-            ];
-        }
+        $validated['password'] = Hash::make($validated['password']);
+        $validated['reset_token'] = Str::random();
+        $record->update($validated);
+        $code = 200;
+        $response = ['message' => 'Reset Password Successfully'];
         return response()->json($response, $code);
     }
 }

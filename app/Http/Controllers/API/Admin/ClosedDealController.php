@@ -40,7 +40,7 @@ class ClosedDealController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'required',
         ]);
@@ -60,7 +60,7 @@ class ClosedDealController extends Controller
     {
         $validated = $request->validate([
             'id' => 'required|exists:closed_deals,id',
-            'name' => 'required',
+            'name' => 'required|max:255',
             'description' => 'required',
             'image' => 'nullable',
         ]);
