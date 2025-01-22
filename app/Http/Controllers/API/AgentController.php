@@ -48,11 +48,12 @@ class AgentController extends Controller
     public function submitInquiry(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'type' => 'required',
-            'properties' => 'nullable',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
             'message' => 'required',
         ]);
 
@@ -67,18 +68,19 @@ class AgentController extends Controller
         return response()->json($response, $code);
     }
 
-    public function submitSchedule(Request $request) {
+    public function submitSchedule(Request $request)
+    {
         $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
             'date' => 'required|date',
             'time' => 'required',
-            'type' => 'required',
-            'properties' => 'required',
+            'type' => 'required|max:255',
+            'properties' => 'required|max:255',
             'message' => 'required',
-            'status' => 'required',
+            'status' => 'required|max:255',
         ]);
 
         $validated['user_id'] = $request->header('user-id');

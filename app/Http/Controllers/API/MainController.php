@@ -30,7 +30,8 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function testimonialsGetAll() {
+    public function testimonialsGetAll()
+    {
         $analyzer = new Analyzer();
         $records = [];
 
@@ -48,22 +49,25 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function seminarsGetAll() {
+    public function seminarsGetAll()
+    {
         $records = Seminar::orderBy('updated_at', 'desc')->get();
         $code = 200;
         $response = ['message' => "Fetched Seminars", 'records' => $records];
         return response()->json($response, $code);
     }
 
-    public function partnersGetAll() {
+    public function partnersGetAll()
+    {
         $records = Partner::all();
         $code = 200;
         $response = ['message' => "Fetched Partners", 'records' => $records];
         return response()->json($response, $code);
     }
 
-    public function careersGetAll() {
-       $records = Career::with('applications')->orderBy('updated_at', 'desc')->get();
+    public function careersGetAll()
+    {
+        $records = Career::with('applications')->orderBy('updated_at', 'desc')->get();
         foreach ($records as $record) {
             $record['available_slots'] = $record->slots - count($record->applications);
         }
@@ -76,11 +80,11 @@ class MainController extends Controller
     {
         $validated = $request->validate([
             'career_id' => 'required|exists:careers,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'address' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'address' => 'required|max:255',
             'resume' => 'required',
         ]);
 
@@ -107,12 +111,12 @@ class MainController extends Controller
     public function submitInquiry(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'type' => 'required',
-            'properties' => 'nullable',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
             'message' => 'required',
         ]);
 
@@ -188,24 +192,24 @@ class MainController extends Controller
     public function submitProperty(Request $request)
     {
         $validated = $request->validate([
-            'user_last' => 'nullable',
-            'user_first' => 'nullable',
-            'user_email' => 'nullable|email',
-            'user_phone' => 'nullable',
-            'sender_type' => 'nullable',
-            'property_name' => 'nullable',
-            'property_type' => 'nullable',
-            'property_unit_status' => 'nullable',
+            'user_last' => 'nullable|max:255',
+            'user_first' => 'nullable|max:255',
+            'user_email' => 'nullable|max:255|email',
+            'user_phone' => 'nullable|max:255',
+            'sender_type' => 'nullable|max:255',
+            'property_name' => 'nullable|max:255',
+            'property_type' => 'nullable|max:255',
+            'property_unit_status' => 'nullable|max:255',
             'property_price' => 'nullable|decimal:0,2',
             'property_area' => 'nullable|decimal:0,2',
-            'property_number' => 'nullable',
-            'property_parking' => 'nullable',
-            'property_status' => 'nullable',
-            'property_rent_terms' => 'nullable',
-            'property_sale_type' => 'nullable',
-            'property_sale_payment' => 'nullable',
-            'property_sale_title' => 'nullable',
-            'property_sale_turnover' => 'nullable',
+            'property_number' => 'nullable|max:255',
+            'property_parking' => 'nullable|boolean',
+            'property_status' => 'nullable|max:255',
+            'property_rent_terms' => 'nullable|max:255',
+            'property_sale_type' => 'nullable|max:255',
+            'property_sale_payment' => 'nullable|max:255',
+            'property_sale_title' => 'nullable|max:255',
+            'property_sale_turnover' => 'nullable|max:255',
             'property_description' => 'nullable',
             'property_amenities' => 'nullable|array',
             'images' => 'nullable',
@@ -238,19 +242,20 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function submitSchedule(Request $request) {
+    public function submitSchedule(Request $request)
+    {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
             'date' => 'required|date',
             'time' => 'required',
-            'type' => 'required',
-            'properties' => 'required',
+            'type' => 'required|max:255',
+            'properties' => 'required|max:255',
             'message' => 'required',
-            'status' => 'required',
+            'status' => 'required|max:255',
         ]);
 
         $record = Schedule::create($validated);
