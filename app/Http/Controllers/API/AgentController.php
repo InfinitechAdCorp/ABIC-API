@@ -68,7 +68,7 @@ class AgentController extends Controller
         // return response()->json($response, $code);
 
         $response = [
-            'user_id' => $request->header('USER-ID'),
+            'user_id' => $request->header('User-ID'),
         ];
 
         return response($response);
