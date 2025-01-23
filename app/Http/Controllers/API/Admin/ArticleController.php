@@ -92,6 +92,6 @@ class ArticleController extends Controller
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-        return response($response, $code);
+        return response()->json($response, $code);
     }
 }
