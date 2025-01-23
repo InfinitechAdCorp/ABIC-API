@@ -67,7 +67,12 @@ class AgentController extends Controller
         // ];
         // return response()->json($response, $code);
 
-        return response()->json($request->header('user-id'));
+        $response = [
+            'user_id' => $request->header('user-id'),
+            'test' => 5,
+        ];
+
+        return response($response);
     }
 
     public function submitSchedule(Request $request)
