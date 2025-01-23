@@ -218,7 +218,7 @@ Route::middleware('auth.admin')->group(function () {
     });
 });
 
-Route::prefix('agent')->middleware('auth.agent')->group(function () {
+Route::prefix('agent')->group(function () {
     Route::get('properties', [AgentController::class, 'propertiesGetAll']);
     Route::get('testimonials', [AgentController::class, 'testimonialsGetAll']);
 
