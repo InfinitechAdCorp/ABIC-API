@@ -47,25 +47,27 @@ class AgentController extends Controller
 
     public function submitInquiry(Request $request)
     {
-        $validated = $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'type' => 'required|max:255',
-            'properties' => 'nullable|max:255',
-            'message' => 'required',
-        ]);
+        // $validated = $request->validate([
+        //     'first_name' => 'required|max:255',
+        //     'last_name' => 'required|max:255',
+        //     'email' => 'required|max:255|email',
+        //     'phone' => 'required|max:255',
+        //     'type' => 'required|max:255',
+        //     'properties' => 'nullable|max:255',
+        //     'message' => 'required',
+        // ]);
 
-        $validated['user_id'] = $request->header('user-id');
+        // $validated['user_id'] = $request->header('user-id');
 
-        $record = Inquiry::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Inquiry",
-            'record' => $record,
-        ];
-        return response()->json($response, $code);
+        // $record = Inquiry::create($validated);
+        // $code = 201;
+        // $response = [
+        //     'message' => "Submitted Inquiry",
+        //     'record' => $record,
+        // ];
+        // return response()->json($response, $code);
+
+        return response()->json($request->header('user-id'));
     }
 
     public function submitSchedule(Request $request)

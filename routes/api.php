@@ -234,6 +234,7 @@ Route::prefix('main')->group(function () {
     Route::get('careers', [MainController::class, 'careersGetAll']);
     Route::get('services', [MainController::class, 'servicesGetAll']);
     Route::get('articles', [MainController::class, 'articlesGetAll']);
+    Route::get('infrastructures', [MainController::class, 'infrastructuresGetAll']);
 
     Route::post('submit-application', [MainController::class, 'submitApplication']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
