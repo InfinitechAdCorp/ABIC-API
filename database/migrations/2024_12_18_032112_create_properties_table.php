@@ -13,22 +13,26 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->ulid('id')->primary();
+            $table->foreignUlid('owner_id');
             $table->string('name');
-            $table->string('type');
             $table->string('location');
             $table->decimal('price', 50, 2);
-            $table->integer('area');
+            $table->decimal('area', 50, 2);
             $table->boolean('parking');
-            $table->boolean('vacant');
-            $table->text('nearby');
-            $table->text('description');
-            $table->string('sale');
-            $table->string('badge');
-            $table->string('status');
+            $table->string('description');
+
             $table->string('unit_number');
             $table->string('unit_type');
-            $table->string('unit_furnish');
-            $table->string('unit_floor');
+            $table->string('unit_status');
+            
+            $table->string('title');
+            $table->string('payment');
+            $table->string('turnover');
+            $table->string('terms');
+
+            $table->string('type');
+            $table->boolean('published');
+
             $table->json('amenities');
             $table->json('images');
             $table->timestamps();

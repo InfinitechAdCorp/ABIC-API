@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
 class Property extends Model
@@ -16,22 +15,26 @@ class Property extends Model
     public $incrementing = false;
 
     protected $fillable = [
+        'owner_id',
         'name',
-        'type',
         'location',
         'price',
         'area',
         'parking',
-        'vacant',
-        'nearby',
         'description',
-        'sale',
-        'badge',
-        'status',
+
         'unit_number',
         'unit_type',
-        'unit_furnish',
-        'unit_floor',
+        'unit_status',
+
+        'title',
+        'payment',
+        'turnover',
+        'terms',
+
+        'type',
+        'published',
+
         'amenities',
         'images',
     ];
@@ -43,13 +46,8 @@ class Property extends Model
         });
     }
 
-    public function user(): BelongsTo
+    public function owner(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function amenities(): HasMany
-    {
-        return $this->hasMany(Amenity::class);
+        return $this->belongsTo(Owner::class);
     }
 }

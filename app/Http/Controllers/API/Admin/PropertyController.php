@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
-use Laravel\Sanctum\PersonalAccessToken;
 
 use App\Models\Property as Model;
+use App\Models\Owner as Parent;
 
 class PropertyController extends Controller
 {
@@ -17,42 +17,46 @@ class PropertyController extends Controller
     public $model = "Property";
 
     public $rules = [
-        'name' => 'required|max:255',
-        'type' => 'required|max:255',
-        'location' => 'required|max:255',
-        'price' => 'required|decimal:0,2',
-        'area' => 'required|numeric|integer',
-        'parking' => 'required|boolean',
-        'vacant' => 'required|boolean',
-        'nearby' => 'required',
-        'description' => 'required',
-        'sale' => 'required|max:255',
-        'badge' => 'required|max:255',
-        'status' => 'required|max:255',
-        'unit_number' => 'required|max:255',
-        'unit_type' => 'required|max:255',
-        'unit_furnish' => 'required|max:255',
-        'unit_floor' => 'required|max:255',
-        'amenities' => 'required|array',
-        'images' => 'required',
+        'owner.first_name' => 'required|max:255',
+        'owner.last_name' => 'required|max:255',
+        'owner.email' => 'required|max:255|email',
+        'owner.phone' => 'required|max:255',
+        'owner.type' => 'required|max:255',
+
+        'property.name' => 'required|max:255',
+        'property.location' => 'required|max:255',
+        'property.price' => 'required|decimal:0,2',
+        'property.area' => 'required|decimal:0,2',
+        'property.parking' => 'required|boolean',
+        'property.description' => 'required',
+
+        'property.unit_number' => 'required|max:255',
+        'property.unit_type' => 'required|max:255',
+        'property.unit_status' => 'required|max:255',
+
+        'property.title' => 'required|max:255',
+        'property.payment' => 'required|max:255',
+        'property.turnover' => 'required|max:255',
+        'property.terms' => 'required|max:255',
+
+        'property.type' => 'required|max:255',
+        'property.published' => 'required|max:255',
+
+        'property.amenities' => 'required|array',
+        'property.images' => 'required',
     ];
 
-    public function getAll(Request $request)
+    public function getAll()
     {
-        $user =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
-        if ($user->type == "Admin") {
-            $records = Model::with('user')->orderBy('updated_at', 'desc')->get();
-        } else if ($user->type == "Agent") {
-            $records = Model::with('user')->where('user_id', $user->id)->orderBy('updated_at', 'desc')->get();
-        }
+        $records = Model::with('owner')->orderBy('updated_at', 'desc')->get();
         $code = 200;
-        $response = ['message' => "Fetched Properties", 'records' => $records];
+        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
     }
 
     public function get($id)
     {
-        $record = Model::with('user')->where('id', $id)->first();
+        $record = Model::with('owner')->where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
@@ -67,25 +71,29 @@ class PropertyController extends Controller
     {
         $validated = $request->validate($this->rules);
 
+        $parent = Parent::create($validated['owner']);
+
+        $validated['property']['owner_id'] = $parent->id;
+
         $key = 'amenities';
-        if ($request[$key]) {
+        if ($request['property'][$key]) {
             $amenities = [];
-            foreach ($request[$key] as $amenity) {
+            foreach ($request['property'][$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
-            $validated[$key] = json_encode($amenities);
+            $validated['property'][$key] = json_encode($amenities);
         }
 
         $key = 'images';
-        if ($request[$key]) {
+        if ($request['property'][$key]) {
             $images = [];
-            foreach ($request[$key] as $image) {
+            foreach ($request['property'][$key] as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
             }
-            $validated[$key] = json_encode($images);
+            $validated['property'][$key] = json_encode($images);
         }
 
-        $record = Model::create($validated);
+        $record = Model::create($validated['property']);
         $code = 201;
         $response = [
             'message' => "Created $this->model",
@@ -103,27 +111,31 @@ class PropertyController extends Controller
 
         $record = Model::find($validated['id']);
 
+        Parent::find($record->owner_id)->delete();
+        $parent = Parent::create($validated['owner']);
+        $validated['property']['owner_id'] = $parent->id;
+
         $key = 'amenities';
-        if ($request[$key]) {
+        if ($request['property'][$key]) {
             $amenities = [];
-            foreach ($request[$key] as $amenity) {
+            foreach ($request['property'][$key] as $amenity) {
                 array_push($amenities, $amenity);
             }
-            $validated[$key] = json_encode($amenities);
+            $validated['property'][$key] = json_encode($amenities);
         }
 
         $key = 'images';
-        if ($request[$key]) {
+        if ($request['property'][$key]) {
             $images = json_decode($record[$key]);
             foreach ($images as $image) {
                 Storage::disk('s3')->delete("properties/images/$image");
             }
 
             $images = [];
-            foreach ($request[$key] as $image) {
+            foreach ($request['property'][$key] as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
             }
-            $validated[$key] = json_encode($images);
+            $validated['property'][$key] = json_encode($images);
         }
 
         $record->update($validated);
@@ -136,6 +148,8 @@ class PropertyController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
+            Parent::find($record->owner_id)->delete();
+            
             $images = json_decode($record->images);
             foreach ($images as $image) {
                 Storage::disk('s3')->delete("properties/images/$image");
