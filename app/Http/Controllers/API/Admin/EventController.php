@@ -28,6 +28,7 @@ class EventController extends Controller
         $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         return response()->json($response, $code);
     }
+    
 
     public function get($id)
     {
