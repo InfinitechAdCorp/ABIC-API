@@ -17,7 +17,6 @@ class PropertyController extends Controller
     public $model = "Property";
 
     public $rules = [
-        'user_id' => 'required|exists:users,id',
         'name' => 'required|max:255',
         'type' => 'required|max:255',
         'location' => 'required|max:255',

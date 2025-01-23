@@ -16,7 +16,6 @@ class Property extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'user_id',
         'name',
         'type',
         'location',
