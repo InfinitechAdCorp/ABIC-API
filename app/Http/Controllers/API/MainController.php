@@ -18,6 +18,7 @@ use App\Models\Submission;
 use App\Models\PropertySubmission;
 use App\Models\Schedule;
 use App\Models\Service;
+use App\Models\Article;
 
 class MainController extends Controller
 {
@@ -82,6 +83,13 @@ class MainController extends Controller
         $records = Service::orderBy('updated_at', 'desc')->get();
         $code = 200;
         $response = ['message' => "Fetched Services", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function articlesGetAll() {
+        $records = Article::get()->groupBy('type');
+        $code = 200;
+        $response = ['message' => "Fetched Articles", 'records' => $records];
         return response()->json($response, $code);
     }
 
