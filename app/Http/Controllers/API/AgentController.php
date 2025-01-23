@@ -16,15 +16,6 @@ class AgentController extends Controller
 {
     use Uploadable;
 
-    public function propertiesGetAll(Request $request)
-    {
-        $user_id = $request->header('user-id');
-        $records = Property::where('user_id', $user_id)->orderBy('badge')->get();
-        $code = 200;
-        $response = ['message' => "Fetched Properties", 'records' => $records];
-        return response()->json($response, $code);
-    }
-
     public function testimonialsGetAll(Request $request)
     {
         $user_id = $request->header('user-id');

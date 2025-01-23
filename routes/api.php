@@ -219,7 +219,7 @@ Route::middleware('auth.admin')->group(function () {
 });
 
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
-    Route::get('properties', [AgentController::class, 'propertiesGetAll']);
+    Route::get('properties', [MainController::class, 'propertiesGetAll']);
     Route::get('testimonials', [AgentController::class, 'testimonialsGetAll']);
 
     Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
