@@ -17,6 +17,7 @@ use App\Models\Inquiry;
 use App\Models\Submission;
 use App\Models\PropertySubmission;
 use App\Models\Schedule;
+use App\Models\Service;
 
 class MainController extends Controller
 {
@@ -73,6 +74,14 @@ class MainController extends Controller
         }
         $code = 200;
         $response = ['message' => "Fetched Careers", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function servicesGetAll()
+    {
+        $records = Service::orderBy('updated_at', 'desc')->get();
+        $code = 200;
+        $response = ['message' => "Fetched Services", 'records' => $records];
         return response()->json($response, $code);
     }
 

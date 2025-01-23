@@ -45,7 +45,7 @@ Route::prefix('users')->group(function () {
     Route::post('/reset-password', [UserController::class, 'resetPassword']);
 });
 
-// Route::middleware('auth.admin')->group(function () {
+Route::middleware('auth.admin')->group(function () {
     Route::prefix('users')->group(function () {
         Route::get('', [UserController::class, 'getAll']);
         Route::get('{id}', [UserController::class, 'get']);
@@ -216,7 +216,7 @@ Route::prefix('users')->group(function () {
         Route::put('', [ArticleController::class, 'update']);
         Route::delete('{id}', [ArticleController::class, 'delete']);
     });
-// });
+});
 
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
     Route::get('properties', [AgentController::class, 'propertiesGetAll']);
@@ -232,6 +232,7 @@ Route::prefix('main')->group(function () {
     Route::get('seminars', [MainController::class, 'seminarsGetAll']);
     Route::get('partners', [MainController::class, 'partnersGetAll']);
     Route::get('careers', [MainController::class, 'careersGetAll']);
+    Route::get('services', [MainController::class, 'servicesGetAll']);
 
     Route::post('submit-application', [MainController::class, 'submitApplication']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
