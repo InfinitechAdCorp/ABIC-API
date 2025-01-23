@@ -149,7 +149,7 @@ class PropertyController extends Controller
         $record = Model::find($id);
         if ($record) {
             Parent::find($record->owner_id)->delete();
-            
+
             $images = json_decode($record->images);
             foreach ($images as $image) {
                 Storage::disk('s3')->delete("properties/images/$image");
@@ -164,6 +164,19 @@ class PropertyController extends Controller
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
+        return response()->json($response, $code);
+    }
+
+    public function setPublishedStatus(Request $request) {
+        $validated = $request->validate([
+            'id' => 'required|exists:properties,id',
+            'published' => 'required|boolean',
+        ]);
+
+        $record = Model::find($validated['id']);
+        $record->update($validated);
+        $code = 200;
+        $response = ['message' => "Updated Status"];
         return response()->json($response, $code);
     }
 }
