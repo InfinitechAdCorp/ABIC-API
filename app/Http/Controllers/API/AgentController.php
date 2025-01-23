@@ -21,7 +21,7 @@ class AgentController extends Controller
         $user_id = $request->header('user-id');
         $records = Property::where('user_id', $user_id)->orderBy('badge')->get();
         $code = 200;
-        $response = ['message' => "Fetched Properties", 'records' => $records];
+        $response = ['message' => "Fetched Properties", 'records' => $records, 'user_id' => $request->header('user-id')];
         return response()->json($response, $code);
     }
 
