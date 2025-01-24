@@ -33,6 +33,7 @@ class Property extends Model
         'terms',
 
         'category',
+        'badge',
         'published',
 
         'amenities',

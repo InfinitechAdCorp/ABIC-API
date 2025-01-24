@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('terms');
 
             $table->string('category');
+            $table->string('badge');
             $table->boolean('published');
 
             $table->json('amenities');

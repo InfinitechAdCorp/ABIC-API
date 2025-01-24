@@ -9,12 +9,10 @@ use Sentiment\Analyzer;
 
 use App\Models\Property;
 use App\Models\Testimonial;
-use App\Models\Seminar;
 use App\Models\Partner;
 use App\Models\Career;
 use App\Models\Application;
 use App\Models\Inquiry;
-use App\Models\Submission;
 use App\Models\PropertySubmission;
 use App\Models\Schedule;
 use App\Models\Service;
@@ -27,7 +25,7 @@ class MainController extends Controller
 
     public function propertiesGetAll()
     {
-        $records = Property::orderBy('badge')->get();
+        $records = Property::where('published', 1)->get();
         $code = 200;
         $response = ['message' => "Fetched Properties", 'records' => $records];
         return response()->json($response, $code);
@@ -49,14 +47,6 @@ class MainController extends Controller
 
         $code = 200;
         $response = ['message' => "Fetched Testimonials", 'records' => $records];
-        return response()->json($response, $code);
-    }
-
-    public function seminarsGetAll()
-    {
-        $records = Seminar::orderBy('updated_at', 'desc')->get();
-        $code = 200;
-        $response = ['message' => "Fetched Seminars", 'records' => $records];
         return response()->json($response, $code);
     }
 
@@ -149,66 +139,6 @@ class MainController extends Controller
         $code = 201;
         $response = [
             'message' => "Submitted Inquiry",
-            'record' => $record,
-        ];
-        return response()->json($response, $code);
-    }
-
-    public function oldSubmitProperty(Request $request)
-    {
-        $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'phone' => 'required',
-            'email' => 'required|email',
-            'property' => 'required',
-            'type' => 'required',
-            'location' => 'required',
-            'price' => 'required|decimal:0,2',
-            'area' => 'required|numeric',
-            'parking' => 'required|boolean',
-            'vacant' => 'nullable|boolean',
-            'description' => 'required',
-            'sale' => 'required',
-            'badge' => 'required',
-            'status' => 'required',
-            'submit_status' => 'required',
-            'unit_number' => 'nullable',
-            'unit_type' => 'required',
-            'unit_furnish' => 'required',
-            'unit_floor' => 'nullable',
-            'submitted_by' => 'nullable',
-            'commission' => 'required|boolean',
-            'terms' => 'nullable',
-            'title' => 'nullable',
-            'turnover' => 'nullable',
-            'lease' => 'nullable',
-            'amenities' => 'required|array',
-            'images' => 'nullable',
-        ]);
-
-        $key = 'amenities';
-        if ($request[$key]) {
-            $amenities = [];
-            foreach ($request[$key] as $amenity) {
-                array_push($amenities, $amenity);
-            }
-            $validated[$key] = json_encode($amenities);
-        }
-
-        $key = 'images';
-        if ($request[$key]) {
-            $images = [];
-            foreach ($request[$key] as $image) {
-                array_push($images, $this->upload($image, "submissions"));
-            }
-            $validated[$key] = json_encode($images);
-        }
-
-        $record = Submission::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Property",
             'record' => $record,
         ];
         return response()->json($response, $code);

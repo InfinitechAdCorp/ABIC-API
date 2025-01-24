@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Traits\Uploadable;
 use Sentiment\Analyzer;
 
-use App\Models\Property;
 use App\Models\Testimonial;
 use App\Models\Inquiry;
 use App\Models\Schedule;

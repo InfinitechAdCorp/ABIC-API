@@ -40,6 +40,7 @@ class PropertyController extends Controller
         'terms' => 'required|max:255',
 
         'category' => 'required|max:255',
+        'badge' => 'required|max:255',
         'published' => 'required|max:255',
 
         'amenities' => 'required|array',

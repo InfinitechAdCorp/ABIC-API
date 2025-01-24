@@ -166,7 +166,6 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
 Route::prefix('main')->group(function () {
     Route::get('properties', [MainController::class, 'propertiesGetAll']);
     Route::get('testimonials', [MainController::class, 'testimonialsGetAll']);
-    Route::get('seminars', [MainController::class, 'seminarsGetAll']);
     Route::get('partners', [MainController::class, 'partnersGetAll']);
     Route::get('careers', [MainController::class, 'careersGetAll']);
     Route::get('services', [MainController::class, 'servicesGetAll']);
