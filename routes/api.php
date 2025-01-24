@@ -59,6 +59,8 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [PropertyController::class, 'create']);
         Route::put('', [PropertyController::class, 'update']);
         Route::delete('{id}', [PropertyController::class, 'delete']);
+
+        Route::post('/set-status', [PropertyController::class, 'setStatus']);
     });
 
     Route::prefix('certificates')->group(function () {

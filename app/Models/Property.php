@@ -32,7 +32,7 @@ class Property extends Model
         'turnover',
         'terms',
 
-        'type',
+        'category',
         'published',
 
         'amenities',

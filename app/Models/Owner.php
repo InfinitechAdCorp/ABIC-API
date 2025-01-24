@@ -15,13 +15,11 @@ class Owner extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'name',
-        'location',
-        'budget',
-        'start',
-        'end',
-        'description',
-        'image',
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'type',
     ];
 
     public static function booted()

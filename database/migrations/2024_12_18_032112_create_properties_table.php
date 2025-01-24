@@ -30,7 +30,7 @@ return new class extends Migration
             $table->string('turnover');
             $table->string('terms');
 
-            $table->string('type');
+            $table->string('category');
             $table->boolean('published');
 
             $table->json('amenities');
