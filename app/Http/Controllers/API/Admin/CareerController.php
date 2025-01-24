@@ -26,6 +26,7 @@ class CareerController extends Controller
         $records = Model::with('applications')->orderBy('updated_at', 'desc')->get();
         foreach ($records as $record) {
             $record['available_slots'] = $record->slots - count($record->applications);
+            $record['applications_count'] = count($record['applications']); 
         }
         $code = 200;
         $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
