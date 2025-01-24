@@ -159,8 +159,9 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
     Route::get('properties', [MainController::class, 'propertiesGetAll']);
     Route::get('testimonials', [AgentController::class, 'testimonialsGetAll']);
 
-    Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
+    Route::post('submit-property', [MainController::class, 'submitProperty']);
     Route::post('submit-schedule', [AgentController::class, 'submitSchedule']);
+    Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
 });
 
 Route::prefix('main')->group(function () {

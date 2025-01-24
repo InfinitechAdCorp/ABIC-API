@@ -6,7 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\Property;
-use App\Models\User;
+use App\Models\Owner;
 
 class PropertySeeder extends Seeder
 {
@@ -15,6 +15,7 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
+        $owner = Owner::firstOrCreate
         $user = User::firstOrCreate([
             'name' => 'Name',
             'email' => 'email@email.com',

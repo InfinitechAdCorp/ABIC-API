@@ -120,7 +120,7 @@ class MainController extends Controller
 
             'category' => 'required|max:255',
             'badge' => 'required|max:255',
-            'published' => 'required|max:255',
+            'published' => 'required|boolean',
 
             'amenities' => 'required|array',
             'images' => 'required',
