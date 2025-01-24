@@ -25,7 +25,7 @@ class CareerController extends Controller
     {
         $records = Model::with('applications')->orderBy('updated_at', 'desc')->get();
         foreach ($records as $record) {
-            $record['applications']['count'] = count($record['applications']); 
+            $record['applications_count'] = count($record['applications']); 
         }
         $code = 200;
         $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
@@ -37,7 +37,7 @@ class CareerController extends Controller
         $record = Model::with('applications')->where('id', $id)->first();
     
         if ($record) {
-            $record['applications']['count'] = count($record['applications']); 
+            $record['applications_count'] = count($record['applications']); 
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
         }
