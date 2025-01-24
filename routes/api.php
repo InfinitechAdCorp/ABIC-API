@@ -163,6 +163,7 @@ Route::prefix('agent')->middleware('auth.agent')->group(function () {
     Route::post('submit-property', [MainController::class, 'submitProperty']);
     Route::post('submit-schedule', [AgentController::class, 'submitSchedule']);
     Route::post('submit-inquiry', [AgentController::class, 'submitInquiry']);
+    Route::post('submit-application', [MainController::class, 'submitApplication']);
 });
 
 Route::prefix('main')->group(function () {

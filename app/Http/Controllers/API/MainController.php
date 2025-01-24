@@ -215,23 +215,14 @@ class MainController extends Controller
             'resume' => 'required',
         ]);
 
-        $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
-        $availableSlots = $parent->slots - count($parent->applications);
-
-        if ($availableSlots <= 0) {
-            $code = 200;
-            $response = ['message' => "Out Of Slots"];
-        } else {
-            $key = 'resume';
-            if ($request->hasFile($key)) {
-                $validated[$key] = $this->upload($request->file($key), "careers/applications");
-            }
-
-            $record = Application::create($validated);
-            $code = 201;
-            $response = ['message' => "Submitted Application", 'record' => $record];
+        $key = 'resume';
+        if ($request->hasFile($key)) {
+            $validated[$key] = $this->upload($request->file($key), "careers/applications");
         }
 
+        $record = Application::create($validated);
+        $code = 201;
+        $response = ['message' => "Submitted Application", 'record' => $record];
         return response()->json($response, $code);
     }
 }

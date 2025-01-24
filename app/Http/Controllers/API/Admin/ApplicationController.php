@@ -51,23 +51,14 @@ class ApplicationController extends Controller
     {
         $validated = $request->validate($this->rules);
 
-        $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
-        $availableSlots = $parent->slots - count($parent->applications);
-
-        if ($availableSlots <= 0) {
-            $code = 200;
-            $response = ['message' => "Out Of Slots"];
-        } else {
-            $key = 'resume';
-            if ($request->hasFile($key)) {
-                $validated[$key] = $this->upload($request->file($key), "careers/applications");
-            }
-
-            $record = Model::create($validated);
-            $code = 201;
-            $response = ['message' => "Created $this->model", 'record' => $record];
+        $key = 'resume';
+        if ($request->hasFile($key)) {
+            $validated[$key] = $this->upload($request->file($key), "careers/applications");
         }
 
+        $record = Model::create($validated);
+        $code = 201;
+        $response = ['message' => "Created $this->model", 'record' => $record];
         return response()->json($response, $code);
     }
 
