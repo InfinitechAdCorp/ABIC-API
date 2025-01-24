@@ -34,12 +34,13 @@ class PropertyController extends Controller
         'unit_type' => 'required|max:255',
         'unit_status' => 'required|max:255',
 
+        'sale_type' => 'required|max:255',
         'title' => 'required|max:255',
         'payment' => 'required|max:255',
         'turnover' => 'required|max:255',
         'terms' => 'required|max:255',
 
-        'category' => 'required|max:255',
+        'status' => 'required|max:255',
         'badge' => 'nullable|max:255',
         'published' => 'required|boolean',
 

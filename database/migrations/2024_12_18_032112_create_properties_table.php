@@ -25,12 +25,13 @@ return new class extends Migration
             $table->string('unit_type');
             $table->string('unit_status');
             
+            $table->string('sale_type');
             $table->string('title');
             $table->string('payment');
             $table->string('turnover');
             $table->string('terms');
 
-            $table->string('category');
+            $table->string('status');
             $table->string('badge')->nullable();
             $table->boolean('published');
 

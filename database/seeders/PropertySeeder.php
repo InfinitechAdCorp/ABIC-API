@@ -38,12 +38,13 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_status' => 'Fully Furnished',
 
+                'sale_type' => 'N/A',
                 'title' => "N/A",
                 'payment' => "N/A",
                 'turnover' => "N/A",
                 'terms' => "N/A",
 
-                'category' => 'Residential',
+                'status' => 'For Rent',
                 'badge' => 'Price Drop',
                 'published' => 1,
 
@@ -64,12 +65,13 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_status' => 'Fully Furnished',
 
+                'sale_type' => 'Pre-Selling',
                 'title' => "N/A",
                 'payment' => "N/A",
                 'turnover' => "N/A",
                 'terms' => "N/A",
 
-                'category' => 'Pre-Selling',
+                'status' => 'For Sale',
                 'badge' => 'Price Drop',
                 'published' => 1,
 
@@ -90,12 +92,13 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_status' => 'Fully Furnished',
 
+                'sale_type' => 'Pre-Selling',
                 'title' => "N/A",
                 'payment' => "N/A",
                 'turnover' => "N/A",
                 'terms' => "N/A",
 
-                'category' => 'Pre-Selling',
+                'status' => 'For Sale',
                 'badge' => 'New',
                 'published' => 1,
 
@@ -116,12 +119,13 @@ class PropertySeeder extends Seeder
                 'unit_type' => '2BR',
                 'unit_status' => 'Fully Furnished',
 
+                'sale_type' => 'Pre-Selling',
                 'title' => "N/A",
                 'payment' => "N/A",
                 'turnover' => "N/A",
                 'terms' => "N/A",
                 
-                'category' => 'Pre-Selling',
+                'status' => 'For Sale',
                 'badge' => 'New',
                 'published' => 1,
                 

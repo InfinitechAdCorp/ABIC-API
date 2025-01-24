@@ -27,12 +27,13 @@ class Property extends Model
         'unit_type',
         'unit_status',
 
+        'sale_type',
         'title',
         'payment',
         'turnover',
         'terms',
 
-        'category',
+        'status',
         'badge',
         'published',
 
