@@ -35,8 +35,10 @@ class CareerController extends Controller
     public function get($id)
     {
         $record = Model::with('applications')->where('id', $id)->first();
-        $record['available_slots'] = $record->slots - count($record['applications']);
+    
         if ($record) {
+            $record['available_slots'] = $record->slots - count($record['applications']);
+            $record['applications_count'] = count($record['applications']); 
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
         }
@@ -44,8 +46,10 @@ class CareerController extends Controller
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
+    
         return response()->json($response, $code);
     }
+    
 
     public function create(Request $request)
     {
