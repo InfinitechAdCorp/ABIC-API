@@ -96,7 +96,7 @@ class PropertySeeder extends Seeder
                 'terms' => "N/A",
 
                 'category' => 'Pre-Selling',
-                'badge' => 'Price Drop',
+                'badge' => 'New',
                 'published' => 1,
 
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
@@ -122,7 +122,7 @@ class PropertySeeder extends Seeder
                 'terms' => "N/A",
                 
                 'category' => 'Pre-Selling',
-                'badge' => 'Price Drop',
+                'badge' => 'New',
                 'published' => 1,
                 
                 'amenities' => json_encode(['Swimming Pool', 'Gym', 'Club House', 'Spa', 'Jogging Track', 'Tennis Court', 'Children\'s Play Area', 'Lounge', 'Barbecue Area', 'Rooftop Garden', 'Business Center', 'Party Hall', 'Indoor Games Room', 'Security System', '24/7 Water Supply', 'Wi-Fi Connectivity', 'Shuttle Service', 'Electric Vehicle Charging', 'Parking Lot', 'Café', 'Convenience Store', 'Health Clinic', 'Pet Area', 'Library', 'Billiards Room']),
