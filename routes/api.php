@@ -6,15 +6,9 @@ use App\Http\Controllers\API\Admin\UserController;
 use App\Http\Controllers\API\Admin\PropertyController;
 use App\Http\Controllers\API\Admin\CertificateController;
 use App\Http\Controllers\API\Admin\ScheduleController;
-use App\Http\Controllers\API\Admin\SubmissionController;
 use App\Http\Controllers\API\Admin\TestimonialController;
 use App\Http\Controllers\API\Admin\PartnerController;
 use App\Http\Controllers\API\Admin\ItemController;
-use App\Http\Controllers\API\Admin\SeminarController;
-use App\Http\Controllers\API\Admin\MeetingController;
-use App\Http\Controllers\API\Admin\EventController;
-use App\Http\Controllers\API\Admin\ClosedDealController;
-use App\Http\Controllers\API\Admin\NewsController;
 use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
@@ -22,7 +16,6 @@ use App\Http\Controllers\API\Admin\ArticleController;
 use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
-use App\Http\Controllers\API\Admin\TipController;
 use App\Http\Controllers\API\AgentController;
 
 use App\Http\Controllers\API\MainController;
@@ -105,16 +98,6 @@ Route::middleware('auth.admin')->group(function () {
         Route::delete('{id}', [TestimonialController::class, 'delete']);
     });
 
-    Route::prefix('submissions')->group(function () {
-        Route::get('', [SubmissionController::class, 'getAll']);
-        Route::get('{id}', [SubmissionController::class, 'get']);
-        Route::post('', [SubmissionController::class, 'create']);
-        Route::put('', [SubmissionController::class, 'update']);
-        Route::delete('{id}', [SubmissionController::class, 'delete']);
-
-        Route::post('/change-status', [SubmissionController::class, 'changeStatus']);
-    });
-
     Route::prefix('partners')->group(function () {
         Route::get('', [PartnerController::class, 'getAll']);
         Route::get('{id}', [PartnerController::class, 'get']);
@@ -131,30 +114,6 @@ Route::middleware('auth.admin')->group(function () {
         Route::delete('{id}', [ItemController::class, 'delete']);
     });
 
-    Route::prefix('tips')->group(function () {
-        Route::get('', [TipController::class, 'getAll']);
-        Route::get('{id}', [TipController::class, 'get']);
-        Route::post('', [TipController::class, 'create']);
-        Route::put('', [TipController::class, 'update']);
-        Route::delete('{id}', [TipController::class, 'delete']);
-    });
-
-    Route::prefix('seminars')->group(function () {
-        Route::get('', [SeminarController::class, 'getAll']);
-        Route::get('{id}', [SeminarController::class, 'get']);
-        Route::post('', [SeminarController::class, 'create']);
-        Route::put('', [SeminarController::class, 'update']);
-        Route::delete('{id}', [SeminarController::class, 'delete']);
-    });
-
-    Route::prefix('meetings')->group(function () {
-        Route::get('', [MeetingController::class, 'getAll']);
-        Route::get('{id}', [MeetingController::class, 'get']);
-        Route::post('', [MeetingController::class, 'create']);
-        Route::put('', [MeetingController::class, 'update']);
-        Route::delete('{id}', [MeetingController::class, 'delete']);
-    });
-
     Route::prefix('inquiries')->group(function () {
         Route::get('', [InquiryController::class, 'getAll']);
         Route::get('{id}', [InquiryController::class, 'get']);
@@ -169,30 +128,6 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [ServiceController::class, 'create']);
         Route::put('', [ServiceController::class, 'update']);
         Route::delete('{id}', [ServiceController::class, 'delete']);
-    });
-
-    Route::prefix('events')->group(function () {
-        Route::get('', [EventController::class, 'getAll']);
-        Route::get('{id}', [EventController::class, 'get']);
-        Route::post('', [EventController::class, 'create']);
-        Route::put('', [EventController::class, 'update']);
-        Route::delete('{id}', [EventController::class, 'delete']);
-    });
-
-    Route::prefix('closed-deals')->group(function () {
-        Route::get('', [ClosedDealController::class, 'getAll']);
-        Route::get('{id}', [ClosedDealController::class, 'get']);
-        Route::post('', [ClosedDealController::class, 'create']);
-        Route::put('', [ClosedDealController::class, 'update']);
-        Route::delete('{id}', [ClosedDealController::class, 'delete']);
-    });
-
-    Route::prefix('news')->group(function () {
-        Route::get('', [NewsController::class, 'getAll']);
-        Route::get('{id}', [NewsController::class, 'get']);
-        Route::post('', [NewsController::class, 'create']);
-        Route::put('', [NewsController::class, 'update']);
-        Route::delete('{id}', [NewsController::class, 'delete']);
     });
 
     Route::prefix('careers')->group(function () {
