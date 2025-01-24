@@ -15,13 +15,10 @@ class PropertySeeder extends Seeder
      */
     public function run(): void
     {
-        $owner = Owner::firstOrCreate
-        $user = User::firstOrCreate([
-            'name' => 'Name',
-            'email' => 'email@email.com',
-            'password' => '12345678',
-            'type' => 'Admin',
-        ]);
+        $owner = Owner::firstOrCreate([
+            'first_name' => 'Weiwei'
+            'last_name'
+        ])
 
         $records = [
             [
