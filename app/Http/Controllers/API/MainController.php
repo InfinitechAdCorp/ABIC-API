@@ -13,11 +13,11 @@ use App\Models\Partner;
 use App\Models\Career;
 use App\Models\Application;
 use App\Models\Inquiry;
-use App\Models\PropertySubmission;
 use App\Models\Schedule;
 use App\Models\Service;
 use App\Models\Article;
 use App\Models\Infrastructure;
+use App\Models\Owner;
 
 class MainController extends Controller
 {
@@ -25,7 +25,7 @@ class MainController extends Controller
 
     public function propertiesGetAll()
     {
-        $records = Property::where('published', 1)->get();
+        $records = Property::where('published', 1)->orderBy('category')->get();
         $code = 200;
         $response = ['message' => "Fetched Properties", 'records' => $records];
         return response()->json($response, $code);
@@ -77,17 +77,129 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function articlesGetAll() {
+    public function articlesGetAll()
+    {
         $records = Article::get()->groupBy('type');
         $code = 200;
         $response = ['message' => "Fetched Articles", 'records' => $records];
         return response()->json($response, $code);
     }
 
-    public function infrastructuresGetAll() {
+    public function infrastructuresGetAll()
+    {
         $records = Infrastructure::orderBy('updated_at', 'desc')->get();
         $code = 200;
         $response = ['message' => "Fetched Infrastruces", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
+    public function submitProperty(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+
+            'name' => 'required|max:255',
+            'location' => 'required|max:255',
+            'price' => 'required|decimal:0,2',
+            'area' => 'required|decimal:0,2',
+            'parking' => 'required|boolean',
+            'description' => 'required',
+
+            'unit_number' => 'required|max:255',
+            'unit_type' => 'required|max:255',
+            'unit_status' => 'required|max:255',
+
+            'title' => 'required|max:255',
+            'payment' => 'required|max:255',
+            'turnover' => 'required|max:255',
+            'terms' => 'required|max:255',
+
+            'category' => 'required|max:255',
+            'badge' => 'required|max:255',
+            'published' => 'required|max:255',
+
+            'amenities' => 'required|array',
+            'images' => 'required',
+        ]);
+
+        $owner = Owner::create($validated);
+
+        $validated['owner_id'] = $owner->id;
+
+        $key = 'amenities';
+        if ($request[$key]) {
+            $amenities = [];
+            foreach ($request[$key] as $amenity) {
+                array_push($amenities, $amenity);
+            }
+            $validated[$key] = json_encode($amenities);
+        }
+
+        $key = 'images';
+        if ($request[$key]) {
+            $images = [];
+            foreach ($request[$key] as $image) {
+                array_push($images, $this->upload($image, "properties/images"));
+            }
+            $validated[$key] = json_encode($images);
+        }
+
+        $record = Property::create($validated);
+        $record = Property::with('owner')->where('id', $record->id)->first();
+        $code = 201;
+        $response = [
+            'message' => "Submitted Property",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitSchedule(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'date' => 'required|date',
+            'time' => 'required',
+            'type' => 'required|max:255',
+            'properties' => 'required|max:255',
+            'message' => 'required',
+            'status' => 'required|max:255',
+        ]);
+
+        $record = Schedule::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Schedule",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitInquiry(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
+            'message' => 'required',
+        ]);
+
+        $record = Inquiry::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Inquiry",
+            'record' => $record,
+        ];
         return response()->json($response, $code);
     }
 
@@ -120,105 +232,6 @@ class MainController extends Controller
             $response = ['message' => "Submitted Application", 'record' => $record];
         }
 
-        return response()->json($response, $code);
-    }
-
-    public function submitInquiry(Request $request)
-    {
-        $validated = $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'type' => 'required|max:255',
-            'properties' => 'nullable|max:255',
-            'message' => 'required',
-        ]);
-
-        $record = Inquiry::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Inquiry",
-            'record' => $record,
-        ];
-        return response()->json($response, $code);
-    }
-
-    public function submitProperty(Request $request)
-    {
-        $validated = $request->validate([
-            'user_last' => 'nullable|max:255',
-            'user_first' => 'nullable|max:255',
-            'user_email' => 'nullable|max:255|email',
-            'user_phone' => 'nullable|max:255',
-            'sender_type' => 'nullable|max:255',
-            'property_name' => 'nullable|max:255',
-            'property_type' => 'nullable|max:255',
-            'property_unit_status' => 'nullable|max:255',
-            'property_price' => 'nullable|decimal:0,2',
-            'property_area' => 'nullable|decimal:0,2',
-            'property_number' => 'nullable|max:255',
-            'property_parking' => 'nullable|boolean',
-            'property_status' => 'nullable|max:255',
-            'property_rent_terms' => 'nullable|max:255',
-            'property_sale_type' => 'nullable|max:255',
-            'property_sale_payment' => 'nullable|max:255',
-            'property_sale_title' => 'nullable|max:255',
-            'property_sale_turnover' => 'nullable|max:255',
-            'property_description' => 'nullable',
-            'property_amenities' => 'nullable|array',
-            'images' => 'nullable',
-        ]);
-
-        $key = 'property_amenities';
-        if ($request[$key]) {
-            $amenities = [];
-            foreach ($request[$key] as $amenity) {
-                array_push($amenities, $amenity);
-            }
-            $validated[$key] = json_encode($amenities);
-        }
-
-        $key = 'images';
-        if ($request[$key]) {
-            $images = [];
-            foreach ($request[$key] as $image) {
-                array_push($images, $this->upload($image, "submissions/images"));
-            }
-            $validated[$key] = json_encode($images);
-        }
-
-        $record = PropertySubmission::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Property",
-            'record' => $record,
-        ];
-        return response()->json($response, $code);
-    }
-
-    public function submitSchedule(Request $request)
-    {
-        $validated = $request->validate([
-            'user_id' => 'required|exists:users,id',
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'date' => 'required|date',
-            'time' => 'required',
-            'type' => 'required|max:255',
-            'properties' => 'required|max:255',
-            'message' => 'required',
-            'status' => 'required|max:255',
-        ]);
-
-        $record = Schedule::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Schedule",
-            'record' => $record,
-        ];
         return response()->json($response, $code);
     }
 }

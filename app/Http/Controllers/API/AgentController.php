@@ -35,29 +35,6 @@ class AgentController extends Controller
         return response()->json($response, $code);
     }
 
-    public function submitInquiry(Request $request)
-    {
-        $validated = $request->validate([
-            'first_name' => 'required|max:255',
-            'last_name' => 'required|max:255',
-            'email' => 'required|max:255|email',
-            'phone' => 'required|max:255',
-            'type' => 'required|max:255',
-            'properties' => 'nullable|max:255',
-            'message' => 'required',
-        ]);
-
-        $validated['user_id'] = $request->header('user-id');
-
-        $record = Inquiry::create($validated);
-        $code = 201;
-        $response = [
-            'message' => "Submitted Inquiry",
-            'record' => $record,
-        ];
-        return response()->json($response, $code);
-    }
-
     public function submitSchedule(Request $request)
     {
         $validated = $request->validate([
@@ -79,6 +56,29 @@ class AgentController extends Controller
         $code = 201;
         $response = [
             'message' => "Submitted Schedule",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
+    public function submitInquiry(Request $request)
+    {
+        $validated = $request->validate([
+            'first_name' => 'required|max:255',
+            'last_name' => 'required|max:255',
+            'email' => 'required|max:255|email',
+            'phone' => 'required|max:255',
+            'type' => 'required|max:255',
+            'properties' => 'nullable|max:255',
+            'message' => 'required',
+        ]);
+
+        $validated['user_id'] = $request->header('user-id');
+
+        $record = Inquiry::create($validated);
+        $code = 201;
+        $response = [
+            'message' => "Submitted Inquiry",
             'record' => $record,
         ];
         return response()->json($response, $code);

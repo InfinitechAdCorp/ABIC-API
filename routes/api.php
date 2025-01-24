@@ -172,10 +172,8 @@ Route::prefix('main')->group(function () {
     Route::get('articles', [MainController::class, 'articlesGetAll']);
     Route::get('infrastructures', [MainController::class, 'infrastructuresGetAll']);
 
-    Route::post('submit-application', [MainController::class, 'submitApplication']);
-    Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-property', [MainController::class, 'submitProperty']);
     Route::post('submit-schedule', [MainController::class, 'submitSchedule']);
-
-    Route::post('old/submit-property', [MainController::class, 'oldSubmitProperty']);
+    Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
+    Route::post('submit-application', [MainController::class, 'submitApplication']);
 });
