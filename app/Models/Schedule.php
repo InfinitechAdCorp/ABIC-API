@@ -30,7 +30,7 @@ class Schedule extends Model
 
     public static function booted()
     {
-        static::creating(function (Schedule $record) {
+        self::creating(function (Schedule $record) {
             $record->id = Str::ulid();
         });
     }

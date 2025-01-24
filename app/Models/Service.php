@@ -21,7 +21,7 @@ class Service extends Model
 
     public static function booted()
     {
-        static::creating(function (Service $record) {
+        self::creating(function (Service $record) {
             $record->id = Str::ulid();
         });
     }

@@ -21,7 +21,7 @@ class Career extends Model
     ];
 
     public static function booted() {
-        static::creating(function (Career $record) {
+        self::creating(function (Career $record) {
             $record->id = Str::ulid();
         });
     }

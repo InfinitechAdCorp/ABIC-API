@@ -24,7 +24,7 @@ class Article extends Model
 
     public static function booted()
     {
-        static::creating(function (Article $record) {
+        self::creating(function (Article $record) {
             $record->id = Str::ulid();
         });
     }

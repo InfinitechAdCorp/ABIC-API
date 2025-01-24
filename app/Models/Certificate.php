@@ -23,7 +23,7 @@ class Certificate extends Model
 
     public static function booted()
     {
-        static::creating(function (Certificate $record) {
+        self::creating(function (Certificate $record) {
             $record->id = Str::ulid();
         });
     }

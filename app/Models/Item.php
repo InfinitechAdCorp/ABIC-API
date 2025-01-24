@@ -23,7 +23,7 @@ class Item extends Model
 
     public static function booted()
     {
-        static::creating(function (Item $record) {
+        self::creating(function (Item $record) {
             $record->id = Str::ulid();
         });
     }

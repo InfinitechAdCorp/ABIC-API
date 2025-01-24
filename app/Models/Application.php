@@ -26,7 +26,7 @@ class Application extends Model
 
     public static function booted()
     {
-        static::creating(function (Application $record) {
+        self::creating(function (Application $record) {
             $record->id = Str::ulid();
         });
     }

@@ -25,7 +25,7 @@ class User extends Authenticatable
 
     public static function booted()
     {
-        static::creating(function (User $record) {
+        self::creating(function (User $record) {
             $record->id = Str::ulid();
             $record->reset_token = Str::random();
         });

@@ -27,7 +27,7 @@ class Inquiry extends Model
 
     public static function booted()
     {
-        static::creating(function (Inquiry $record) {
+        self::creating(function (Inquiry $record) {
             $record->id = Str::ulid();
         });
     }

@@ -20,7 +20,7 @@ class Partner extends Model
 
     public static function booted()
     {
-        static::creating(function (Partner $record) {
+        self::creating(function (Partner $record) {
             $record->id = Str::ulid();
         });
     }

@@ -43,7 +43,7 @@ class Property extends Model
 
     public static function booted()
     {
-        static::creating(function (Property $record) {
+        self::creating(function (Property $record) {
             $record->id = Str::ulid();
         });
     }

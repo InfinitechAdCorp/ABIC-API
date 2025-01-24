@@ -21,7 +21,7 @@ class Amenity extends Model
 
     public static function booted()
     {
-        static::creating(function (Amenity $record) {
+        self::creating(function (Amenity $record) {
             $record->id = Str::ulid();
         });
     }

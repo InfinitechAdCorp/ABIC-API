@@ -24,7 +24,7 @@ class Owner extends Model
 
     public static function booted()
     {
-        static::creating(function (Owner $record) {
+        self::creating(function (Owner $record) {
             $record->id = Str::ulid();
         });
     }

@@ -25,7 +25,7 @@ class Infrastructure extends Model
 
     public static function booted()
     {
-        static::creating(function (Infrastructure $record) {
+        self::creating(function (Infrastructure $record) {
             $record->id = Str::ulid();
         });
     }

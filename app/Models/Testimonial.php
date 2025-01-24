@@ -23,7 +23,7 @@ class Testimonial extends Model
 
     public static function booted()
     {
-        static::creating(function (Testimonial $record) {
+        self::creating(function (Testimonial $record) {
             $record->id = Str::ulid();
         });
     }
