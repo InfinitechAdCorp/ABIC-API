@@ -93,6 +93,38 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
+    public function filterProperties(Request $request)
+    {
+        $where = [];
+
+        $location = $request->query('location');
+        if ($location) {
+            $location = str_replace('+', ' ', $location);
+            array_push($where, ['location', 'LIKE', "%$location%"]);
+        }
+
+        $min_price = $request->query('min_price');
+        if ($min_price) {
+            array_push($where, ['price', '>=', $min_price]);
+        }
+
+        $max_price = $request->query('max_price');
+        if ($max_price) {
+            array_push($where, ['price', '<=', $max_price]);
+        }
+
+        $unit_type = $request->query('unit_type');
+        if ($unit_type) {
+            $unit_type = str_replace('+', ' ', $unit_type);
+            array_push($where, ['unit_type', $unit_type]);
+        }
+
+        $records = Property::where($where)->get();
+        $code = 200;
+        $response = ['message' => "Filtered Properties", 'records' => $records];
+        return response()->json($response, $code);
+    }
+
     public function submitProperty(Request $request)
     {
         $validated = $request->validate([
