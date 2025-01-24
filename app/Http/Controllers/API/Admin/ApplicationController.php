@@ -68,26 +68,17 @@ class ApplicationController extends Controller
         $this->rules['resume'] = 'nullable';
         $validated = $request->validate($this->rules);
 
-        $parent = Career::with('applications')->where('id', $validated['career_id'])->first();
-        $availableSlots = $parent->slots - count($parent['applications']);
+        $record = Model::find($validated['id']);
 
-        if ($availableSlots <= 0) {
-            $code = 200;
-            $response = ['message' => "Out Of Slots"];
-        } else {
-            $record = Model::find($validated['id']);
-
-            $key = 'resume';
-            if ($request->hasFile($key)) {
-                Storage::disk('s3')->delete("careers/applications/$record[$key]");
-                $validated[$key] = $this->upload($request->file($key), "careers/applications");
-            }
-
-            $record->update($validated);
-            $code = 200;
-            $response = ['message' => "Updated $this->model", 'record' => $record];
+        $key = 'resume';
+        if ($request->hasFile($key)) {
+            Storage::disk('s3')->delete("careers/applications/$record[$key]");
+            $validated[$key] = $this->upload($request->file($key), "careers/applications");
         }
 
+        $record->update($validated);
+        $code = 200;
+        $response = ['message' => "Updated $this->model", 'record' => $record];
         return response()->json($response, $code);
     }
 

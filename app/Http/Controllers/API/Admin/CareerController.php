@@ -48,7 +48,6 @@ class CareerController extends Controller
     
         return response()->json($response, $code);
     }
-    
 
     public function create(Request $request)
     {
