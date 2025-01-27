@@ -155,16 +155,6 @@ class PropertyController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            $owner = Owner::find($record->owner_id);
-            if ($owner) {
-                $owner->delete();
-            }
-
-            $images = json_decode($record->images);
-            foreach ($images as $image) {
-                Storage::disk('s3')->delete("properties/images/$image");
-            }
-
             $record->delete();
             $code = 200;
             $response = [
@@ -177,7 +167,8 @@ class PropertyController extends Controller
         return response()->json($response, $code);
     }
 
-    public function setStatus(Request $request) {
+    public function setStatus(Request $request)
+    {
         $validated = $request->validate([
             'id' => 'required|exists:properties,id',
             'published' => 'required|boolean',

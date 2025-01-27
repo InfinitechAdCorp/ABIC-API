@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Property extends Model
 {
@@ -45,6 +46,15 @@ class Property extends Model
     {
         self::creating(function (Property $record) {
             $record->id = Str::ulid();
+        });
+
+        self::deleted(function (Property $record) {
+            $record->owner()->delete();
+
+            $images = json_decode($record->images);
+            foreach ($images as $image) {
+                Storage::disk('s3')->delete("properties/images/$image");
+            }
         });
     }
 
