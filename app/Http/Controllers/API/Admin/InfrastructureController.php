@@ -85,7 +85,6 @@ class InfrastructureController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("tips/$record->image");
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];
