@@ -13,6 +13,7 @@ use App\Http\Controllers\API\Admin\AmenityController;
 use App\Http\Controllers\API\Admin\CareerController;
 use App\Http\Controllers\API\Admin\ApplicationController;
 use App\Http\Controllers\API\Admin\ArticleController;
+use App\Http\Controllers\API\Admin\ContractController;
 use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
@@ -162,6 +163,14 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [VideoController::class, 'create']);
         Route::put('', [VideoController::class, 'update']);
         Route::delete('{id}', [VideoController::class, 'delete']);
+    });
+
+    Route::prefix('contracts')->group(function () {
+        Route::get('', [ContractController::class, 'getAll']);
+        Route::get('{id}', [ContractController::class, 'get']);
+        Route::post('', [ContractController::class, 'create']);
+        Route::put('', [ContractController::class, 'update']);
+        Route::delete('{id}', [ContractController::class, 'delete']);
     });
 });
 
