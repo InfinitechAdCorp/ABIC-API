@@ -82,7 +82,6 @@ class ServiceController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("services/$record->image");
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];

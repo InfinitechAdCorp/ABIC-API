@@ -90,7 +90,6 @@ class VideoController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("videos/$record->video");
             $record->delete();
             $code = 200;
             $response = [

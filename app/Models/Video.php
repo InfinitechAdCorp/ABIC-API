@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Video extends Model
 {
@@ -25,10 +26,14 @@ class Video extends Model
         self::creating(function (Video $record) {
             $record->id = Str::ulid();
         });
+
+        self::deleted(function (Video $record) {
+            Storage::disk('s3')->delete("videos/$record->video");
+        });
     }
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class); 
+        return $this->belongsTo(User::class);
     }
 }

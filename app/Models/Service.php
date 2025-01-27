@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
@@ -24,6 +25,9 @@ class Service extends Model
         self::creating(function (Service $record) {
             $record->id = Str::ulid();
         });
-    }
 
+        self::deleted(function (Service $record) {
+            Storage::disk('s3')->delete("services/$record->image");
+        });
+    }
 }
