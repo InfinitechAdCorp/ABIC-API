@@ -52,7 +52,7 @@ class PropertyController extends Controller
     {
         $records = Model::with('owner')->orderBy('updated_at', 'desc')->get();
         $code = 200;
-        $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
+        $response = ['message' => "Fetched Properties", 'records' => $records];
         return response()->json($response, $code);
     }
 
@@ -155,7 +155,10 @@ class PropertyController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Owner::find($record->owner_id)->delete();
+            $owner = Owner::find($record->owner_id);
+            if ($owner) {
+                $owner->delete();
+            }
 
             $images = json_decode($record->images);
             foreach ($images as $image) {
