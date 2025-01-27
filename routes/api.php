@@ -186,7 +186,6 @@ Route::middleware('auth.admin')->group(function () {
 Route::prefix('agent')->middleware('auth.agent')->group(function () {
     Route::get('', [AgentController::class, 'getAgent']);
     Route::get('properties', [MainController::class, 'propertiesGetAll']);
-    Route::get('testimonials', [AgentController::class, 'testimonialsGetAll']);
     Route::get('services', [MainController::class, 'servicesGetAll']);
 
     Route::get('filter-properties', [MainController::class, 'filterProperties']);
