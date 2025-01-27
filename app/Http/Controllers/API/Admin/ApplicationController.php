@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Storage;
 use App\Traits\Uploadable;
 
 use App\Models\Application as Model;
-use App\Models\Career;
 
 class ApplicationController extends Controller
 {

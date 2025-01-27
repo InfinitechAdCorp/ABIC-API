@@ -35,7 +35,6 @@ class CareerController extends Controller
     public function get($id)
     {
         $record = Model::with('applications')->where('id', $id)->first();
-    
         if ($record) {
             $record['applications_count'] = count($record['applications']); 
             $code = 200;
@@ -45,7 +44,6 @@ class CareerController extends Controller
             $code = 404;
             $response = ['message' => "$this->model Not Found"];
         }
-    
         return response()->json($response, $code);
     }
 
