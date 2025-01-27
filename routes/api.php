@@ -16,6 +16,7 @@ use App\Http\Controllers\API\Admin\ArticleController;
 use App\Http\Controllers\API\Admin\ContractController;
 use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
+use App\Http\Controllers\API\Admin\ProfileController;
 use App\Http\Controllers\API\Admin\ServiceController;
 use App\Http\Controllers\API\Admin\VideoController;
 
@@ -171,6 +172,14 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [ContractController::class, 'create']);
         Route::put('', [ContractController::class, 'update']);
         Route::delete('{id}', [ContractController::class, 'delete']);
+    });
+
+    Route::prefix('profiles')->group(function () {
+        Route::get('', [ProfileController::class, 'getAll']);
+        Route::get('{id}', [ProfileController::class, 'get']);
+        Route::post('', [ProfileController::class, 'create']);
+        Route::put('', [ProfileController::class, 'update']);
+        Route::delete('{id}', [ProfileController::class, 'delete']);
     });
 });
 
