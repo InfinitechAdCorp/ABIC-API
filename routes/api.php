@@ -16,6 +16,8 @@ use App\Http\Controllers\API\Admin\ArticleController;
 use App\Http\Controllers\API\Admin\InfrastructureController;
 use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ServiceController;
+use App\Http\Controllers\API\Admin\VideoController;
+
 use App\Http\Controllers\API\AgentController;
 
 use App\Http\Controllers\API\MainController;
@@ -152,6 +154,14 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [ArticleController::class, 'create']);
         Route::put('', [ArticleController::class, 'update']);
         Route::delete('{id}', [ArticleController::class, 'delete']);
+    });
+
+    Route::prefix('videos')->group(function () {
+        Route::get('', [VideoController::class, 'getAll']);
+        Route::get('{id}', [VideoController::class, 'get']);
+        Route::post('', [VideoController::class, 'create']);
+        Route::put('', [VideoController::class, 'update']);
+        Route::delete('{id}', [VideoController::class, 'delete']);
     });
 });
 
