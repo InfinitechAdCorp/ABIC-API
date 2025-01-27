@@ -16,6 +16,7 @@ class ProfileController extends Controller
 
     public $model = "Profile";
 
+    
     public $rules = [
         'user_id' => 'required|exists:users,id',
         'position' => 'required|max:255',
