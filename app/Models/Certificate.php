@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Certificate extends Model
 {
@@ -25,6 +26,10 @@ class Certificate extends Model
     {
         self::creating(function (Certificate $record) {
             $record->id = Str::ulid();
+        });
+
+        self::deleted(function (Certificate $record) {
+            Storage::disk('s3')->delete("certificates/$record->image");
         });
     }
 

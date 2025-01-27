@@ -91,7 +91,6 @@ class CertificateController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("certificates/$record->image");
             $record->delete();
             $code = 200;
             $response = [
