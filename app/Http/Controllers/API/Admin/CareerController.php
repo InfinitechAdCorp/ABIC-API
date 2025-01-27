@@ -88,7 +88,6 @@ class CareerController extends Controller
     {
         $record = Model::find($id);
         if ($record) {
-            Storage::disk('s3')->delete("careers/images/$record->image");
             $record->delete();
             $code = 200;
             $response = ['message' => "Deleted $this->model"];

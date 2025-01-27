@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Application extends Model
 {
@@ -28,6 +29,10 @@ class Application extends Model
     {
         self::creating(function (Application $record) {
             $record->id = Str::ulid();
+        });
+
+        self::deleted(function (Application $record) {
+            Storage::disk('s3')->delete("careers/applications/$record->resume");
         });
     }
 
