@@ -14,15 +14,17 @@ class UserController extends Controller
 {
     public $model = "User";
 
+    public $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
+
     public function getAll(Request $request)
     {
         $record =  PersonalAccessToken::findToken($request->bearerToken())->tokenable;
         if ($record->type == "Admin") {
-            $records = Model::orderBy('updated_at', 'desc')->get();
+            $records = Model::with($this->relations)->orderBy('updated_at', 'desc')->get();
             $code = 200;
             $response = ['message' => "Fetched $this->model" . "s", 'records' => $records];
         } else if ($record->type == "Agent") {
-            $record = Model::where('id', $record->id)->first();
+            $record = Model::with($this->relations)->where('id', $record->id)->first();
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
         }
@@ -31,7 +33,7 @@ class UserController extends Controller
 
     public function get($id)
     {
-        $record = Model::where('id', $id)->first();
+        $record = Model::with($this->relations)->where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched $this->model", 'record' => $record];
@@ -117,7 +119,8 @@ class UserController extends Controller
         return response()->json($response, $code);
     }
 
-    public function requestReset(Request $request) {
+    public function requestReset(Request $request)
+    {
         $validated = $request->validate([
             'email' => 'required|email|exists:users,email',
         ]);
