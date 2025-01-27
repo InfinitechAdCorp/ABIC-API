@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Partner extends Model
 {
@@ -22,6 +23,10 @@ class Partner extends Model
     {
         self::creating(function (Partner $record) {
             $record->id = Str::ulid();
+        });
+
+        self::deleted(function (Partner $record) {
+            Storage::disk('s3')->delete("partners/$record->image");
         });
     }
 }
