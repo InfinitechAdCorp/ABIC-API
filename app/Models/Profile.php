@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class Profile extends Model
 {
@@ -31,6 +32,10 @@ class Profile extends Model
     {
         self::creating(function (Profile $record) {
             $record->id = Str::ulid();
+        });
+
+        self::deleted(function (Profile $record) {
+            Storage::disk('s3')->delete("profiles/$record->image");
         });
     }
 
