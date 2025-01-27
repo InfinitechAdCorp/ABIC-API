@@ -205,6 +205,7 @@ Route::prefix('main')->group(function () {
     Route::get('infrastructures', [MainController::class, 'infrastructuresGetAll']);
 
     Route::get('filter-properties', [MainController::class, 'filterProperties']);
+    Route::get('filter-location/{id}', [MainController::class, 'filterLocation']);
     Route::post('submit-property', [MainController::class, 'submitProperty']);
     Route::post('submit-schedule', [MainController::class, 'submitSchedule']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);

@@ -125,6 +125,28 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
+    public function filterLocation($id) {
+        $property = Property::find($id);
+        if ($property) {
+            $locations = ["Pasig", "Makati", "Quezon", "Las Pinas"];
+            foreach ($locations as $location) {
+                $count = Property::where(['location', 'LIKE', "%$location%"])->get()->count();
+                if ($count > 0) {
+                    $matchingLocation = $location;
+                }
+            }
+
+            $records = Property::where(['location', 'LIKE', "%$matchingLocation%"])->get();
+            $code = 200;
+            $response = ['message' => "Filtered Properties", 'records' => $records];
+        }
+        else {
+            $code = 404;
+            $response = ['message' => "Property Not Found"];
+        }
+        return response()->json($response, $code);
+    }
+
     public function submitProperty(Request $request)
     {
         $validated = $request->validate([
