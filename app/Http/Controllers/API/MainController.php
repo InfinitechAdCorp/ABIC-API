@@ -130,13 +130,13 @@ class MainController extends Controller
         if ($property) {
             $locations = ["Pasig", "Makati", "Quezon", "Las Pinas"];
             foreach ($locations as $location) {
-                $count = Property::where(['location', 'LIKE', "%$location%"])->get()->count();
+                $count = Property::where([['location', 'LIKE', "%$location%"], ['id', '!=', $id]])->get()->count();
                 if ($count > 0) {
                     $matchingLocation = $location;
                 }
             }
 
-            $records = Property::where(['location', 'LIKE', "%$matchingLocation%"])->get();
+            $records = Property::where([['location', 'LIKE', "%$matchingLocation%"], ['id', '!=', $id]])->get();
             $code = 200;
             $response = ['message' => "Filtered Properties", 'records' => $records];
         }
