@@ -55,7 +55,7 @@ Route::middleware('auth.admin')->group(function () {
         Route::get('{id}', [PropertyController::class, 'get']);
         Route::post('', [PropertyController::class, 'create']);
         Route::put('', [PropertyController::class, 'update']);
-        Route::patch('', [PropertyController::class, 'update']);
+        Route::patch('', [PropertyController::class, 'UpdatePatch']);
         Route::delete('{id}', [PropertyController::class, 'delete']);
 
         Route::post('/set-status', [PropertyController::class, 'setStatus']);
