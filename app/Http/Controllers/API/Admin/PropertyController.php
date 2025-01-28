@@ -153,50 +153,89 @@ class PropertyController extends Controller
 
     public function UpdatePatch(Request $request)
     {
-        $this->rules['id'] = 'required|exists:properties,id';
-        $this->rules['amenities'] = 'nullable|array';
-        $this->rules['images'] = 'nullable';
+        // Define validation rules, making fields optional for PATCH
+        $this->rules = [
+            'id' => 'required|exists:properties,id', // 'id' is required to find the record
+            'first_name' => 'sometimes|string|max:255',
+            'last_name' => 'sometimes|string|max:255',
+            'email' => 'sometimes|email|max:255',
+            'phone' => 'sometimes|string|max:20',
+            'type' => 'sometimes|string|max:50',
+            'name' => 'sometimes|string|max:255',
+            'location' => 'sometimes|string|max:255',
+            'price' => 'sometimes|numeric',
+            'area' => 'sometimes|numeric',
+            'parking' => 'sometimes|integer',
+            'description' => 'sometimes|string',
+            'unit_number' => 'sometimes|string|max:50',
+            'unit_type' => 'sometimes|string|max:50',
+            'unit_status' => 'sometimes|string|max:50',
+            'sale_type' => 'sometimes|string|max:50',
+            'title' => 'sometimes|string|max:255',
+            'payment' => 'sometimes|string|max:255',
+            'turnover' => 'sometimes|string|max:255',
+            'terms' => 'sometimes|string|max:255',
+            'status' => 'sometimes|string|max:50',
+            'published' => 'sometimes|boolean',
+            'amenities' => 'sometimes|array',
+            'images' => 'sometimes|array',
+        ];
+
+        // Validate only the fields provided in the request
         $validated = $request->validate($this->rules);
 
-        $record = Model::find($validated['id']);
+        // Find the record by ID
+        $record = Model::findOrFail($validated['id']);
 
-        Owner::find($record->owner_id)->delete();
-        $owner = Owner::create($validated);
-        $validated['owner_id'] = $owner->id;
+        // Handle owner update if applicable
+        if ($request->has('owner')) {
+            Owner::find($record->owner_id)->delete();
+            $owner = Owner::create($validated);
+            $validated['owner_id'] = $owner->id;
+        }
 
-        $key = 'amenities';
-        if ($request[$key]) {
+        // Handle amenities update
+        if ($request->has('amenities')) {
             $amenities = [];
-            foreach ($request[$key] as $amenity) {
+            foreach ($request->input('amenities') as $amenity) {
                 array_push($amenities, $amenity);
             }
-            $validated[$key] = json_encode($amenities);
+            $validated['amenities'] = json_encode($amenities);
         }
 
-        $key = 'images';
-        if ($request[$key]) {
-            $images = json_decode($record[$key]);
-            foreach ($images as $image) {
-                Storage::disk('s3')->delete("properties/images/$image");
+        // Handle images update
+        if ($request->has('images')) {
+            // Delete old images from S3
+            $oldImages = json_decode($record->images, true);
+            if ($oldImages) {
+                foreach ($oldImages as $image) {
+                    Storage::disk('s3')->delete("properties/images/$image");
+                }
             }
 
+            // Upload new images
             $images = [];
-            foreach ($request[$key] as $image) {
+            foreach ($request->input('images') as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
             }
-            $validated[$key] = json_encode($images);
+            $validated['images'] = json_encode($images);
         }
 
+        // Update only the provided fields
         $record->update($validated);
-        $record = Model::with('owner')->where('id', $record->id)->first();
-        $code = 200;
+
+        // Retrieve the updated record with relationships
+        $record = Model::with('owner')->findOrFail($record->id);
+
+        // Prepare response
         $response = [
             'message' => "Updated $this->model",
             'record' => $record,
         ];
-        return response()->json($response, $code);
-    }
 
+        return response()->json($response, 200);
+    }
+    
     public function delete($id)
     {
         $record = Model::find($id);
