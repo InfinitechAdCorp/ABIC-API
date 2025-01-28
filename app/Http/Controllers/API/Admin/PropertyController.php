@@ -151,6 +151,52 @@ class PropertyController extends Controller
         return response()->json($response, $code);
     }
 
+    public function UpdatePatch(Request $request)
+    {
+        $this->rules['id'] = 'required|exists:properties,id';
+        $this->rules['amenities'] = 'nullable|array';
+        $this->rules['images'] = 'nullable';
+        $validated = $request->validate($this->rules);
+
+        $record = Model::find($validated['id']);
+
+        Owner::find($record->owner_id)->delete();
+        $owner = Owner::create($validated);
+        $validated['owner_id'] = $owner->id;
+
+        $key = 'amenities';
+        if ($request[$key]) {
+            $amenities = [];
+            foreach ($request[$key] as $amenity) {
+                array_push($amenities, $amenity);
+            }
+            $validated[$key] = json_encode($amenities);
+        }
+
+        $key = 'images';
+        if ($request[$key]) {
+            $images = json_decode($record[$key]);
+            foreach ($images as $image) {
+                Storage::disk('s3')->delete("properties/images/$image");
+            }
+
+            $images = [];
+            foreach ($request[$key] as $image) {
+                array_push($images, $this->upload($image, "properties/images"));
+            }
+            $validated[$key] = json_encode($images);
+        }
+
+        $record->update($validated);
+        $record = Model::with('owner')->where('id', $record->id)->first();
+        $code = 200;
+        $response = [
+            'message' => "Updated $this->model",
+            'record' => $record,
+        ];
+        return response()->json($response, $code);
+    }
+
     public function delete($id)
     {
         $record = Model::find($id);
