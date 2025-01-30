@@ -153,9 +153,8 @@ class PropertyController extends Controller
 
     public function UpdatePatch(Request $request)
     {
-        // Define validation rules, making fields optional for PATCH
         $this->rules = [
-            'id' => 'required|exists:properties,id', // 'id' is required to find the record
+            'id' => 'required|exists:properties,id',
             'first_name' => 'sometimes|string|max:255',
             'last_name' => 'sometimes|string|max:255',
             'email' => 'sometimes|email|max:255',
@@ -181,20 +180,18 @@ class PropertyController extends Controller
             'images' => 'sometimes|array',
         ];
 
-        // Validate only the fields provided in the request
         $validated = $request->validate($this->rules);
 
-        // Find the record by ID
         $record = Model::findOrFail($validated['id']);
 
-        // Handle owner update if applicable
         if ($request->has('owner')) {
-            Owner::find($record->owner_id)->delete();
-            $owner = Owner::create($validated);
-            $validated['owner_id'] = $owner->id;
+            $owner = Owner::find($record->owner_id);
+            if ($owner) {
+                $owner->update($request->input('owner'));
+            }
         }
+        
 
-        // Handle amenities update
         if ($request->has('amenities')) {
             $amenities = [];
             foreach ($request->input('amenities') as $amenity) {
@@ -203,9 +200,7 @@ class PropertyController extends Controller
             $validated['amenities'] = json_encode($amenities);
         }
 
-        // Handle images update
         if ($request->has('images')) {
-            // Delete old images from S3
             $oldImages = json_decode($record->images, true);
             if ($oldImages) {
                 foreach ($oldImages as $image) {
@@ -213,7 +208,6 @@ class PropertyController extends Controller
                 }
             }
 
-            // Upload new images
             $images = [];
             foreach ($request->input('images') as $image) {
                 array_push($images, $this->upload($image, "properties/images"));
@@ -221,13 +215,10 @@ class PropertyController extends Controller
             $validated['images'] = json_encode($images);
         }
 
-        // Update only the provided fields
         $record->update($validated);
 
-        // Retrieve the updated record with relationships
         $record = Model::with('owner')->findOrFail($record->id);
 
-        // Prepare response
         $response = [
             'message' => "Updated $this->model",
             'record' => $record,
