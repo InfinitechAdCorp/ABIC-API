@@ -216,7 +216,7 @@ Route::prefix('main')->group(function () {
     Route::post('submit-schedule', [MainController::class, 'submitSchedule']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-application', [MainController::class, 'submitApplication']);
-    Route::post('testimonial', [TestimonialController::class, 'submitTestimonial']);
+    Route::post('testimonial', [TestimonialController::class, 'create']);
     
 
     Route::prefix('subscribers')->group(function () {
