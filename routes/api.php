@@ -207,6 +207,7 @@ Route::prefix('main')->group(function () {
     Route::get('partners', [MainController::class, 'partnersGetAll']);
     Route::get('careers', [MainController::class, 'careersGetAll']);
     Route::get('services', [MainController::class, 'servicesGetAll']);
+    Route::get('services/{id}', [MainController::class, 'servicesGet']);
     Route::get('articles', [MainController::class, 'articlesGetAll']);
     Route::get('infrastructures', [MainController::class, 'infrastructuresGetAll']);
 
