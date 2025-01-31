@@ -40,7 +40,7 @@ class MainController extends Controller
 
         foreach ($testimonials as $testimonial) {
             $sentiment = $analyzer->getSentiment($testimonial->message);
-            if ($sentiment['compound'] > 0.5) {
+            if ($sentiment['compound'] > 0.3) {
                 array_push($records, $testimonial);
             }
         }
