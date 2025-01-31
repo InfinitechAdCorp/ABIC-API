@@ -20,6 +20,7 @@ use App\Http\Controllers\API\Admin\InquiryController;
 use App\Http\Controllers\API\Admin\ProfileController;
 use App\Http\Controllers\API\Admin\ServiceController;
 use App\Http\Controllers\API\Admin\VideoController;
+use App\Http\Controllers\API\Admin\SubscriberController;
 
 use App\Http\Controllers\API\AgentController;
 
@@ -215,4 +216,12 @@ Route::prefix('main')->group(function () {
     Route::post('submit-schedule', [MainController::class, 'submitSchedule']);
     Route::post('submit-inquiry', [MainController::class, 'submitInquiry']);
     Route::post('submit-application', [MainController::class, 'submitApplication']);
+
+    Route::prefix('subscribers')->group(function () {
+        Route::get('', [SubscriberController::class, 'getAll']);
+        Route::get('{id}', [SubscriberController::class, 'get']);
+        Route::post('', [SubscriberController::class, 'create']);
+        Route::put('', [SubscriberController::class, 'update']);
+        Route::delete('{id}', [SubscriberController::class, 'delete']);
+    });
 });
