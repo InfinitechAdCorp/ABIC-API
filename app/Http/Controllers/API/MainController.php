@@ -79,14 +79,14 @@ class MainController extends Controller
 
     public function servicesGet($id)
     {
-        $record = Model::find($id);
+        $record = Service::find($id);
         if ($record) {
             $code = 200;
-            $response = ['message' => "Fetched $this->model", 'record' => $record];
+            $response = ['message' => "Fetched Service", 'record' => $record];
         }
         else {
             $code = 404;
-            $response = ['message' => "$this->model Not Found"];
+            $response = ['message' => "Service Not Found"];
         }
         return response()->json($response, $code);
     }
