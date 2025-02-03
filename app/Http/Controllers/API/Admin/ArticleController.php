@@ -17,7 +17,6 @@ class ArticleController extends Controller
 
     public $rules = [
         'title' => 'required|max:255',
-        'subtitle' => 'nullable|max:255',
         'date' => 'required|date',
         'content' => 'required',
         'type' => 'required|max:255',
