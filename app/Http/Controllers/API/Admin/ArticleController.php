@@ -22,6 +22,7 @@ class ArticleController extends Controller
         'content' => 'required',
         'type' => 'required|max:255',
         'image' => 'required',
+        'url' => 'nullable',
     ];
 
     public function getAll()

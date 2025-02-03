@@ -21,6 +21,7 @@ class Article extends Model
         'content',
         'type',
         'image',
+        'url',
     ];
 
     public static function booted()
