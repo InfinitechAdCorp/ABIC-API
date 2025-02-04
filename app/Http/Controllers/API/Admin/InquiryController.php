@@ -90,4 +90,18 @@ class InquiryController extends Controller
         }
         return response()->json($response, $code);
     }
+
+    public function setStatus(Request $request)
+    {
+        $validated = $request->validate([
+            'id' => 'required|exists:schedules,id',
+            'status' => 'required',
+        ]);
+
+        $record = Model::find($validated['id']);
+        $record->update($validated);
+        $code = 200;
+        $response = ['message' => "Updated Status"];
+        return response()->json($response, $code);
+    }
 }

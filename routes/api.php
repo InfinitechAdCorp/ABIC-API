@@ -130,6 +130,7 @@ Route::middleware('auth.admin')->group(function () {
         Route::post('', [InquiryController::class, 'create']);
         Route::put('', [InquiryController::class, 'update']);
         Route::delete('{id}', [InquiryController::class, 'delete']);
+        Route::post('/set-status', [InquiryController::class, 'setStatus']);
     });
 
     Route::prefix('services')->group(function () {
