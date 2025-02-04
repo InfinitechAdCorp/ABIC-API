@@ -94,7 +94,7 @@ class InquiryController extends Controller
     public function setStatus(Request $request)
     {
         $validated = $request->validate([
-            'id' => 'required|exists:schedules,id',
+            'id' => 'required|exists:inquiries,id',
             'status' => 'required',
         ]);
 
