@@ -50,6 +50,8 @@ class UserController extends Controller
             'name' => 'required|max:255|unique:users,name',
             'email' => 'required|max:255|email|unique:users,email',
             'password' => 'required|min:8|max:255',
+            'phone' => 'required|max:255|phone',
+            'address' => 'required|max:255|address',
             'type' => 'required|max:255'
         ]);
 
@@ -70,6 +72,8 @@ class UserController extends Controller
             'id' => 'required|exists:users,id',
             'name' => 'required|max:255',
             'email' => 'required|max:255|email',
+            'phone' => 'required|max:255|phone',
+            'address' => 'required|max:255|address',
         ]);
 
         $record = Model::find($validated['id']);
