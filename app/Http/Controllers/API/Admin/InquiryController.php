@@ -21,6 +21,7 @@ class InquiryController extends Controller
         'type' => 'required|max:255',
         'properties' => 'nullable|max:255',
         'message' => 'required',
+        'status' => 'nullable|max:255',
     ];
 
     public function getAll(Request $request)

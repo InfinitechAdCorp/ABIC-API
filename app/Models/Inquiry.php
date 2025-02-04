@@ -23,6 +23,7 @@ class Inquiry extends Model
         'type',
         'inquiries',
         'message',
+        'status',
     ];
 
     public static function booted()
