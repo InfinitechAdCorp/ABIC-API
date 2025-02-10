@@ -29,10 +29,6 @@ class Article extends Model
             $record->id = Str::ulid();
         });
 
-        self::updated(function (Article $record) {
-            Storage::disk('s3')->delete("articles/$record->image");
-        });
-
         self::deleted(function (Article $record) {
             Storage::disk('s3')->delete("articles/$record->image");
         });

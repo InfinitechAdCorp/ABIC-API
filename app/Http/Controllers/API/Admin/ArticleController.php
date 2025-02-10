@@ -70,6 +70,7 @@ class ArticleController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
+            Storage::disk('s3')->delete("articles/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "articles");
         }
 
