@@ -18,6 +18,7 @@ use App\Models\Service;
 use App\Models\Article;
 use App\Models\Infrastructure;
 use App\Models\Owner;
+use App\Models\User;
 
 class MainController extends Controller
 {
@@ -41,6 +42,15 @@ class MainController extends Controller
             $code = 404;
             $response = ['message' => "Property Not Found"];
         }
+        return response()->json($response, $code);
+    }
+
+    public function usersGetAll()
+    {
+        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
+        $records = User::with($relations)->orderBy('updated_at', 'desc')->get();
+        $code = 200;
+        $response = ['message' => "Fetched Users", 'records' => $records];
         return response()->json($response, $code);
     }
 
