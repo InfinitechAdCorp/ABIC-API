@@ -34,11 +34,7 @@ class MainController extends Controller
 
     public function propertiesGet($id)
     {
-        $where = [
-            ['type', 'Agent'],
-            ['id', $id],
-        ];
-        $record = Property::with('owner')->where($where)->first();
+        $record = Property::with('owner')->where('id', $id)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched Property", 'record' => $record];
@@ -52,7 +48,7 @@ class MainController extends Controller
     public function usersGetAll()
     {
         $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
-        $records = User::with($relations)->orderBy('updated_at', 'desc')->get();
+        $records = User::with($relations)->where('type', 'Agent')->orderBy('updated_at', 'desc')->get();
         $code = 200;
         $response = ['message' => "Fetched Users", 'records' => $records];
         return response()->json($response, $code);
