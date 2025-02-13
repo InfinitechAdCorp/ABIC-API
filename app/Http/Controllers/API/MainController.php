@@ -34,7 +34,11 @@ class MainController extends Controller
 
     public function propertiesGet($id)
     {
-        $record = Property::with('owner')->where('id', $id)->first();
+        $where = [
+            ['type', 'Agent'],
+            ['id', $id],
+        ];
+        $record = Property::with('owner')->where($where)->first();
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched Property", 'record' => $record];
