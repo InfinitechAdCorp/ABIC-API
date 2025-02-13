@@ -31,6 +31,19 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
+    public function propertiesGet($id)
+    {
+        $record = Property::with('owner')->where('id', $id)->first();
+        if ($record) {
+            $code = 200;
+            $response = ['message' => "Fetched Property", 'record' => $record];
+        } else {
+            $code = 404;
+            $response = ['message' => "Property Not Found"];
+        }
+        return response()->json($response, $code);
+    }
+
     public function testimonialsGetAll()
     {
         $analyzer = new Analyzer();
@@ -83,8 +96,7 @@ class MainController extends Controller
         if ($record) {
             $code = 200;
             $response = ['message' => "Fetched Service", 'record' => $record];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "Service Not Found"];
         }
@@ -139,7 +151,8 @@ class MainController extends Controller
         return response()->json($response, $code);
     }
 
-    public function filterLocation($id) {
+    public function filterLocation($id)
+    {
         $property = Property::find($id);
         if ($property) {
             $locations = ["Pasig", "Makati", "Quezon", "Las Pinas"];
@@ -153,8 +166,7 @@ class MainController extends Controller
             $records = Property::where([['location', 'LIKE', "%$matchingLocation%"], ['id', '!=', $id]])->get();
             $code = 200;
             $response = ['message' => "Filtered Properties", 'records' => $records];
-        }
-        else {
+        } else {
             $code = 404;
             $response = ['message' => "Property Not Found"];
         }
