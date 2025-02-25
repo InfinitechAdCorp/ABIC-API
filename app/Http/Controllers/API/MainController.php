@@ -26,8 +26,7 @@ class MainController extends Controller
 
     public function getAllUsers()
     {
-        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
-        $record = User::with($relations)->get();
+        $record = User::get();
 
         $code = 200;
         $response = ['message' => "Fetched Users", 'record' => $record];
