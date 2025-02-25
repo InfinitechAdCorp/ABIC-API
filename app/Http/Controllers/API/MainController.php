@@ -26,22 +26,8 @@ class MainController extends Controller
 
     public function usersGetAll()
     {
-        $analyzer = new Analyzer();
-        $testimonials = [];
-
-        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
+        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'videos'];
         $record = User::with($relations)->get();
-
-        foreach ($record['testimonials'] as $testimonial) {
-            $sentiment = $analyzer->getSentiment($testimonial->message);
-            if ($sentiment['compound'] > 0.5) {
-                array_push($testimonials, $testimonial);
-            }
-        }
-
-        unset($record['testimonials']);
-        $record['testimonials'] = $testimonials;
-
         $code = 200;
         $response = ['message' => "Fetched Users", 'record' => $record];
         return response()->json($response, $code);
