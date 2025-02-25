@@ -224,7 +224,6 @@ Route::prefix('main')->group(function () {
     Route::post('submit-application', [MainController::class, 'submitApplication']);
     Route::post('testimonial', [TestimonialController::class, 'create']);
 
-
     Route::prefix('subscribers')->group(function () {
         Route::get('', [SubscriberController::class, 'getAll']);
         Route::get('{id}', [SubscriberController::class, 'get']);
