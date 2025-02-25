@@ -24,6 +24,29 @@ class MainController extends Controller
 {
     use Uploadable;
 
+    public function getAllUsers()
+    {
+        $analyzer = new Analyzer();
+        $testimonials = [];
+
+        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
+        $record = User::with($relations)->get();
+
+        foreach ($record['testimonials'] as $testimonial) {
+            $sentiment = $analyzer->getSentiment($testimonial->message);
+            if ($sentiment['compound'] > 0.5) {
+                array_push($testimonials, $testimonial);
+            }
+        }
+
+        unset($record['testimonials']);
+        $record['testimonials'] = $testimonials;
+
+        $code = 200;
+        $response = ['message' => "Fetched Users", 'record' => $record];
+        return response()->json($response, $code);
+    }
+
     public function propertiesGetAll()
     {
         $records = Property::where('published', 1)->orderBy('status')->get();
