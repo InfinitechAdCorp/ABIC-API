@@ -24,9 +24,9 @@ class MainController extends Controller
 {
     use Uploadable;
 
-    public function usersGetAll()
+    public function allUsersgetAll()
     {
-        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'videos'];
+        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
         $record = User::with($relations)->get();
         $code = 200;
         $response = ['message' => "Fetched Users", 'record' => $record];
@@ -51,6 +51,15 @@ class MainController extends Controller
             $code = 404;
             $response = ['message' => "Property Not Found"];
         }
+        return response()->json($response, $code);
+    }
+
+    public function usersGetAll()
+    {
+        $relations = ['profile', 'certificates', 'inquiries', 'schedules', 'testimonials', 'videos'];
+        $records = User::with($relations)->where('type', 'Agent')->orderBy('updated_at', 'desc')->get();
+        $code = 200;
+        $response = ['message' => "Fetched Users", 'records' => $records];
         return response()->json($response, $code);
     }
 
