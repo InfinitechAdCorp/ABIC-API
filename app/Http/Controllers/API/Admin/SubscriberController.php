@@ -52,8 +52,9 @@ class SubscriberController extends Controller
     public function create(Request $request)
     {
         $validated = $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email|unique:subscribers,email',
         ]);
+        
 
         $record = Model::create($validated);
         $code = 201;
