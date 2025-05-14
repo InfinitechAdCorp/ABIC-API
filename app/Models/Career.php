@@ -27,7 +27,7 @@ class Career extends Model
         });
 
         self::deleted(function (Career $record) {
-            Storage::disk('s3')->delete("careers/images/$record->image");
+            Storage::disk('public')->delete("careers/images/$record->image");
         });
     }
 

@@ -68,7 +68,7 @@ class ServiceController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("services/$record[$key]");
+            Storage::disk('public')->delete("services/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "services");
         }
 

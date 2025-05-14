@@ -76,7 +76,7 @@ class VideoController extends Controller
 
         $key = 'video';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("videos/$record[$key]");
+            Storage::disk('public')->delete("videos/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "videos");
         }
 

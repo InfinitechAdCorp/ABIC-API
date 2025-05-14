@@ -26,7 +26,7 @@ class Partner extends Model
         });
 
         self::deleted(function (Partner $record) {
-            Storage::disk('s3')->delete("partners/$record->image");
+            Storage::disk('public')->delete("partners/$record->image");
         });
     }
 }

@@ -69,7 +69,7 @@ class ItemController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("items/$record[$key]");
+            Storage::disk('public')->delete("items/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "items");
         }
 

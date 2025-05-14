@@ -66,7 +66,7 @@ class PartnerController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("partners/$record[$key]");
+            Storage::disk('public')->delete("partners/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "partners");
         }
 

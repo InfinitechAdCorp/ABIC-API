@@ -27,7 +27,7 @@ class Service extends Model
         });
 
         self::deleted(function (Service $record) {
-            Storage::disk('s3')->delete("services/$record->image");
+            Storage::disk('public')->delete("services/$record->image");
         });
     }
 }

@@ -72,7 +72,7 @@ class CareerController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("careers/images/$record[$key]");
+            Storage::disk('public')->delete("careers/images/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "careers/images");
         }
 

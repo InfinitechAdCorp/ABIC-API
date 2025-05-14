@@ -35,7 +35,7 @@ class Profile extends Model
         });
 
         self::deleted(function (Profile $record) {
-            Storage::disk('s3')->delete("profiles/$record->image");
+            Storage::disk('public')->delete("profiles/$record->image");
         });
     }
 

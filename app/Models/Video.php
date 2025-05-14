@@ -28,7 +28,7 @@ class Video extends Model
         });
 
         self::deleted(function (Video $record) {
-            Storage::disk('s3')->delete("videos/$record->video");
+            Storage::disk('public')->delete("videos/$record->video");
         });
     }
 

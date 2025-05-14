@@ -29,7 +29,7 @@ class Certificate extends Model
         });
 
         self::deleted(function (Certificate $record) {
-            Storage::disk('s3')->delete("certificates/$record->image");
+            Storage::disk('public')->delete("certificates/$record->image");
         });
     }
 

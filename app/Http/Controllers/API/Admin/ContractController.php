@@ -76,7 +76,7 @@ class ContractController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("contracts/$record[$key]");
+            Storage::disk('public')->delete("contracts/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "contracts");
         }
 

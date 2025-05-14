@@ -8,7 +8,7 @@ trait Uploadable {
     public function upload($file, $directory) {
         if ($file) {
             $name = Str::ulid().".".$file->clientExtension();
-            Storage::disk('s3')->put("$directory/$name", $file->getContent(), 'public');
+            Storage::disk('public')->put("$directory/$name", $file->getContent(), 'public');
             return $name;
         }
     }

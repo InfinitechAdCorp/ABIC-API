@@ -77,7 +77,7 @@ class CertificateController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("certificates/$record[$key]");
+            Storage::disk('public')->delete("certificates/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "certificates");
         }
 

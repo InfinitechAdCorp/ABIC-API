@@ -28,7 +28,7 @@ class Contract extends Model
         });
 
         self::deleted(function (Contract $record) {
-            Storage::disk('s3')->delete("contracts/$record->image");
+            Storage::disk('public')->delete("contracts/$record->image");
         });
     }
 

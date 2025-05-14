@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DatabaseTestController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -12,3 +12,4 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/test-connection', [DatabaseTestController::class, 'test']);

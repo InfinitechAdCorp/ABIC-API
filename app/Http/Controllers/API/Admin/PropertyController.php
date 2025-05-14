@@ -131,7 +131,7 @@ class PropertyController extends Controller
         if ($request[$key]) {
             $images = json_decode($record[$key]);
             foreach ($images as $image) {
-                Storage::disk('s3')->delete("properties/images/$image");
+                Storage::disk('public')->delete("properties/images/$image");
             }
 
             $images = [];
@@ -204,7 +204,7 @@ class PropertyController extends Controller
             $oldImages = json_decode($record->images, true);
             if ($oldImages) {
                 foreach ($oldImages as $image) {
-                    Storage::disk('s3')->delete("properties/images/$image");
+                    Storage::disk('public')->delete("properties/images/$image");
                 }
             }
 

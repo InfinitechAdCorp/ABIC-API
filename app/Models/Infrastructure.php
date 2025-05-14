@@ -31,7 +31,7 @@ class Infrastructure extends Model
         });
 
         self::deleted(function (Infrastructure $record) {
-            Storage::disk('s3')->delete("infrastructures/$record->image");
+            Storage::disk('public')->delete("infrastructures/$record->image");
         });
     }
 }

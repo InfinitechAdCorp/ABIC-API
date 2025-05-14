@@ -32,7 +32,7 @@ class Application extends Model
         });
 
         self::deleted(function (Application $record) {
-            Storage::disk('s3')->delete("careers/applications/$record->resume");
+            Storage::disk('public')->delete("careers/applications/$record->resume");
         });
     }
 

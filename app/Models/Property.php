@@ -53,7 +53,7 @@ class Property extends Model
 
             $images = json_decode($record->images);
             foreach ($images as $image) {
-                Storage::disk('s3')->delete("properties/images/$image");
+                Storage::disk('public')->delete("properties/images/$image");
             }
         });
     }

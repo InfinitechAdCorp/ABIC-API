@@ -71,7 +71,7 @@ class ApplicationController extends Controller
 
         $key = 'resume';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("careers/applications/$record[$key]");
+            Storage::disk('public')->delete("careers/applications/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "careers/applications");
         }
 

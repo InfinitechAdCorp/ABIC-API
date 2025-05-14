@@ -71,7 +71,7 @@ class InfrastructureController extends Controller
 
         $key = 'image';
         if ($request->hasFile($key)) {
-            Storage::disk('s3')->delete("infrastructures/$record[$key]");
+            Storage::disk('public')->delete("infrastructures/$record[$key]");
             $validated[$key] = $this->upload($request->file($key), "infrastructures");
         }
 

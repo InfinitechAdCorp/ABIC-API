@@ -30,7 +30,7 @@ class Article extends Model
         });
 
         self::deleted(function (Article $record) {
-            Storage::disk('s3')->delete("articles/$record->image");
+            Storage::disk('public')->delete("articles/$record->image");
         });
     }
 }
